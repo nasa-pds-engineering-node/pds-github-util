@@ -13,6 +13,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/NASA-PDS-Incubator/pds-github-util",
+    download_url = "https://github.com/NASA-PDS-Incubator/pds-github-util/releases/download/0.0.1/pds_github_util-0.0.1.tar.gz",
     packages=setuptools.find_packages(),
     keywords=['github', 'action', 'github action', 'snapshot', 'release', 'maven'],
 

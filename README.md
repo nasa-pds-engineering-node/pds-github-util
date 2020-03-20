@@ -39,4 +39,21 @@ Run with, as parameter, the personal access token for github:
     cd pds-github-util
     python -m venv venv
     source venv/bin/activate
-    pip install -r requirements.txt 
+    pip install -r requirements.txt
+    
+Udate the code
+
+Create package and publish it:
+
+Set the version in setup.py
+
+Tag the code
+
+    git tag <version>
+    git push origin --tags
+
+Create the package:
+
+    python setup.py sdist
+
+Publish it as a github release
