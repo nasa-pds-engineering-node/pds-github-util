@@ -31,8 +31,6 @@
 import os
 import logging
 import github3
-# sudo apt-get install libxml2-dev libxslt-dev python-dev
-# pip install lxml
 import libxml2
 import argparse
 

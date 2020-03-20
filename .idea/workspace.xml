@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="950d6b29-bd7c-4d8f-bd9d-879c9023444a" name="Default Changelist" comment="" />
+    <list default="true" id="950d6b29-bd7c-4d8f-bd9d-879c9023444a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/pds_github_util/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pds-github-util/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pds-github-util/new_snapshot_release_from_maven_project.py" beforeDir="false" afterPath="$PROJECT_DIR$/pds_github_util/snapshot_release.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +25,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1ZM6WEN3bMB0pK6mTCG0C7rH2zN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -89,7 +97,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="new_snapshot_release_from_maven_project" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="snapshot_release" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="dev_report" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -104,7 +112,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pds-github-util/new_snapshot_release_from_maven_project.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pds-github-util/snapshot_release.py" />
       <option name="PARAMETERS" value="--token 0f7f1395f57b4567e3796e88471666f6f3178788" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -149,7 +157,7 @@
       <option name="presentableId" value="Default" />
       <updated>1584636645549</updated>
       <workItem from="1584636646813" duration="13498000" />
-      <workItem from="1584671857825" duration="2641000" />
+      <workItem from="1584671857825" duration="7021000" />
     </task>
     <servers />
   </component>
@@ -157,9 +165,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="424" y="186" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584673185776">
-      <screen x="0" y="23" width="1920" height="997" />
+    <state x="424" y="186" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584722350808">
+      <screen x="0" y="23" width="1920" height="996" />
     </state>
+    <state x="424" y="186" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.23.1792.1097/0.23.1920.996@0.23.1920.996" timestamp="1584722350808" />
     <state x="424" y="186" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.23.1792.1097/0.23.1920.997@0.23.1920.997" timestamp="1584673185776" />
     <state x="714" y="296" key="EnvironmentVariablesDialog" timestamp="1584672999032">
       <screen x="0" y="23" width="1920" height="997" />
@@ -218,7 +227,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pds-github-util/delete_snapshot_release.py</url>
+          <url>file://$PROJECT_DIR$/pds_github_util/delete_snapshot_release.py</url>
           <line>25</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
