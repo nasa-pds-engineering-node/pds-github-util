@@ -41,7 +41,7 @@ Run with, as parameter, the personal access token for github:
     source venv/bin/activate
     pip install -r requirements.txt
     
-Udate the code
+Update the code
 
 Create package and publish it:
 
@@ -56,4 +56,12 @@ Create the package:
 
     python setup.py sdist
 
-Publish it as a github release
+Publish it as a github release.
+
+Publish on pypi (you need a pypi account):
+
+    pip install twine
+    twine upload dist/*
+    
+    
+    

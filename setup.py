@@ -24,8 +24,8 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        'github3.py>=1.3',
-        'libxml2-python>=2.9'
+        'github3.py',
+        'lxml'
     ],
     entry_points={
         'console_scripts': ['snapshot-release=pds_github_util:snapshot_release.main'],
