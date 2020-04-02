@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pds_github_util", # Replace with your own username
-    version="0.0.1",
+    name="pds_github_util", # Replace with your own package name
+    version="0.1.0",
     license="apache-2.0",
     author="thomas loubrieu",
     author_email="loubrieu@jpl.nasa.gov",
@@ -25,10 +25,13 @@ setuptools.setup(
     python_requires='>=3.6',
     install_requires=[
         'github3.py',
-        'lxml'
+        'libxml2-python3'
     ],
     entry_points={
-        'console_scripts': ['snapshot-release=pds_github_util:snapshot_release.main'],
+        # snapshot-release for backward compatibility
+        'console_scripts': ['snapshot-release=pds_github_util:maven-snapshot_release.main',
+                            'maven-snapshot-release=pds_github_util:maven-snapshot_release.main',
+                            'python-snapshot-release=pds_github_util:python-snapshot_release.main'],
     }
 
 )

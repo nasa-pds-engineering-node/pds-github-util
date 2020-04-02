@@ -43,6 +43,10 @@ Run with, as parameter, the personal access token for github:
     
 Update the code
 
+Test the code:
+
+    python setup.py test
+
 Create package and publish it:
 
 Set the version in setup.py
@@ -51,6 +55,10 @@ Tag the code
 
     git tag <version>
     git push origin --tags
+
+The package will be published to pypi automatically though github action.
+
+## Manually publish the package
 
 Create the package:
 

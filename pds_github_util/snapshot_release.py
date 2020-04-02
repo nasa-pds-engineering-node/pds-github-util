@@ -31,19 +31,19 @@
 import os
 import logging
 import github3
-import libxml2
 import argparse
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-def delete_snapshot_releases(_repo):
+def delete_snapshot_releases(_repo, suffix):
     """
         Delete all pre-existing snapshot releases
     """
     for release in _repo.releases():
-        if release.tag_name.endswith('SNAPSHOT'):
+        if release.tag_name.endswith(suffix):
             release.delete()
 
 
@@ -80,7 +80,7 @@ def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger):
                              f_asset)
 
 
-def main():
+def snapshot_release_publication(suffix, get_version):
     """
     Script made to work in the context of a github action.
     """
@@ -95,22 +95,13 @@ def main():
     org = repo_full_name_array[0]
     repo_name = repo_full_name_array[1]
 
-    # read current version
-    pom_path = os.path.join(os.environ.get('GITHUB_WORKSPACE'), 'pom.xml')
-    doc = libxml2.parseFile(pom_path)
-    ctxt = doc.xpathNewContext()
-    ctxt.xpathRegisterNs("pom", "http://maven.apache.org/POM/4.0.0")
-    tag_name = ctxt.xpathEval("/pom:project/pom:version")[0].content
+    tag_name = get_version()
+    if tag_name.endswith(suffix):
+        tagger = {"name": "thomas loubrieu",
+                  "email": "loubrieu@jpl.nasa.gov"}
 
-    tagger = {"name": "thomas loubrieu",
-              "email": "loubrieu@jpl.nasa.gov"}
+        gh = github3.login(token=args.token)
+        repo = gh.repository(org, repo_name)
 
-    gh = github3.login(token=args.token)
-    repo = gh.repository(org, repo_name)
-
-    delete_snapshot_releases(repo)
-    create_snapshot_release(repo, repo_name, "master", tag_name, tagger)
-
-
-if __name__ == "__main__":
-    main()
+        delete_snapshot_releases(repo, suffix)
+        create_snapshot_release(repo, repo_name, "master", tag_name, tagger)
