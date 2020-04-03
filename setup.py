@@ -29,9 +29,11 @@ setuptools.setup(
     ],
     entry_points={
         # snapshot-release for backward compatibility
-        'console_scripts': ['snapshot-release=pds_github_util:maven-snapshot_release.main',
-                            'maven-snapshot-release=pds_github_util:maven-snapshot_release.main',
-                            'python-snapshot-release=pds_github_util:python-snapshot_release.main'],
-    }
+        'console_scripts': ['snapshot-release=pds_github_util.maven_snapshot_release:main',
+                            'maven-snapshot-release=pds_github_util.maven_snapshot_release:main',
+                            'python-snapshot-release=pds_github_util.python_snapshot_release:main'
+                            ],
+    },
+
 
 )

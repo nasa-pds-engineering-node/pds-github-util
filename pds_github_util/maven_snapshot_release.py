@@ -15,5 +15,7 @@ def maven_get_version():
     return ctxt.xpathEval("/pom:project/pom:version")[0].content
 
 
+main = snapshot_release_publication(SNAPSHOT_TAG_SUFFIX, maven_get_version)
+
 if __name__ == "__main__":
-    snapshot_release_publication(SNAPSHOT_TAG_SUFFIX, maven_get_version)
+    main()
