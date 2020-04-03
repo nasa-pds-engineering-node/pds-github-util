@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pds_github_util", # Replace with your own package name
-    version="0.1.0",
+    version="0.1.2",
     license="apache-2.0",
     author="thomas loubrieu",
     author_email="loubrieu@jpl.nasa.gov",

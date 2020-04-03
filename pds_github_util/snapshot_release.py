@@ -89,4 +89,4 @@ def snapshot_release_publication(suffix, get_version, upload_assets):
         repo = gh.repository(org, repo_name)
 
         delete_snapshot_releases(repo, suffix)
-        create_snapshot_release(repo, repo_name, "master", tag_name, tagger)
+        create_snapshot_release(repo, repo_name, "master", tag_name, tagger, upload_assets)
