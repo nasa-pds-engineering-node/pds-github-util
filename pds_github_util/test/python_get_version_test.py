@@ -9,13 +9,9 @@ logger = logging.getLogger(__name__)
 
 class PythonGetVersionTestCase(unittest.TestCase):
 
-    _locally_set_github_workspace = False
-
     def setUp(self):
-        if 'GITHUB_WORKSPACE' not in os.environ.keys():
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, '..', '..')
-            self._locally_set_github_workspace = True
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, '..', '..')
 
     def test_python_get_version(self):
         version = python_get_version()
@@ -23,8 +19,7 @@ class PythonGetVersionTestCase(unittest.TestCase):
         self.assertGreaterEqual(len(version), 3)
 
     def tearDown(self):
-        if self._locally_set_github_workspace:
-            del os.environ['GITHUB_WORKSPACE']
+        del os.environ['GITHUB_WORKSPACE']
 
 
 if __name__ == '__main__':

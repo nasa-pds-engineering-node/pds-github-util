@@ -47,40 +47,25 @@ def delete_snapshot_releases(_repo, suffix):
             release.delete()
 
 
-def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger):
+def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger, upload_assets):
     """
     Create a tag and new release from the latest commit on branch_name.
     Push the assets created in target directory.
     """
     our_branch = repo.branch(branch_name)
     repo.create_tag(tag_name,
-                    f'nightly snapshot',
+                    f'development build',
                     our_branch.commit.sha,
                     "commit",
                     tagger)
 
     # create the release
-    release = repo.create_release(tag_name, target_commitish=branch_name, name=tag_name, body="nightly build")
+    release = repo.create_release(tag_name, target_commitish=branch_name, name=tag_name, body="development build")
 
-    # upload assets
-    targz_package = os.path.join(os.environ.get('GITHUB_WORKSPACE'),
-                                 'target',
-                                 f'{repo_name}-{tag_name}-bin.tar.gz')
-    with open(targz_package, 'rb') as f_asset:
-        release.upload_asset('application/tar+gzip',
-                             f'{repo_name}-{tag_name}-bin.tar.gz',
-                             f_asset)
-
-    zip_package = os.path.join(os.environ.get('GITHUB_WORKSPACE'),
-                               'target',
-                               f'{repo_name}-{tag_name}-bin.zip')
-    with open(zip_package, 'rb') as f_asset:
-        release.upload_asset('application/zip',
-                             f'{repo_name}-{tag_name}-bin.zip',
-                             f_asset)
+    upload_assets(repo_name, tag_name, release)
 
 
-def snapshot_release_publication(suffix, get_version):
+def snapshot_release_publication(suffix, get_version, upload_assets):
     """
     Script made to work in the context of a github action.
     """
