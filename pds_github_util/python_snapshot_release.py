@@ -1,7 +1,11 @@
 import os
 import re
 import glob
+import logging
 from .snapshot_release import snapshot_release_publication
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 SNAPSHOT_TAG_SUFFIX = "+dev"
 
@@ -26,8 +30,10 @@ def python_upload_assets(repo_name, tag_name, release):
                                  'dist',
                                  f'{repo_name}-{tag_name}.tar.gz')
     with open(targz_package, 'rb') as f_asset:
+        asset_filename = f'{repo_name}-{tag_name}.tar.gz'
+        logger.info(f"Upload asset file {asset_filename}")
         release.upload_asset('application/tar+gzip',
-                             f'{repo_name}-{tag_name}.tar.gz',
+                             asset_filename,
                              f_asset)
 
     whl_packages_pattern = os.path.join(os.environ.get('GITHUB_WORKSPACE'),
@@ -36,8 +42,10 @@ def python_upload_assets(repo_name, tag_name, release):
     whl_packages = glob.glob(whl_packages_pattern)
     for whl_package in whl_packages:
         with open(whl_package, 'rb') as f_asset:
+            asset_filename = os.path.basename(whl_package)
+            logger.info(f"Upload asset file {asset_filename}")
             release.upload_asset('application/zip',
-                                 os.path.basename(whl_package),
+                                 asset_filename,
                                  f_asset)
 
 
