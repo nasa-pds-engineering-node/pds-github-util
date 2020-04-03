@@ -6,16 +6,25 @@ from pds_github_util.python_snapshot_release import python_get_version
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 class PythonGetVersionTestCase(unittest.TestCase):
-    def test_python_get_version(self):
+
+    _locally_set_github_workspace = False
+
+    def setUp(self):
         if 'GITHUB_WORKSPACE' not in os.environ.keys():
             current_dir = os.path.dirname(os.path.abspath(__file__))
             os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, '..', '..')
+            self._locally_set_github_workspace = True
+
+    def test_python_get_version(self):
         version = python_get_version()
-
         logger.info(f"found version is {version}")
-
         self.assertGreaterEqual(len(version), 3)
+
+    def tearDown(self):
+        if self._locally_set_github_workspace:
+            del os.environ['GITHUB_WORKSPACE']
 
 
 if __name__ == '__main__':
