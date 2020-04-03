@@ -16,7 +16,8 @@ def python_get_version():
                 return line[9:-2]
 
 
-main = snapshot_release_publication(SNAPSHOT_TAG_SUFFIX, python_get_version)
+def main():
+    snapshot_release_publication(SNAPSHOT_TAG_SUFFIX, python_get_version)
 
 
 if __name__ == "__main__":

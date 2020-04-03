@@ -25,7 +25,7 @@ setuptools.setup(
     python_requires='>=3.6',
     install_requires=[
         'github3.py',
-        'libxml2-python3'
+        'lxml'
     ],
     entry_points={
         # snapshot-release for backward compatibility

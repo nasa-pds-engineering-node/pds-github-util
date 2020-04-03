@@ -1,17 +1,18 @@
 import unittest
 import os
 import logging
-from pds_github_util.python_snapshot_release import python_get_version
+from pds_github_util.maven_snapshot_release import maven_get_version
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-class PythonGetVersionTestCase(unittest.TestCase):
-    def test_python_get_version(self):
+
+class MavenGetVersionTestCase(unittest.TestCase):
+    def test_maven_get_version(self):
         if 'GITHUB_WORKSPACE' not in os.environ.keys():
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, '..', '..')
-        version = python_get_version()
+            os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, 'data')
+        version = maven_get_version()
 
         logger.info(f"found version is {version}")
 
