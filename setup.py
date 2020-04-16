@@ -1,11 +1,16 @@
+import re
 import setuptools
+
+with open("./pds_github_util/__init__.py") as fi:
+    result = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fi.read())
+version = result.group(1)
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="pds_github_util", # Replace with your own package name
-    version="0.1.3",
+    version=version,
     license="apache-2.0",
     author="thomas loubrieu",
     author_email="loubrieu@jpl.nasa.gov",

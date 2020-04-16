@@ -42,6 +42,7 @@ def delete_snapshot_releases(_repo, suffix):
     """
         Delete all pre-existing snapshot releases
     """
+    logger.info("delete previous releases")
     for release in _repo.releases():
         if release.tag_name.endswith(suffix):
             release.delete()
@@ -52,6 +53,7 @@ def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger, uplo
     Create a tag and new release from the latest commit on branch_name.
     Push the assets created in target directory.
     """
+    logger.info("create new snapshot release")
     our_branch = repo.branch(branch_name)
     repo.create_tag(tag_name,
                     f'development build',
@@ -62,6 +64,7 @@ def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger, uplo
     # create the release
     release = repo.create_release(tag_name, target_commitish=branch_name, name=tag_name, body="development build")
 
+    logger.info("upload assets")
     upload_assets(repo_name, tag_name, release)
 
 
