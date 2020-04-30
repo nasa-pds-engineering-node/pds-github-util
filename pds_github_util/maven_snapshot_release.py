@@ -1,3 +1,4 @@
+import fnmatch
 import os
 from lxml import etree
 from .snapshot_release import snapshot_release_publication
@@ -20,21 +21,15 @@ def maven_upload_assets(repo_name, tag_name, release):
 
     """
     # upload assets
-    targz_package = os.path.join(os.environ.get('GITHUB_WORKSPACE'),
-                                 'target',
-                                 f'{repo_name}-{tag_name}-bin.tar.gz')
-    with open(targz_package, 'rb') as f_asset:
-        release.upload_asset('application/tar+gzip',
-                             f'{repo_name}-{tag_name}-bin.tar.gz',
-                             f_asset)
-
-    zip_package = os.path.join(os.environ.get('GITHUB_WORKSPACE'),
-                               'target',
-                               f'{repo_name}-{tag_name}-bin.zip')
-    with open(zip_package, 'rb') as f_asset:
-        release.upload_asset('application/zip',
-                             f'{repo_name}-{tag_name}-bin.zip',
-                             f_asset)
+    assets = ['*-bin.tar.gz', '*-bin.zip', '*.jar']
+    for dirname, subdirs, files in os.walk(os.environ.get('GITHUB_WORKSPACE')):
+        if dirname.endswith('target'):
+            for extension in assets:
+                for filename in fnmatch.filter(files, extension):
+                    with open(os.path.join(dirname, filename), 'rb') as f_asset:
+                        release.upload_asset('application/tar+gzip',
+                                             filename,
+                                             f_asset)
 
 
 def main():

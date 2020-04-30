@@ -56,13 +56,13 @@ def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger, uplo
     logger.info("create new snapshot release")
     our_branch = repo.branch(branch_name)
     repo.create_tag(tag_name,
-                    f'development build',
+                    f'SNAPSHOT release',
                     our_branch.commit.sha,
                     "commit",
                     tagger)
 
     # create the release
-    release = repo.create_release(tag_name, target_commitish=branch_name, name=tag_name, body="development build")
+    release = repo.create_release(tag_name, target_commitish=branch_name, name=repo_name + " " + tag_name, prerelease=True)
 
     logger.info("upload assets")
     upload_assets(repo_name, tag_name, release)
