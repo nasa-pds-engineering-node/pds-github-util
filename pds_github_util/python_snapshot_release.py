@@ -1,9 +1,8 @@
 import os
 import re
-import glob
 import logging
 import glob
-from .snapshot_release import snapshot_release_publication
+from pds_github_util.snapshot_release import snapshot_release_publication
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -18,6 +17,7 @@ def python_get_version():
 
 
 def python_get_version_from_setup():
+    logger.info("get version from setup.py file")
     setup_path = os.path.join(os.environ.get('GITHUB_WORKSPACE'), 'setup.py')
     prog = re.compile("version=.*")
     try:
@@ -33,13 +33,16 @@ def python_get_version_from_setup():
         return None
 
 def python_get_version_from_init():
+    logger.info("get version from package __init__.py file")
     init_path_pattern =  os.path.join(os.environ.get('GITHUB_WORKSPACE'), "*", "__init__.py")
     init_path = glob.glob(init_path_pattern)[0]
     try:
         with open(init_path) as fi:
             result = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fi.read())
             if result:
-                return result.group(1)
+                version = result.group(1)
+                logger.info("version {version}")
+                return version
             else:
                 return None
     except FileNotFoundError:
