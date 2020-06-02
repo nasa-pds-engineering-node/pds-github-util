@@ -2,7 +2,7 @@ import os
 import re
 import logging
 import glob
-from pds_github_util.snapshot_release import snapshot_release_publication
+from pds_github_util.release.snapshot_release import snapshot_release_publication
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)

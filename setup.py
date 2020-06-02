@@ -30,13 +30,15 @@ setuptools.setup(
     python_requires='>=3.6',
     install_requires=[
         'github3.py',
-        'lxml'
+        'lxml',
+        'mdutils'
     ],
     entry_points={
         # snapshot-release for backward compatibility
-        'console_scripts': ['snapshot-release=pds_github_util.maven_snapshot_release:main',
-                            'maven-snapshot-release=pds_github_util.maven_snapshot_release:main',
-                            'python-snapshot-release=pds_github_util.python_snapshot_release:main'
+        'console_scripts': ['snapshot-release=pds_github_util.release.maven_snapshot_release:main',
+                            'maven-snapshot-release=pds_github_util.release.maven_snapshot_release:main',
+                            'python-snapshot-release=pds_github_util.release.python_snapshot_release:main',
+                            'requirement-report=pds_github_util.requirements.generate_requirements:main'
                             ],
     },
 

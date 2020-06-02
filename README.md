@@ -1,6 +1,8 @@
 # PDS utility function for github
 
-Enforces the PDS engineering node software lifecycle
+Enforces the PDS engineering node software lifecycle:
+  - releases
+
 
 # Prerequisites
 
@@ -14,7 +16,7 @@ libxml2 is used. It needs to be deployed as follow:
 
 ## Ubuntu
 
-    sudo apt-get install libxml2-dev libxslt-dev python-dev
+    sudo apt-get update && sudo apt-get install libxml2-dev libxslt-dev python-dev
     pip install lxml
 
 # deploy and run
@@ -30,7 +32,13 @@ Some environment variable need to be set (they are defined by default in github 
 
 Run with, as parameter, the personal access token for github:
 
-    snapshot-release --token <personal access token>
+    maven-snapshot-release --token <personal access token>
+
+or 
+
+    python-snapshot-release --token <personal access token>
+    
+    
 
 
 # Development
