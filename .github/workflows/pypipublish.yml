@@ -39,6 +39,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
+        echo ::set-env name=GITHUB_TOKEN::$(${{ secrets.GITHUB_TOKEN }})
         pytest -s
     - name: Create the package
       run: |

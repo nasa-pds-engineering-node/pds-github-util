@@ -29,14 +29,13 @@ Some environment variable need to be set (they are defined by default in github 
 
     export GITHUB_WORKSPACE=<where the repository which we want to publish a snapshot is cloned>
     export GITHUB_REPOSITORY=<full name of the repository which we want to publish for example NASA-PDS-Incubator/pds-app-registry>
+    
 
-Run with, as parameter, the personal access token for github:
+Get command arguments:
 
-    maven-snapshot-release --token <personal access token>
-
-or 
-
-    python-snapshot-release --token <personal access token>
+    maven-snapshot-release --help
+    python-snapshot-release --help
+    requirement-report --help
     
     
 
@@ -53,6 +52,7 @@ Update the code
 
 Test the code:
 
+    export GITHUB_TOKEN=<personal access token for github>
     python setup.py test
 
 Create package and publish it:
