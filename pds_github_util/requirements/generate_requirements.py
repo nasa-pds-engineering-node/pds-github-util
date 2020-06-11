@@ -20,7 +20,8 @@ def main():
     args = parser.parse_args()
 
     requirements = Requirements(args.organization, args.repository, token=args.token, dev=args.dev)
-    requirements.write_requirements(args.output)
+    requirement_file = requirements.write_requirements(args.output)
+    print(requirement_file)
 
 
 if __name__ == "__main__":
