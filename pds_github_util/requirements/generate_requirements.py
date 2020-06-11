@@ -10,7 +10,7 @@ def main():
     parser.add_argument('--repository', dest='repository',
                         help='github repository name')
     parser.add_argument('--dev', dest='dev',
-                        type = str2bool, nargs = '?',
+                        nargs = '?',
                         const = True, default = False,
                         help = "Generate requirements with impacts related to latest dev/snapshot version")
     parser.add_argument('--output', dest='output',
