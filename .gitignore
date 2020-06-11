@@ -3,3 +3,6 @@ __pycache__/
 dist/
 build/
 .idea/
+env.sh
+output/
+pds_github_util.egg-info/

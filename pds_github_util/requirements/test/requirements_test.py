@@ -20,5 +20,10 @@ class MyTestCase(unittest.TestCase):
         requirement_summary = requirements._get_requirement_tag_map()
 
 
+    def test_generate_requirement_file(self):
+        requirements = Requirements('NASA-PDS', 'pds-doi-service', token=GITHUB_TOKEN, dev=True)
+        requirements.write_requirements(output_file_name='output/REQUIREMENTS.md')
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,4 +1,5 @@
 import github3
+from packaging import version
 
 
 
@@ -21,6 +22,28 @@ class Tags:
         for tag in self.sorted_tags:
             if tag['date'] > date_iso:
                 return tag['name']
+
+    def get_latest_tag(self, dev=False):
+        latest_tag = None
+        for tag in self._repo.tags():
+            if Tags.is_dev_version(tag.name) and dev:  # if we have a dev version and we look for dev version
+                latest_tag = Tags.get_max_tag(tag.name, latest_tag) if latest_tag else tag.name
+            elif not (Tags.is_dev_version(
+                    tag.name) or self._dev):  # if we don't have a dev version and we look for stable version
+                latest_tag = Tags.get_max_tag(tag.name, latest_tag) if latest_tag else tag.name
+
+        return latest_tag.__str__() if latest_tag else None
+
+    @staticmethod
+    def is_dev_version(tag_name):
+        return tag_name.endswith("-dev") or tag_name.endswith("-SNAPSHOT")
+
+    @staticmethod
+    def get_max_tag(tag_name, other_tag_name):
+        vers = version.parse(tag_name)
+        other_vers = version.parse(other_tag_name)
+        return tag_name if (vers > other_vers) else other_tag_name
+
 
 
 
