@@ -82,13 +82,11 @@ class Requirements:
         else:
             return 'The versions implementing or impacting this requirement are:'
 
-    def write_requirements(self, output_file_name=None):
-        if output_file_name is None:
-            output_file_name = os.path.join(self._current_tag, 'REQUIREMENTS.md')
+    def write_requirements(self, root_dir='.', output_file_name=None):
+        if not output_file_name:
+            output_file_name = os.path.join(root_dir, self._current_tag, 'REQUIREMENTS.md')
 
-        output_file_dir = os.path.dirname(output_file_name)
-        if len(output_file_dir):
-            os.makedirs(output_file_dir, exist_ok=True)
+        os.makedirs(os.path.dirname(output_file_name), exist_ok=True)
         requirements_md = MdUtils(file_name=output_file_name, title="Requirements Summary")
 
         for req_topic in self._requirements:

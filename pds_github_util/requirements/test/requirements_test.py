@@ -24,6 +24,10 @@ class MyTestCase(unittest.TestCase):
         requirements = Requirements('NASA-PDS', 'pds-doi-service', token=GITHUB_TOKEN, dev=True)
         requirements.write_requirements(output_file_name='output/REQUIREMENTS.md')
 
+    def test_generate_requirement_file_in_dir(self):
+        requirements = Requirements('NASA-PDS', 'pds-doi-service', token=GITHUB_TOKEN, dev=True)
+        requirements.write_requirements(root_dir='.pdsen-corral')
+
 
 if __name__ == '__main__':
     unittest.main()
