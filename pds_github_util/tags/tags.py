@@ -28,8 +28,7 @@ class Tags:
         for tag in self._repo.tags():
             if Tags.is_dev_version(tag.name) and dev:  # if we have a dev version and we look for dev version
                 latest_tag = Tags.get_max_tag(tag.name, latest_tag) if latest_tag else tag.name
-            elif not (Tags.is_dev_version(
-                    tag.name) or self._dev):  # if we don't have a dev version and we look for stable version
+            elif not (Tags.is_dev_version(tag.name) or dev):  # if we don't have a dev version and we look for stable version
                 latest_tag = Tags.get_max_tag(tag.name, latest_tag) if latest_tag else tag.name
 
         return latest_tag.__str__() if latest_tag else None
