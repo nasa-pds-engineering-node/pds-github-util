@@ -17,13 +17,15 @@ def main():
                         help = "Generate requirements with impacts related to latest dev/snapshot version")
     parser.add_argument('--output', dest='output',
                         help='directory where version/REQUIREMENTS.md file is created')
+    parser.add_argument('--format', dest='format', default='md',
+                        help='markdown (md) or html')
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
     args = parser.parse_args()
 
     try:
         requirements = Requirements(args.organization, args.repository, token=args.token, dev=args.dev)
-        requirement_file = requirements.write_requirements(root_dir=args.output)
+        requirement_file = requirements.write_requirements(root_dir=args.output, format=args.format)
         print(requirement_file)
     except NoAppropriateVersionFoundException as e:
         print('')

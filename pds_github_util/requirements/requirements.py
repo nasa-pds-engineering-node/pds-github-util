@@ -3,7 +3,10 @@ import logging
 import github3
 import re
 from mdutils import MdUtils
+from markdown2 import Markdown
 from pds_github_util.tags.tags import Tags
+
+from pds_github_util.html.md_to_html import md_to_html
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -83,16 +86,16 @@ class Requirements:
         else:
             return 'The versions implementing or impacting this requirement are:'
 
-    def write_requirements(self, root_dir='.', output_file_name=None):
-        if not output_file_name:
+    def write_requirements(self, root_dir='.', md_file_name=None, format='md'):
+        if not md_file_name:
             if self._current_tag:
-                output_file_name = os.path.join(root_dir, self._current_tag, 'REQUIREMENTS.md')
+                md_file_name = os.path.join(root_dir, self._current_tag, 'REQUIREMENTS.md')
             else:
                 dev_or_stable = "dev" if self._dev else "stable"
                 raise NoAppropriateVersionFoundException("No suitable version for " + dev_or_stable + "release")
 
-        os.makedirs(os.path.dirname(output_file_name), exist_ok=True)
-        requirements_md = MdUtils(file_name=output_file_name, title="Requirements Summary")
+        os.makedirs(os.path.dirname(md_file_name), exist_ok=True)
+        requirements_md = MdUtils(file_name=md_file_name, title="Requirements Summary")
 
         for req_topic in self._requirements:
             requirements_md.new_header(level=1, title=req_topic)
@@ -112,5 +115,13 @@ class Requirements:
                     requirements_md.new_paragraph('This requirement is not impacted by the current version')
 
         requirements_md.create_md_file()
+        if format == 'md':
+            return md_file_name
+        if format == 'html':
+            html_file_name = md_file_name.replace('.md', '.html')
+            return md_to_html(md_file_name, html_file_name,
+                              {'name': self._repo, 'description': self._repo.description, 'tag': self._current_tag})
+        else:
+            logger.error(f'output format {format} is not supported')
+            return ''
 
-        return output_file_name

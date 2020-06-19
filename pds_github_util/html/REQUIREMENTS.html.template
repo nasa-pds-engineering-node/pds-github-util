@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Requirements | pds-deep-archive</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Requirements summary" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="{{ description }}" />
+<meta property="og:description" content=" {{ description }}" />
+<link rel="canonical" href="https://nasa-pds.github.io/pds-deep-archive/pdsen-corral/{{ tag }}/REQUIREMENTS.html" />
+<meta property="og:url" content="https://nasa-pds.github.io/pds-deep-archive/pdsen-corral/{{ tag }}/REQUIREMENTS.html" />
+<meta property="og:site_name" content="{{ name }}" />
+<script type="application/ld+json">
+{"@type":"WebPage","headline":"Changelog","url":"https://nasa-pds.github.io/pds-deep-archive/pdsen-corral/{{ tag }}}}/REQUIREMENTS.html","description":"{{description }}","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="https://nasa-pds.github.io/pdsen-corral/assets/css/style.css?v=f093e6f77b857157fbbb149faab255eadf166819">
+  </head>
+  <body>
+  <div class="container-lg px-3 my-5 markdown-body">
+{{{ requirements_html }}}
+  </div>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+
+  </body>
+</html>
