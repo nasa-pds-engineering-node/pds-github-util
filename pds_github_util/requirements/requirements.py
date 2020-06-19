@@ -9,7 +9,8 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-
+class NoAppropriateVersionFoundException(Exception):
+    pass
 
 class Requirements:
 
@@ -84,7 +85,11 @@ class Requirements:
 
     def write_requirements(self, root_dir='.', output_file_name=None):
         if not output_file_name:
-            output_file_name = os.path.join(root_dir, self._current_tag, 'REQUIREMENTS.md')
+            if self._current_tag:
+                output_file_name = os.path.join(root_dir, self._current_tag, 'REQUIREMENTS.md')
+            else:
+                dev_or_stable = "dev" if self._dev else "stable"
+                raise NoAppropriateVersionFoundException("No suitable version for " + dev_or_stable + "release")
 
         os.makedirs(os.path.dirname(output_file_name), exist_ok=True)
         requirements_md = MdUtils(file_name=output_file_name, title="Requirements Summary")
@@ -105,7 +110,6 @@ class Requirements:
                     requirements_md.new_list(issue_lines)
                 else:
                     requirements_md.new_paragraph('This requirement is not impacted by the current version')
-
 
         requirements_md.create_md_file()
 

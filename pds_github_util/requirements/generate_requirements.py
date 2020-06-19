@@ -1,7 +1,9 @@
 import argparse
-from pds_github_util.requirements.requirements import Requirements
+import logging
+from pds_github_util.requirements.requirements import Requirements, NoAppropriateVersionFoundException
 
-
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 def main():
     parser = argparse.ArgumentParser(description='Create new snapshot release')
@@ -19,9 +21,15 @@ def main():
                         help='github personal access token')
     args = parser.parse_args()
 
-    requirements = Requirements(args.organization, args.repository, token=args.token, dev=args.dev)
-    requirement_file = requirements.write_requirements(root_dir=args.output)
-    print(requirement_file)
+    try:
+        requirements = Requirements(args.organization, args.repository, token=args.token, dev=args.dev)
+        requirement_file = requirements.write_requirements(root_dir=args.output)
+        print(requirement_file)
+    except NoAppropriateVersionFoundException as e:
+        print('')
+        logger.error(e)
+        exit(0) # we don't want the github action to fail after that
+
 
 
 if __name__ == "__main__":
