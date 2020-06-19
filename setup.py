@@ -23,6 +23,7 @@ setuptools.setup(
     url="https://github.com/NASA-PDS/pds-github-util",
     download_url = "https://github.com/NASA-PDS/pds-github-util/releases/download/0.0.1/pds_github_util-0.0.1.tar.gz",
     packages=setuptools.find_packages(),
+    include_package_data=True,
     keywords=['github', 'action', 'github action', 'snapshot', 'release', 'maven'],
 
     classifiers=[
