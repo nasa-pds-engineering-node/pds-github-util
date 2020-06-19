@@ -3,7 +3,6 @@ import logging
 import github3
 import re
 from mdutils import MdUtils
-from markdown2 import Markdown
 from pds_github_util.tags.tags import Tags
 
 from pds_github_util.html.md_to_html import md_to_html

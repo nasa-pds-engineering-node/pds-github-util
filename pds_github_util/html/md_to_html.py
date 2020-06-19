@@ -17,4 +17,3 @@ def md_to_html(in_file, out_file,
         f_out.write(html_str)
     return out_file
 
-    return html_file
