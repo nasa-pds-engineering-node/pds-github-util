@@ -3,7 +3,7 @@ lxml>=4.5
 mdutils>=1.2
 packaging>=20.4
 markdown2==2.3
-pystache==0.5
+pystache==0.5.4
 emoji==0.5
 
 
