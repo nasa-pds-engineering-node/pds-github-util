@@ -39,8 +39,9 @@ def python_get_version_from_setup():
 def python_get_version_from_init():
     logger.info("get version from package __init__.py file")
     init_path_pattern =  os.path.join(os.environ.get('GITHUB_WORKSPACE'), "*", "__init__.py")
-    init_path = glob.glob(init_path_pattern)[0]
-    try:
+    found_init = glob.glob(init_path_pattern)
+    if len(found_init):
+        init_path = found_init[0]
         with open(init_path) as fi:
             result = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fi.read())
             if result:
@@ -49,7 +50,7 @@ def python_get_version_from_init():
                 return version
             else:
                 return None
-    except FileNotFoundError:
+    else:
         return None
 
 def python_get_version_from_version_txt():
