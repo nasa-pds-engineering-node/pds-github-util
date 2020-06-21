@@ -2,6 +2,7 @@ import os
 import re
 import logging
 import glob
+from pathlib import Path
 from pds_github_util.release.snapshot_release import snapshot_release_publication
 
 logging.basicConfig(level=logging.DEBUG)
@@ -10,10 +11,13 @@ logger = logging.getLogger(__name__)
 SNAPSHOT_TAG_SUFFIX = "-dev"
 
 def python_get_version():
-    version = python_get_version_from_init()
-    if not version:
-        version = python_get_version_from_setup()
-    return version
+    get_version_funcs = ['python_get_version_from_init',
+                         'python_get_version_from_setup',
+                         'python_get_version_from_version_txt']
+    for get_version_func in get_version_funcs:
+        v = eval(get_version_func)()
+        if v:
+            return v
 
 
 def python_get_version_from_setup():
@@ -46,6 +50,17 @@ def python_get_version_from_init():
             else:
                 return None
     except FileNotFoundError:
+        return None
+
+def python_get_version_from_version_txt():
+    version_text_filename = 'version.txt'
+    try:
+        versiontext_file = next(Path('src').rglob(version_text_filename))
+        with open(versiontext_file) as f:
+            version = f.read()
+        return version.strip()
+    except StopIteration:
+        logger.info(f"no {version_text_filename} file found")
         return None
 
 
