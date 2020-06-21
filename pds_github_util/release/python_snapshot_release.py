@@ -46,7 +46,7 @@ def python_get_version_from_init():
             result = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fi.read())
             if result:
                 version = result.group(1)
-                logger.info("version {version}")
+                logger.info(f"version {version}")
                 return version
             else:
                 return None
@@ -54,6 +54,7 @@ def python_get_version_from_init():
         return None
 
 def python_get_version_from_version_txt():
+    logger.info("get version from version.text file")
     version_text_filename = 'version.txt'
     try:
         versiontext_file = next(Path('src').rglob(version_text_filename))
