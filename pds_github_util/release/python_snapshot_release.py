@@ -11,9 +11,11 @@ logger = logging.getLogger(__name__)
 SNAPSHOT_TAG_SUFFIX = "-dev"
 
 def python_get_version():
-    get_version_funcs = ['python_get_version_from_init',
-                         'python_get_version_from_setup',
-                         'python_get_version_from_version_txt']
+    get_version_funcs = [
+        'python_get_version_from_version_txt',
+        'python_get_version_from_init',
+        'python_get_version_from_setup'
+    ]
     for get_version_func in get_version_funcs:
         v = eval(get_version_func)()
         if v:
@@ -30,7 +32,7 @@ def python_get_version_from_setup():
                 line = line.strip()
                 if prog.match(line):
                     version = line[9:-2]
-                    logger.info("version {version}")
+                    logger.info(f'version {version}')
                     return version
         return None
     except FileNotFoundError:
