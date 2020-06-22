@@ -1,4 +1,5 @@
 import os
+from pkg_resources import resource_string
 from markdown2 import Markdown
 from pystache import Renderer
 import emoji
@@ -11,9 +12,9 @@ def md_to_html(in_file, out_file,
         html_emojized_str = emoji.emojize(html_str, use_aliases=True)
         template_kargs['requirements_html'] = html_emojized_str
     renderer = Renderer()
-    template_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'REQUIREMENTS.html.template')
+    template = resource_string(__name__,  'REQUIREMENTS.html.template')
     with open(out_file, 'w') as f_out:
-        html_str = renderer.render_path(template_file, template_kargs)
+        html_str = renderer.render(template, template_kargs)
         f_out.write(html_str)
     return out_file
 
