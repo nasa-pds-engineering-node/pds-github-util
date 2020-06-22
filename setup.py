@@ -25,7 +25,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     include_package_data=True,
     package_data = {
-        'html' : ['*.template']},
+        '' : ['*.template']},
     keywords=['github', 'action', 'github action', 'snapshot', 'release', 'maven'],
 
     classifiers=[
