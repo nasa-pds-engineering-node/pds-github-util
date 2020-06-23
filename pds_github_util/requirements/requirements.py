@@ -28,28 +28,32 @@ class Requirements:
         self._current_tag = self._tags.get_latest_tag(self._dev)
         self._requirements_tag_map = self._get_requirement_tag_map()
 
+
+    def _get_requirement_topic(self, issue):
+        requirement_topic = None
+        for label in issue.labels():
+            if label.name.startswith("requirement-topic"):
+                requirement_topic = label.name.split(':')[1]
+                continue
+
+        if not requirement_topic:
+            requirement_topic = 'default'
+
+        return requirement_topic
+
+
+
+
     def _get_requirements_from_issues(self):
         summary = {}
 
         for issue in self._repo.issues(state='all', direction='asc', labels='requirement'):
-            topic_assigned = False
-            for label in issue.labels():
-                if label.name.startswith("requirement-topic"):
-                    requirement_topic = label.name.split(':')[1]
-                    if requirement_topic not in summary.keys():
-                        summary[requirement_topic] = []
-                    summary[requirement_topic].append({'number': issue.number,
-                                                       'title': issue.title,
-                                                       'link': issue.url})
-                    topic_assigned = True
-                    continue
-
-        if not topic_assigned:
-            if "default" not in summary.keys():
-                summary["default"] = []
-            summary["default"].append({'number': issue.number,
-                                       'title': issue.title,
-                                       'link': issue.url})
+            requirement_topic = self._get_requirement_topic(issue)
+            if requirement_topic not in summary.keys():
+                summary[requirement_topic] = []
+            summary[requirement_topic].append({'number': issue.number,
+                                               'title': issue.title,
+                                               'link': issue.url})
 
         return summary
 
