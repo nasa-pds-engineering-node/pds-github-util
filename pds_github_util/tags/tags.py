@@ -1,4 +1,5 @@
 import github3
+import git
 from packaging import version
 
 

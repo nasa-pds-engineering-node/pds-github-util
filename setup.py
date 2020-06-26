@@ -41,6 +41,7 @@ setuptools.setup(
                             'maven-snapshot-release=pds_github_util.release.maven_snapshot_release:main',
                             'python-snapshot-release=pds_github_util.release.python_snapshot_release:main',
                             'requirement-report=pds_github_util.requirements.generate_requirements:main'
+                            'broadcast-commit=pds_github_util.branches.broadcast_commit:main'
                             ],
     },
 
