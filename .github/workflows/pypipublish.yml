@@ -39,7 +39,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+        export GITHUB_TOKEN=${{ secrets.ADMIN_GITHUB_TOKEN }}
         pytest -s
     - name: Create the package
       run: |
