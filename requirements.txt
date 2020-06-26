@@ -5,5 +5,5 @@ packaging>=20.4
 markdown2==2.3
 pystache==0.5.4
 emoji==0.5
-
+gitpython==3.1
 
