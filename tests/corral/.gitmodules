@@ -1,0 +1,37 @@
+[submodule "."]
+    version = 10.1
+
+[submodule "pds-doi-service"]
+    path = pds-doi-service
+    url = https://github.com/NASA-PDS/pds-doi-service/
+    description = Manage DOIs
+
+[submodule "pds-registry-app"]
+    path = pds-registry-app
+    url = https://github.com/NASA-PDS/pds-registry-app/
+    description = Create records, store and request the digital product in the PDS registry
+    version = 0.1
+
+[submodule "pds-deep-archive"]
+    path = pds-deep-archive
+    url = https://github.com/NASA-PDS/pds-deep-archive
+    description = Archive PDS products with OAIS standards to NSSDCA
+    version = 0.1
+
+[submodule "validate"]
+    path = validate
+    url = https://github.com/NASA-PDS/validate/
+    description = Validate PDS formats
+    version = 1.23
+
+[submodule "pds4-information-model"]
+    path = pds4-information-model
+    url = https://github.com/NASA-PDS/pds4-information-model/
+    description = PDS4 information model and tools for its maintenance
+    version = 11.3
+
+[submodule "harvest"]
+    path = harvest
+    url = https://github.com/NASA-PDS/harvest/
+    description = harvest pds4 label to store them in registry
+    version = 3.2

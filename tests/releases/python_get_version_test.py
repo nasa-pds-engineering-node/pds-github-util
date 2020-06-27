@@ -10,8 +10,9 @@ logger = logging.getLogger(__name__)
 class PythonGetVersionTestCase(unittest.TestCase):
 
     def setUp(self):
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, '..', '..', '..')
+        if 'GITHUB_WORKSPACE' not in os.environ:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, '..', '..')
 
     def test_python_get_version(self):
         version = python_get_version()

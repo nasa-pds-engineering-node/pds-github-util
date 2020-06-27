@@ -25,7 +25,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     include_package_data=True,
     package_data = {
-        '' : ['*.template']},
+        '' : ['*.template', 'gh_pages/resources/*']},
     keywords=['github', 'action', 'github action', 'snapshot', 'release', 'maven'],
 
     classifiers=[
@@ -40,8 +40,9 @@ setuptools.setup(
         'console_scripts': ['snapshot-release=pds_github_util.release.maven_snapshot_release:main',
                             'maven-snapshot-release=pds_github_util.release.maven_snapshot_release:main',
                             'python-snapshot-release=pds_github_util.release.python_snapshot_release:main',
-                            'requirement-report=pds_github_util.requirements.generate_requirements:main'
-                            'broadcast-commit=pds_github_util.branches.broadcast_commit:main'
+                            'requirement-report=pds_github_util.requirements.generate_requirements:main',
+                            'git-ping=pds_github_util.branches.git_ping:main',
+                            'summaries=pds_github_util.gh_pages.build_summaries:main'
                             ],
     },
 
