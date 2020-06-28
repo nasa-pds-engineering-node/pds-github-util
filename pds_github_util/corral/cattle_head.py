@@ -59,7 +59,7 @@ class CattleHead():
 
     def _get_cell(self, function):
         link_func = eval(f'self._get_{function}_link()')
-        return f'[![{function}]({self._icon_dict[function]})]({link_func} "{function}")'
+        return f'[![{function}]({self._icon_dict[function]})]({link_func} "{function}")' if link_func else ' '
 
     def _get_download_link(self):
         return f'https://github.com/NASA-PDS/{self._repo_name}/releases/tag/{self._version}'
@@ -72,7 +72,7 @@ class CattleHead():
             if self._version in self._changelog_signets:
                 return self._changelog_signets[self._version]
             else:
-                return
+                return None
         else:
             return "https://www.gnupg.org/gph/en/manual/r1943.html"
 
@@ -82,7 +82,7 @@ class CattleHead():
         if self._version and requests.get(url).status_code != 404:
             return url
         else:
-            return VOID_URL
+            return None
 
     def _get_license_link(self):
         return f'https://raw.githubusercontent.com/NASA-PDS/{self._repo_name}/master/LICENSE.txt'
