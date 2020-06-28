@@ -28,7 +28,7 @@ def write_build_summary(gitmodules=None, root_dir='.', output_file_name=None, to
 
     if not output_file_name:
         output_file_name = os.path.join(root_dir, version, 'index')
-        os.makedirs(os.path.dirname(output_file_name), exist_ok=True)
+    os.makedirs(os.path.dirname(output_file_name), exist_ok=True)
 
     software_summary_md = MdUtils(file_name=output_file_name, title=f'Software Summary (build {version})')
 
