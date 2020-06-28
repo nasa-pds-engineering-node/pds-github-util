@@ -1,2 +1,3 @@
 include html/REQUIREMENTS.html.template
 include gh_pages/resources/*
+include gh_pages/resources/images/*

@@ -8,7 +8,8 @@ SEMANTIC_VERSION_REGEX = r'\d+\.\d+(-SNAPSHOT)?'
 def update_index(root_dir):
     index_file_name = os.path.join(root_dir, 'index.md')
     index_md_file = mdutils.MdUtils(file_name=index_file_name, title=f'PDS Engineering Node software suite, builds')
-    index_md_file.new_inline_image('new PDS logo test', 'https://nasa-pds.github.io/pdsen-corral/images/logo.png')
+    img = index_md_file.new_inline_image('new PDS logo test', 'https://nasa-pds.github.io/pdsen-corral/images/logo.png')
+    index_md_file.new_line(img)
     prog = re.compile(SEMANTIC_VERSION_REGEX)
     build_dirs = []
     for d in os.listdir(root_dir):
