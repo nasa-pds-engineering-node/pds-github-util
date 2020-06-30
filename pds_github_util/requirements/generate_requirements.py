@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 def main():
-    parser = argparse.ArgumentParser(description='Create new snapshot release')
+    parser = argparse.ArgumentParser(description='Create a requirement report')
     parser.add_argument('--organization', dest='organization',
                         help='github organization owning the repo (e.g. NASA-PDS)')
     parser.add_argument('--repository', dest='repository',

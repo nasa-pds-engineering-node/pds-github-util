@@ -15,6 +15,7 @@ class NoAppropriateVersionFoundException(Exception):
     pass
 
 class Requirements:
+    ISSUE_TYPES = ['bug', 'enhancement']
 
     def __init__(self, org, repo, token=None, dev=False):
         self._organization = org
@@ -89,6 +90,15 @@ class Requirements:
         else:
             return 'The versions implementing or impacting this requirement are:'
 
+
+    @staticmethod
+    def _issue_is_bug_or_enhancement(issue):
+        for label in issue.labels():
+            if label.name in Requirements.ISSUE_TYPES:
+                return label.name
+
+
+
     def write_requirements(self, root_dir='.', md_file_name=None, format='md'):
         if not md_file_name:
             if self._current_tag:
@@ -108,12 +118,17 @@ class Requirements:
                 title = f"{req['title']} ([#{req['number']}](https://github.com/{self._repo}/issues/{req['number']})) {impacted_icon}"
                 requirements_md.new_header(level=2, title=title)
                 if impacted:
-                    issue_lines = []
-                    requirements_md.new_paragraph('The issues which impact the current requirements are:')
+                    issue_lines = {t : [] for t in Requirements.ISSUE_TYPES}
                     for n in self._requirements_tag_map[req['number']]['issues']:
                         issue = self._repo.issue(n)
-                        issue_lines.append(f'{issue.title} ([#{n}](https://github.com/{self._repo}/issues/{n}))')
-                    requirements_md.new_list(issue_lines)
+                        bug_or_enhancement = Requirements._issue_is_bug_or_enhancement(issue)
+                        issue_lines[bug_or_enhancement].append(f'{issue.title} ([#{n}](https://github.com/{self._repo}/issues/{n}))')
+
+                    for issue_type, issue_list in issue_lines.items():
+                        if len(issue_lines[issue_type]):
+                            requirements_md.new_paragraph(f'The {issue_type}s which impact this requirements are:')
+                            requirements_md.new_list(issue_list)
+
                 else:
                     requirements_md.new_paragraph('This requirement is not impacted by the current version')
 
