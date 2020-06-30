@@ -37,7 +37,7 @@ class CattleHead():
         self._org = self._github_path.split("/")[-2]
         self._repo_name = self._github_path.split("/")[-1]
         self._description = description
-        self._changelog_url = f"http://nasa-pds.github.io/{self._repo_name}/pdsen-corral/CHANGELOG.html"
+        self._changelog_url = f"http://{self._org}.github.io/{self._repo_name}/pdsen-corral/CHANGELOG.html"
         self._changelog_signets = self._get_changelog_signet()
         self._dev = dev
         self._token = token
@@ -62,10 +62,10 @@ class CattleHead():
         return f'[![{function}]({self._icon_dict[function]})]({link_func} "{function}")' if link_func else ' '
 
     def _get_download_link(self):
-        return f'https://github.com/NASA-PDS/{self._repo_name}/releases/tag/{self._version}'
+        return f'{self._github_path}/releases/tag/{self._version}'
 
     def _get_manual_link(self):
-        return f'https://nasa-pds.github.io/{self._repo_name}'
+        return f'https://{self._org}.github.io/{self._repo_name}'
 
     def _get_changelog_link(self):
         if self._version:
@@ -77,7 +77,7 @@ class CattleHead():
             return "https://www.gnupg.org/gph/en/manual/r1943.html"
 
     def _get_requirements_link(self):
-        url = f'https://nasa-pds.github.io/{self._repo_name}/pdsen-corral/{self._version}/REQUIREMENTS.html'
+        url = f'https://{self._org}.github.io/{self._repo_name}/pdsen-corral/{self._version}/REQUIREMENTS.html'
         logger.info(f'try url {url} for requirements')
         if self._version and requests.get(url).status_code != 404:
             return url
@@ -88,7 +88,7 @@ class CattleHead():
         return f'https://raw.githubusercontent.com/NASA-PDS/{self._repo_name}/master/LICENSE.txt'
 
     def _get_feedback_link(self):
-        return f'https://github.com/NASA-PDS/{self._repo_name}/issues/new/choose'
+        return f'{self._github_path}/issues/new/choose'
 
     def get_table_row(self):
         icon_cells = [self._get_cell(k) for k in self._icon_dict.keys()]
