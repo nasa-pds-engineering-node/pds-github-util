@@ -1,5 +1,6 @@
 import os
 from configparser import ConfigParser
+from datetime import datetime
 import logging
 from pds_github_util.corral import CattleHead
 
@@ -46,7 +47,9 @@ class Herd:
                                                      token=self._token,
                                                      **optional_module_options)
             else:
-                self._shepard_version = self._config.has_option(section, 'version')
+                self._shepard_version = self._config.get(section, 'version')
+                self._release_date = datetime.fromisoformat(self._config.get(section, 'release'))
+                self._update_date = datetime.now()
 
         return 0
 
@@ -60,3 +63,9 @@ class Herd:
 
     def get_shepard_version(self):
         return self._config.get('submodule "."', 'version').strip(" ")
+
+    def get_release_datetime(self):
+        return self._release_date
+
+    def get_update_datetime(self):
+        return self._update_date

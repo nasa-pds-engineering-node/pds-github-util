@@ -28,35 +28,44 @@ def copy_resources():
             copy(i_p, os.getcwd())
 
 
+
+def build_summaries(token):
+    copy_resources()
+
+    herds = []
+    # loop on stable releases
+    for herd in loop_checkout_on_branch('NASA-PDS/pdsen-corral',
+                            '[0-9]+\.[0-9]+',
+                            partial(write_build_summary,
+                                    root_dir=os.getcwd(),
+                                    gitmodules='/tmp/pdsen-corral/.gitmodules',
+                                    token=token,
+                                    dev=False),
+                            token=token,
+                            local_git_tmp_dir='/tmp'):
+        herds.append(herd)
+
+    herd = next(loop_checkout_on_branch('NASA-PDS/pdsen-corral',
+                            'master',
+                            partial(write_build_summary,
+                                    root_dir=os.getcwd(),
+                                    gitmodules='/tmp/pdsen-corral/.gitmodules',
+                                    token=token,
+                                    dev=True),
+                            token=token,
+                            local_git_tmp_dir='/tmp'))
+
+    herds.append(herd)
+
+    update_index(os.getcwd(), herds)
+
+
 def main():
     parser = argparse.ArgumentParser(description='Create new snapshot release')
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
     args = parser.parse_args()
-
-    copy_resources()
-
-    loop_checkout_on_branch('NASA-PDS/pdsen-corral',
-                            '[0-9]+\.[0-9]+',
-                            partial(write_build_summary,
-                                    root_dir=os.getcwd(),
-                                    gitmodules='/tmp/pdsen-corral/.gitmodules',
-                                    token=args.token,
-                                    dev=False),
-                            token=args.token,
-                            local_git_tmp_dir='/tmp')
-
-    loop_checkout_on_branch('NASA-PDS/pdsen-corral',
-                            'master',
-                            partial(write_build_summary,
-                                    root_dir=os.getcwd(),
-                                    gitmodules='/tmp/pdsen-corral/.gitmodules',
-                                    token=args.token,
-                                    dev=True),
-                            token=args.token,
-                            local_git_tmp_dir='/tmp')
-
-    update_index(os.getcwd())
+    build_summaries(args.token)
 
 
 

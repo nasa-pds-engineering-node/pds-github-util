@@ -1,12 +1,20 @@
 # PDS utility function for github
 
 Enforces the PDS engineering node software lifecycle:
-  - releases
+  - publish snapshot releases for python (`python-snapshot-release`) or maven  (`maven-snaphot-release`) projects
+  - create requirements reports (`requirement-report`)
+  - ping a repository, ie creates an empty commit & push e.g. to trigger github action (`git-ping`)
+  - create build summaries from .gitmodule file (`summaries`)
+  
+These routines are called from [github actions](https://github.com/features/actions).
+
+They are orchestrated around the [pdsen-corral](https://github.com/nasa-pds/pdsen-corral/) repository  
+  
 
 
 # Prerequisites
 
-libxml2 is used. It needs to be deployed as follow:
+libxml2 is used to do publish a snapshot release of a maven project (`maven-snaphot-release`). It needs to be deployed as follow:
 
 ## Macos
 
@@ -36,6 +44,8 @@ Get command arguments:
     maven-snapshot-release --help
     python-snapshot-release --help
     requirement-report --help
+    git-ping --help
+    summaries --help
     
     
 

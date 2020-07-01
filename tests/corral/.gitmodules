@@ -1,5 +1,6 @@
 [submodule "."]
     version = 10.1
+    release = 2020-06-15
 
 [submodule "pds-doi-service"]
     url = https://github.com/NASA-PDS/pds-doi-service/

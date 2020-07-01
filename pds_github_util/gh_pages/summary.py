@@ -47,4 +47,4 @@ def write_build_summary(gitmodules=None, root_dir='.', output_file_name=None, to
 
     software_summary_md.create_md_file()
 
-    return os.path.dirname(output_file_name)
+    return herd
