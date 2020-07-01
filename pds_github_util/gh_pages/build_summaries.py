@@ -45,6 +45,7 @@ def build_summaries(token):
                             local_git_tmp_dir='/tmp'):
         herds.append(herd)
 
+    # dev release on master
     herd = next(loop_checkout_on_branch('NASA-PDS/pdsen-corral',
                             'master',
                             partial(write_build_summary,
