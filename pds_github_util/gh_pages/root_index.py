@@ -28,6 +28,9 @@ class HerdTable:
                       colored_datetime(h.get_update_datetime(), colored=False)])
         self.n_rows += 1
 
+    def __len__(self):
+        return self.n_rows - 1
+
     def write_to_md_file(self, md_file):
         md_file.new_table(columns=self.n_columns,
                    rows=self.n_rows,
@@ -65,14 +68,17 @@ def update_index(root_dir, herds):
         except StopIteration as e:
             break
 
-    index_md_file.new_paragraph("Latest stable release")
-    table_latest_stable_release.write_to_md_file(index_md_file)
+    if len(table_latest_stable_release):
+        index_md_file.new_paragraph("Latest stable release")
+        table_latest_stable_release.write_to_md_file(index_md_file)
 
-    index_md_file.new_paragraph("Development releases")
-    table_development_releases.write_to_md_file(index_md_file)
+    if len(table_development_releases):
+        index_md_file.new_paragraph("Development releases")
+        table_development_releases.write_to_md_file(index_md_file)
 
-    index_md_file.new_paragraph("Archived stable releases")
-    table_latest_stable_release.write_to_md_file(index_md_file)
+    if len(table_archived_releases):
+        index_md_file.new_paragraph("Archived stable releases")
+        table_archived_releases.write_to_md_file(index_md_file)
 
     img = index_md_file.new_inline_image('new PDS logo test', 'https://nasa-pds.github.io/pdsen-corral/images/logo.png')
     index_md_file.new_line(img)
