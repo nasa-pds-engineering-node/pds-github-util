@@ -91,5 +91,3 @@ def update_index(root_dir, herds):
 
     index_md_file.create_md_file()
 
-
-def _get_dev_release_table(herds):
