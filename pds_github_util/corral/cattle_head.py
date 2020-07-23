@@ -103,9 +103,12 @@ class CattleHead():
 
     def get_table_row(self):
         icon_cells = [self._get_cell(k) for k in self._icon_dict.keys()]
+
+        more_description = f' [...]({self._github_path})' if len(self._description)>75 else ''
+
         return [self._name,
                 self._version if self._version else "None",
-                self._description,
+                self._description[:75] + more_description,
                 *icon_cells
         ]
 
