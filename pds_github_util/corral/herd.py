@@ -42,7 +42,6 @@ class Herd:
                 optional_module_options = {k:self._config.get(section, k).strip("/") for k in ['version'] if self._config.has_option(section, k)}
                 self._herd[module_name] = CattleHead(module_name,
                                                      self._config.get(section, "url").strip("/"),
-                                                     self._config.get(section, "description").strip("/"),
                                                      dev=self._dev,
                                                      token=self._token,
                                                      **optional_module_options)

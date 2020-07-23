@@ -30,24 +30,25 @@ class CattleHead():
         'feedback': 'https://nasa-pds.github.io/pdsen-corral/images/feedback.png'
     }
 
-    def __init__(self, name, github_path, description, version=None, dev=False, token=None):
-        logger.info(f'create cattleHead {name}, {github_path}, {description}')
+    def __init__(self, name, github_path, version=None, dev=False, token=None):
+        logger.info(f'create cattleHead {name}, {github_path}')
         self._name = name
         self._github_path = github_path
         self._org = self._github_path.split("/")[-2]
         self._repo_name = self._github_path.split("/")[-1]
-        self._description = description
+        self._token = token
+        gh = github3.login(token=self._token)
+        self._repo = gh.repository(self._org, self._repo_name)
+        self._description = self._repo.description
         self._changelog_url = f"http://{self._org}.github.io/{self._repo_name}/pdsen-corral/CHANGELOG.html"
         self._changelog_signets = self._get_changelog_signet()
         self._dev = dev
-        self._token = token
         self._version = self._get_latest_patch(minor=version)
 
     def _get_latest_patch(self, minor=None):
-        gh = github3.login(token=self._token)
-        repo = gh.repository(self._org, self._repo_name)
+
         latest_tag = None
-        for tag in repo.tags():
+        for tag in self._repo.tags():
             if is_dev_version(tag.name) and self._dev:  # if we have a dev version and we look for dev version
                 latest_tag = get_max_tag(tag.name, latest_tag) if latest_tag else tag.name
             elif not (is_dev_version(tag.name) or self._dev):  # if we don't have a dev version and we look for stable version
@@ -65,7 +66,17 @@ class CattleHead():
         return f'{self._github_path}/releases/tag/{self._version}'
 
     def _get_manual_link(self):
+        if self._version:
+            url = f'https://{self._org}.github.io/{self._repo_name}/{self._version}'
+            if requests.get(url).status_code != 404:
+                return url
+            elif self._version[0] == 'v':
+                url = f'https://{self._org}.github.io/{self._repo_name}/{self._version[1:]}'
+                if requests.get(url).status_code != 404:
+                    return url
+
         return f'https://{self._org}.github.io/{self._repo_name}'
+
 
     def _get_changelog_link(self):
         if self._version:
