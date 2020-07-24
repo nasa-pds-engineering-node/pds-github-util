@@ -31,6 +31,7 @@ class Herd:
 
         self._herd = {}
         self._shepard_version = None
+        self._update_date = None
         for section in self._config.sections():
             if 'submodule "."' not in section:
                 module_array = section.split(" ")
@@ -40,15 +41,19 @@ class Herd:
                     logger.error(f'section {section} is malformed, expected format is: [submodule "<module name>"]')
 
                 optional_module_options = {k:self._config.get(section, k).strip("/") for k in ['version'] if self._config.has_option(section, k)}
-                self._herd[module_name] = CattleHead(module_name,
+                cattle_head = CattleHead(module_name,
                                                      self._config.get(section, "url").strip("/"),
                                                      dev=self._dev,
                                                      token=self._token,
                                                      **optional_module_options)
+
+                pub_date = cattle_head.get_published_date()
+                if pub_date:
+                    self._update_date = max(self._update_date, pub_date) if self._update_date else pub_date
+                self._herd[module_name] = cattle_head
             else:
                 self._shepard_version = self._config.get(section, 'version')
                 self._release_date = datetime.fromisoformat(self._config.get(section, 'release'))
-                self._update_date = datetime.now()
 
         return 0
 
