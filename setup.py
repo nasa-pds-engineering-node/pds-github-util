@@ -42,7 +42,9 @@ setuptools.setup(
                             'python-snapshot-release=pds_github_util.release.python_snapshot_release:main',
                             'requirement-report=pds_github_util.requirements.generate_requirements:main',
                             'git-ping=pds_github_util.branches.git_ping:main',
-                            'summaries=pds_github_util.gh_pages.build_summaries:main'
+                            'summaries=pds_github_util.gh_pages.build_summaries:main',
+                            'pds4-validate=pds_github_util.utils.pds4_validate:main',
+                            'ldd-gen=pds_github_util.utils.ldd_gen:main'
                             ],
     },
 
