@@ -23,7 +23,7 @@ GITHUB_ORG = 'NASA-PDS'
 GITHUB_REPO = 'pds4-information-model'
 
 # LDDTool defaults
-LDDTOOL_DEFAULT_ARGS = '-lp'
+LDDTOOL_DEFAULT_ARGS = '-lpJ'
 
 # Schema download constants
 PDS_SCHEMA_URL = 'https://pds.nasa.gov/pds4/pds/v1/'
