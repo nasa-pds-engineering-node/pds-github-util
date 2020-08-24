@@ -53,7 +53,7 @@ def exec_validate(executable, args, log_path=os.path.expanduser('~')):
     with Popen(cmd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
         with open(log_out, 'w') as f:
             for line in p.stdout:
-                logger.info(line) # process line here
+                print(line, end='') # process line here
                 f.write(line)
 
     if p.returncode != 0:
