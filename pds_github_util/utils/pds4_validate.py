@@ -53,7 +53,7 @@ def exec_validate(executable, args, log_path=os.path.expanduser('~')):
     with Popen(cmd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
         with open(log_out, 'w') as f:
             for line in p.stdout:
-                print(line, end='') # process line here
+                logger.info(line, end='') # process line here
                 f.write(line)
 
     if p.returncode != 0:
@@ -112,7 +112,7 @@ def main():
                               'download and validate with this version of the '
                               'PDS4 Information Model. this version should be '
                               'the semantic numbered version. e.g. 1.14.0.0'))
-    parser.add_argument('--development_release', dest='development_release',
+    parser.add_argument('--development_release',
                         help=('flag to indicate this should be tested with a '
                               'development release of the PDS4 Standard.'),
                         action='store_true', default=False)

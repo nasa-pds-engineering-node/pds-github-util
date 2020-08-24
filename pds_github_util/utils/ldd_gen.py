@@ -59,15 +59,17 @@ def get_latest_release(token, dev=False):
     return _tags._repo.release_from_tag(_tags.get_latest_tag(dev=dev))
 
 
-def cleanup_ldd_output(ldd_output_path):
+def prep_ldd_output_path(ldd_output_path):
     # Crawl two directories up and remove everything
     parent_dir = os.path.dirname(os.path.dirname(ldd_output_path.rstrip(os.sep)))
     # parent_dir = ldd_output_path
 
-    print(parent_dir)
+    logger.info(f'Cleaning up {parent_dir}')
     for path, dirs, files in os.walk(parent_dir):
         for f in files:
-            os.remove(os.path.join(path, f))
+            filepath = os.path.join(path, f)
+            logger.info(f'Removing {filepath}')
+            os.remove(filepath)
 
     if not os.path.exists(ldd_output_path):
         os.makedirs(ldd_output_path)
@@ -84,11 +86,10 @@ def exec_lddtool(executable, execution_cwd, args, log_path=os.path.expanduser('~
     cmd = ['bash', executable ]
     # print(args)
     cmd.extend(args)
-    print(cmd)
     with Popen(cmd, cwd=execution_cwd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
         with open(log_out, 'w') as f:
             for line in p.stdout:
-                print(line, end='') # process line here
+                logger.info(line, end='') # process line here
                 f.write(line)
 
     if p.returncode != 0:
@@ -144,7 +145,7 @@ def main():
         lddtool_args.extend(find_ingest_ldds(args.ingest_ldd_src_dir))
 
         # cleanup the LDD Output area before generating LDDs
-        cleanup_ldd_output(args.ldd_output_path)
+        prep_ldd_output_path(args.ldd_output_path)
         
         pkg = download_asset(get_latest_release(token, dev=args.use_lddtool_unstable), 
                                                 args.deploy_dir, file_extension='.zip')
