@@ -142,7 +142,7 @@ def main():
 
         if args.development_release:
             if not args.with_pds4_version:
-                raise ArgumentError('--with_pds4_version must be specified when using --development_release')
+                raise argparse.ArgumentError('--with_pds4_version must be specified when using --development_release')
 
         if args.with_pds4_version:
             download_schemas(DOWNLOAD_PATH, args.with_pds4_version, dev_release=args.development_release)
