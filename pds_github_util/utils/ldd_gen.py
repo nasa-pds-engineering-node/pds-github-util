@@ -50,12 +50,16 @@ def convert_pds4_version_to_alpha(pds4_version):
     return pds4_version_short
 
 
-def find_ingest_ldds(ingest_ldd_src_dir):
+def find_dependency_ingest_ldds(ingest_ldd_src_dir):
     # Get any dependencies first
     dependencies_path = os.path.join(ingest_ldd_src_dir, 'dependencies')
-    ingest_ldds = glob.glob(os.path.join(dependencies_path, '*', 'src', '**IngestLDD*.xml'))
-    ingest_ldds.extend(glob.glob(os.path.join(ingest_ldd_src_dir, '*IngestLDD*.xml')))
-    return ingest_ldds
+    dependency_ldds = glob.glob(os.path.join(dependencies_path, '*', 'src', '*IngestLDD*.xml'))
+    return dependency_ldds
+
+
+def find_primary_ingest_ldd(ingest_ldd_src_dir):
+    ingest_ldd = glob.glob(os.path.join(ingest_ldd_src_dir, '*IngestLDD*.xml'))
+    return ingest_ldd
 
 
 def get_latest_release(token, dev=False):
@@ -79,7 +83,7 @@ def prep_ldd_output_path(ldd_output_path):
         os.makedirs(ldd_output_path)
 
 
-def exec_lddtool(executable, execution_cwd, args, log_path=os.path.expanduser('~')):
+def exec_lddtool(executable, execution_cwd, args, ingest_ldds, log_path=os.path.expanduser('~')):
     dtime = datetime.now().strftime('%Y%m%d%H%M%S')
     log_out = os.path.join(log_path, f'lddtool_run_log_{dtime}.txt')
     if not os.path.exists(os.path.dirname(log_out)):
@@ -88,7 +92,8 @@ def exec_lddtool(executable, execution_cwd, args, log_path=os.path.expanduser('~
     logger.info(log_out)
 
     cmd = ['bash', executable ]
-    # print(args)
+    args.extend(ingest_ldds)
+    print(args)
     cmd.extend(args)
     with Popen(cmd, cwd=execution_cwd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
         with open(log_out, 'w') as f:
@@ -146,7 +151,7 @@ def main():
             lddtool_args.extend(['-A', convert_pds4_version_to_alpha(args.with_pds4_version)])
 
         # Get the IngestLDDs
-        lddtool_args.extend(find_ingest_ldds(args.ingest_ldd_src_dir))
+        # lddtool_args.extend()
 
         # cleanup the LDD Output area before generating LDDs
         prep_ldd_output_path(args.ldd_output_path)
@@ -155,8 +160,18 @@ def main():
                                                 args.deploy_dir, file_extension='.zip')
         sw_dir = unzip_asset(pkg, args.deploy_dir)
 
+        # Generate dependency LDDs
+        ingest_ldds = find_dependency_ingest_ldds(args.ingest_ldd_src_dir)
+        for ingest in ingest_ldds:
+            # execute LDDTool
+            exec_lddtool(os.path.join(sw_dir, 'bin', 'lddtool'), args.ldd_output_path, lddtool_args, [ ingest ], log_path=args.output_log_path)
+
+        # Generate final LDDs
+        ingest_ldds.extend(find_primary_ingest_ldd(args.ingest_ldd_src_dir))
+
         # execute LDDTool
-        exec_lddtool(os.path.join(sw_dir, 'bin', 'lddtool'), args.ldd_output_path, lddtool_args, log_path=args.output_log_path)
+        exec_lddtool(os.path.join(sw_dir, 'bin', 'lddtool'), args.ldd_output_path, lddtool_args, ingest_ldds, log_path=args.output_log_path)
+
     except CalledProcessError:
         logger.error(f'FAILED: LDDTool failed unexpectedly. See output logs.')
         sys.exit(1)
