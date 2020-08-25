@@ -49,8 +49,12 @@ def convert_pds4_version_to_alpha(pds4_version):
 
     return pds4_version_short
 
+
 def find_ingest_ldds(ingest_ldd_src_dir):
-    ingest_ldds = glob.glob(os.path.join(ingest_ldd_src_dir, '**IngestLDD*.xml'))
+    # Get any dependencies first
+    dependencies_path = os.path.join(ingest_ldd_src_dir, 'dependencies')
+    ingest_ldds = glob.glob(os.path.join(dependencies_path, '*', 'src', '**IngestLDD*.xml'))
+    ingest_ldds.extend(glob.glob(os.path.join(ingest_ldd_src_dir, '*IngestLDD*.xml')))
     return ingest_ldds
 
 
