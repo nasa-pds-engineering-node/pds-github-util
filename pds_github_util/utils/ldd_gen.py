@@ -89,11 +89,11 @@ def exec_lddtool(executable, execution_cwd, args, ingest_ldds, log_path=os.path.
     if not os.path.exists(os.path.dirname(log_out)):
         os.makedirs(os.path.dirname(log_out))
 
-    logger.info(log_out)
-
     cmd = ['bash', executable ]
     args.extend(ingest_ldds)
     cmd.extend(args)
+    logger.info(cmd)
+
     with Popen(cmd, cwd=execution_cwd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
         with open(log_out, 'w') as f:
             for line in p.stdout:
