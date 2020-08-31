@@ -93,7 +93,6 @@ def exec_lddtool(executable, execution_cwd, args, ingest_ldds, log_path=os.path.
 
     cmd = ['bash', executable ]
     args.extend(ingest_ldds)
-    print(args)
     cmd.extend(args)
     with Popen(cmd, cwd=execution_cwd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
         with open(log_out, 'w') as f:
@@ -148,7 +147,7 @@ def main():
         lddtool_args = [ LDDTOOL_DEFAULT_ARGS ]
 
         if args.with_pds4_version:
-            lddtool_args.extend(['-A', convert_pds4_version_to_alpha(args.with_pds4_version)])
+            lddtool_args.extend(['-V', convert_pds4_version_to_alpha(args.with_pds4_version)])
 
         # Get the IngestLDDs
         # lddtool_args.extend()
