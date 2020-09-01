@@ -8,8 +8,18 @@ version = result.group(1)
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open('requirements.txt', 'r') as f:
-    pip_requirements = f.readlines()
+#with open('requirements.txt', 'r') as f:
+#    pip_requirements = f.readlines()
+pip_requirements = [ 'github3.py>=1.3',
+                     'lxml>=4.5',
+                     'mdutils>=1.2',
+                     'packaging>=20.4',
+                     'markdown2==2.3',
+                     'pystache==0.5.4',
+                     'emoji==0.5',
+                     'gitpython==3.1',
+                     'requests==2.23.0',
+                     'beautifulsoup4==4.9.0' ]
 
 setuptools.setup(
     name="pds_github_util", # Replace with your own package name
@@ -42,7 +52,9 @@ setuptools.setup(
                             'python-snapshot-release=pds_github_util.release.python_snapshot_release:main',
                             'requirement-report=pds_github_util.requirements.generate_requirements:main',
                             'git-ping=pds_github_util.branches.git_ping:main',
-                            'summaries=pds_github_util.gh_pages.build_summaries:main'
+                            'summaries=pds_github_util.gh_pages.build_summaries:main',
+                            'pds4-validate=pds_github_util.utils.pds4_validate:main',
+                            'ldd-gen=pds_github_util.utils.ldd_gen:main'
                             ],
     },
 
