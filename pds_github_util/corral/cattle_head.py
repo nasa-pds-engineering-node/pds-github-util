@@ -23,10 +23,10 @@ def get_max_tag(tag, other_tag):
 class CattleHead():
 
     _icon_dict = {
-        'download': 'https://nasa-pds.github.io/pdsen-corral/images/download.png',
         'manual': 'https://nasa-pds.github.io/pdsen-corral/images/manual.png',
         'changelog': 'https://nasa-pds.github.io/pdsen-corral/images/changelog.png',
         'requirements': 'https://nasa-pds.github.io/pdsen-corral/images/requirements.png',
+        'download': 'https://nasa-pds.github.io/pdsen-corral/images/download.png',
         'license' : 'https://nasa-pds.github.io/pdsen-corral/images/license.png',
         'feedback': 'https://nasa-pds.github.io/pdsen-corral/images/feedback.png'
     }

@@ -6,7 +6,7 @@ from pds_github_util.corral.herd import Herd
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-COLUMNS = ['download', 'manual', 'changelog', 'requirements', 'license', 'feedback']
+COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedback']
 
 def write_build_summary(gitmodules=None, root_dir='.', output_file_name=None, token=None, dev=False, version=None):
 
