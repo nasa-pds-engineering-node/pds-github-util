@@ -41,7 +41,7 @@ class CattleHead():
         gh = github3.login(token=self._token)
         self._repo = gh.repository(self._org, self._repo_name)
         self._description = self._repo.description
-        self._changelog_url = f"http://{self._org}.github.io/{self._repo_name}/pdsen-corral/CHANGELOG.html"
+        self._changelog_url = f'https://github.com/{self._org}/{self._repo_name}/blob/master/CHANGELOG.md'
         self._changelog_signets = self._get_changelog_signet()
         self._dev = dev
 
@@ -99,7 +99,7 @@ class CattleHead():
             return "https://www.gnupg.org/gph/en/manual/r1943.html"
 
     def _get_requirements_link(self):
-        url = f'https://{self._org}.github.io/{self._repo_name}/pdsen-corral/{self._version_name}/REQUIREMENTS.html'
+        url = f'https://github.com/{self._org}/{self._repo_name}/blob/master/docs/requirements/{self._version_name}/REQUIREMENTS.md'
         logger.info(f'try url {url} for requirements')
         if self._version_name and requests.get(url).status_code != 404:
             return url
