@@ -131,8 +131,20 @@ class CattleHead():
         soup = BeautifulSoup(changelog.content, 'html.parser')
         changelog_signets = {}
         for h2 in soup.find_all('h2'):
-            changelog_signets[h2.find("a").text] = "#".join([self._changelog_url, h2.get('id')])
+            version , signet = self._extract_signet_from_h2(h2)
+            if version:
+                changelog_signets[version] = signet
 
         return changelog_signets
+
+    def _extract_signet_from_h2(self, h2_tag):
+        a_tags = h2_tag.find_all("a")
+        if len(a_tags) == 2:
+            href_attr = a_tags[0].get('href')
+            if href_attr:
+                return a_tags[1].text, ''.join([self._changelog_url, href_attr])
+
+        return None, None
+
 
 
