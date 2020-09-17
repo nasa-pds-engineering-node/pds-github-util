@@ -1,6 +1,6 @@
 import argparse
 
-from pds_github_util.output.summary import write_build_summary
+from pds_github_util.gh_pages.summary import write_build_summary
 
 
 def main():
