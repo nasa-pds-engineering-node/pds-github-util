@@ -120,7 +120,7 @@ class CattleHead():
 
         return [self._name,
                 self._version_name if self._version_name else "None",
-                self._update.strftime('%y-%m-%d') if self._update else "Not yet",
+                self._update.strftime('%Y-%m-%d') if self._update else "N/A",
                 description,
                 *icon_cells
         ]
