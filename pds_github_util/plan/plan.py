@@ -23,7 +23,7 @@ REPO_INFO = ('\n--------\n\n'
              '   * - `User Guide <{}>`_\n'
              '     - `Github Repo <{}>`_\n'
              '     - `Issue Tracking <{}/issues>`_ \n'
-             '     - `Backlog <{}/issues>`_ \n'
+             '     - `Backlog <{}/issues?q=is%3Aopen+is%3Aissue+label%3Abacklog>`_ \n'
              '     - `Stable Release <{}/releases/latest>`_ \n'
              '     - `Dev Release <{}/releases>`_ \n\n')
 
