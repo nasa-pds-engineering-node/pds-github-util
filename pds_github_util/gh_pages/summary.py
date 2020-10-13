@@ -36,7 +36,7 @@ def write_build_summary(gitmodules=None, root_dir='.', output_file_name=None, to
     for column in COLUMNS:
         column_headers.append(f'![{column}](https://nasa-pds.github.io/pdsen-corral/images/{column}_text.png)')
 
-    table = ["tool", "version", "published", "description", *column_headers]
+    table = ["tool", "version", "last updated", "description", *column_headers]
     n_columns = len(table)
     for k, ch in herd.get_cattle_heads().items():
         table.extend(ch.get_table_row())
