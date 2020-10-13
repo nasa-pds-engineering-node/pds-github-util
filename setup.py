@@ -40,7 +40,7 @@ setuptools.setup(
 
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache v2 License",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
@@ -54,7 +54,9 @@ setuptools.setup(
                             'git-ping=pds_github_util.branches.git_ping:main',
                             'summaries=pds_github_util.gh_pages.build_summaries:main',
                             'pds4-validate=pds_github_util.utils.pds4_validate:main',
-                            'ldd-gen=pds_github_util.utils.ldd_gen:main'
+                            'ldd-gen=pds_github_util.utils.ldd_gen:main',
+                            'ldd-release=pds_github_util.release.ldd_release:main',
+                            'release-plan=pds_github_util.plan.plan:main'
                             ],
     },
 

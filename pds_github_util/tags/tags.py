@@ -34,6 +34,13 @@ class Tags:
 
         return latest_tag.__str__() if latest_tag else None
 
+    def get_tag(self, tag_name):
+        for tag in self._repo.tags():
+            if tag.name == tag_name:
+                return tag
+
+        return None
+
     @staticmethod
     def is_dev_version(tag_name):
         return tag_name.endswith("-dev") or tag_name.endswith("-SNAPSHOT")

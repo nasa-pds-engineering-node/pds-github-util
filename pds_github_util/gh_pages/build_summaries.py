@@ -8,9 +8,12 @@ from pds_github_util.branches.git_actions import loop_checkout_on_branch
 from pds_github_util.gh_pages.summary import write_build_summary
 from pds_github_util.gh_pages.root_index import update_index
 
+logger = logging.getLogger('github3')
+logger.setLevel(level=logging.WARNING)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
+
 
 def copy_resources():
     logger.info("write static resources (img, config)...")
