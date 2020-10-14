@@ -81,7 +81,12 @@ def find_ldds(ldd_output_path, namespace_id, ldd_version):
                 # get ingest ldd version
                 tree = ET.parse(ldd_xml)
                 root = tree.getroot()
-                pds4_num_versions.append(root.findall(f'.//{{{PDS_NS}}}Identification_Area/{{{PDS_NS}}}information_model_version')[0].text)
+                try:
+                    pds4_num_versions.append(root.findall(f'.//{{{PDS_NS}}}Identification_Area/{{{PDS_NS}}}information_model_version')[0].text)
+                except Exception as e:
+                    logger.warn(f'{ldd_xml} not an LDD XML. skipping...')
+                    None
+
                 logger.info(f'pds4_versions: {pds4_num_versions}')
 
     logger.info('find and group LDDs into applicable groupings')
