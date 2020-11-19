@@ -1,7 +1,9 @@
 import os
 import logging
 import github3
+import glob
 import re
+import shutil
 from mdutils import MdUtils
 from pds_github_util.tags.tags import Tags
 
@@ -90,14 +92,20 @@ class Requirements:
         else:
             return 'The versions implementing or impacting this requirement are:'
 
-
     @staticmethod
     def _issue_is_bug_or_enhancement(issue):
         for label in issue.labels():
             if label.name in Requirements.ISSUE_TYPES:
                 return label.name
 
+    def _clean_previous_dev_requirements(self, root_dir):
+        if self._dev:
+            requirement_version_dev_dirs = glob.glob(os.path.join(root_dir, '*' + Tags.PYTHON_DEV_SUFFIX))
+            requirement_version_dev_dirs.extend(glob.glob(os.path.join(root_dir, '*' + Tags.JAVA_DEV_SUFFIX)))
 
+            for dir in requirement_version_dev_dirs:
+                if dir != self._current_tag:
+                    shutil.rmtree(dir)
 
     def write_requirements(self, root_dir='.', md_file_name=None, format='md'):
         if not md_file_name:
@@ -142,4 +150,6 @@ class Requirements:
         else:
             logger.error(f'output format {format} is not supported')
             return ''
+
+        self._clean_previous_dev_requirements(root_dir)
 

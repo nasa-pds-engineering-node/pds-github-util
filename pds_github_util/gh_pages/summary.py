@@ -1,6 +1,7 @@
 import os
 import logging
 from mdutils import MdUtils
+from pds_github_util.tags.tags import Tags
 from pds_github_util.corral.herd import Herd
 
 logging.basicConfig(level=logging.INFO)
@@ -19,11 +20,12 @@ def write_build_summary(gitmodules=None, root_dir='.', output_file_name=None, to
         herd.set_shepard_version(version)
 
     logger.info(f'build version is {version}')
-    if dev and not ('dev' in version or 'SNAPSHOT' in version):
-        logger.error("version of build does not contain dev or SNAPSHOT, dev build summary is not generated")
+    is_dev = Tags.JAVA_DEV_SUFFIX in version or Tags.PYTHON_DEV_SUFFIX in version
+    if dev and not is_dev:
+        logger.error(f'version of build does not contain {Tags.JAVA_DEV_SUFFIX} or {Tags.PYTHON_DEV_SUFFIX}, dev build summary is not generated')
         exit(1)
-    elif not dev and ('dev' in version or 'SNAPSHOT' in version):
-        logger.error("version of build contains dev or SNAPSHOT, release build summary is not generated")
+    elif not dev and is_dev:
+        logger.error(f'version of build contains {Tags.JAVA_DEV_SUFFIX} or {Tags.PYTHON_DEV_SUFFIX}, release build summary is not generated')
         exit(1)
 
     if not output_file_name:

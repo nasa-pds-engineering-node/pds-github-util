@@ -5,6 +5,10 @@ from packaging import version
 
 
 class Tags:
+    JAVA_DEV_SUFFIX = '-SNAPSHOT'
+    PYTHON_DEV_SUFFIX = '-dev'
+
+
     def __init__(self, org, repo, token=None):
         self._organization = org
         self._repository = repo
@@ -34,9 +38,9 @@ class Tags:
 
         return latest_tag.__str__() if latest_tag else None
 
-    @staticmethod
-    def is_dev_version(tag_name):
-        return tag_name.endswith("-dev") or tag_name.endswith("-SNAPSHOT")
+    @classmethod
+    def is_dev_version(cls, tag_name):
+        return tag_name.endswith(Tags.PYTHON_DEV_SUFFIX) or tag_name.endswith(Tags.PYTHON_DEV_SUFFIX)
 
     @staticmethod
     def get_max_tag(tag_name, other_tag_name):

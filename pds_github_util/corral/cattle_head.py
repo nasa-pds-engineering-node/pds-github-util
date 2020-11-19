@@ -101,7 +101,7 @@ class CattleHead():
     def _get_requirements_link(self):
         url = f'https://github.com/{self._org}/{self._repo_name}/blob/master/docs/requirements/{self._version_name}/REQUIREMENTS.md'
         logger.info(f'try url {url} for requirements')
-        if self._version_name and requests.get(url).status_code != 404:
+        if self._version_name and requests.get(url, timeout=5).status_code != 404:
             return url
         else:
             return None
