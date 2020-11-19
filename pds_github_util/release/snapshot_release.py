@@ -1,7 +1,8 @@
+import argparse
 import os
 import logging
 import github3
-import argparse
+import sys
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -45,18 +46,32 @@ def snapshot_release_publication(suffix, get_version, upload_assets):
     parser = argparse.ArgumentParser(description='Create new snapshot release')
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
-    args = parser.parse_args()
+    parser.add_argument('--repo_name',
+                        help='full name of github repo (e.g. user/repo)')
+    parser.add_argument('--workspace',
+                        help='path of workspace. defaults to current working directory if this or GITHUB_WORKSPACE not specified')
+    args, unknown = parser.parse_known_args()
 
     # read organization and repository name
-    repo_full_name = os.environ.get('GITHUB_REPOSITORY')
+    repo_full_name = args.repo_name or os.environ.get('GITHUB_REPOSITORY')
+    if not repo_full_name:
+        logger.error(f'Github repository must be provided or set as environment variable (GITHUB_REPOSITORY).')
+        sys.exit(1)
+
+    workspace = args.workspace or os.environ.get('GITHUB_WORKSPACE')
+    if not workspace:
+        workspace = os.getcwd()
+        os.environ['GITHUB_WORKSPACE'] = workspace
+
     repo_full_name_array = repo_full_name.split("/")
     org = repo_full_name_array[0]
     repo_name = repo_full_name_array[1]
 
     tag_name = get_version()
+    print(tag_name)
     if tag_name.endswith(suffix):
-        tagger = {"name": "GitHub Action",
-                  "email": "action@github.com"}
+        tagger = {"name": "PDSEN CI Bot",
+                  "email": "pdsen-ci@jpl.nasa.gov"}
 
         gh = github3.login(token=args.token)
         repo = gh.repository(org, repo_name)

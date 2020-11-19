@@ -38,6 +38,13 @@ class Tags:
 
         return latest_tag.__str__() if latest_tag else None
 
+    def get_tag(self, tag_name):
+        for tag in self._repo.tags():
+            if tag.name == tag_name:
+                return tag
+
+        return None
+
     @classmethod
     def is_dev_version(cls, tag_name):
         return tag_name.endswith(Tags.PYTHON_DEV_SUFFIX) or tag_name.endswith(Tags.PYTHON_DEV_SUFFIX)
