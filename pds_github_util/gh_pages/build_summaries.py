@@ -32,7 +32,7 @@ def copy_resources():
 
 
 
-def build_summaries(token):
+def build_summaries(token, path=os.getcwd(), format='md'):
     copy_resources()
 
     herds = []
@@ -40,10 +40,11 @@ def build_summaries(token):
     for herd in loop_checkout_on_branch('NASA-PDS/pdsen-corral',
                             '[0-9]+\.[0-9]+',
                             partial(write_build_summary,
-                                    root_dir=os.getcwd(),
+                                    root_dir=path,
                                     gitmodules='/tmp/pdsen-corral/.gitmodules',
                                     token=token,
-                                    dev=False),
+                                    dev=False,
+                                    format=format),
                             token=token,
                             local_git_tmp_dir='/tmp'):
         herds.append(herd)
@@ -55,7 +56,8 @@ def build_summaries(token):
                                     root_dir=os.getcwd(),
                                     gitmodules='/tmp/pdsen-corral/.gitmodules',
                                     token=token,
-                                    dev=True),
+                                    dev=True,
+                                    format=format),
                             token=token,
                             local_git_tmp_dir='/tmp'))
 
@@ -68,8 +70,12 @@ def main():
     parser = argparse.ArgumentParser(description='Create new snapshot release')
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
+    parser.add_argument('--path', dest='path',
+                        help='directory where the summary will be created')
+    parser.add_argument('--format', dest='format',
+                        help='format of the summary, accepted formats are md and rst')
     args = parser.parse_args()
-    build_summaries(args.token)
+    build_summaries(args.token, args.path, args.format)
 
 
 

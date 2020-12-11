@@ -1,0 +1,15 @@
+[submodule "."]
+    version = 11.0
+    release = 2020-12-31
+
+[submodule "pds-doi-service"]
+    path = pds-doi-service
+    url = https://github.com/NASA-PDS/pds-doi-service/
+    description = Manage DOIs
+    version = 1.0
+
+[submodule "pds-registry-app"]
+    path = pds-registry-app
+    url = https://github.com/NASA-PDS/pds-registry-app/
+    description = Create records, store and request the digital product in the PDS registry
+    version = 0.2

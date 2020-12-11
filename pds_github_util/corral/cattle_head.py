@@ -5,7 +5,16 @@ import github3
 from packaging import version
 from datetime import datetime
 logging.basicConfig(level=logging.INFO)
+
+import http.client
+http.client.HTTPConnection.debuglevel = 1
+
 logger = logging.getLogger(__name__)
+
+
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
 
 VOID_URL = 'https://en.wikipedia.org/wiki/Void_(astronomy)'
 SHORT_DESCRIPTION_LEN = 50
@@ -18,6 +27,7 @@ def get_max_tag(tag, other_tag):
     vers = version.parse(tag.name)
     other_vers = version.parse(other_tag.name)
     return tag if (vers > other_vers) else other_tag
+
 
 
 class CattleHead():
@@ -53,6 +63,16 @@ class CattleHead():
         else:
             self._update = None
 
+        self.rst_doc = None
+
+    def set_rst(self, d):
+        self.rst_doc = d
+
+    def set_icon_replacement_rst(self, function, link_func):
+        self.rst_doc.deffered_directive('image', arg=self._icon_dict[function],
+                               fields=[('target', link_func)],
+                               reference=f'{self._repo}_{function}')
+
     def get_published_date(self):
         return self._update
 
@@ -69,9 +89,38 @@ class CattleHead():
 
         return latest_tag if latest_tag else None
 
-    def _get_cell(self, function):
+    @staticmethod
+    def _reachable(url):
+        logger.info(f'try url {url}')
+        time_out = 5;
+
+        headers = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml',
+            'Accept-encoding': 'gzip,deflate,br',
+            'Accept-language': 'en-US,en',
+            'Content-Type': 'text/html; charset=utf-8',
+            'Connection': 'close',
+            'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36'
+        }
+
+        try:
+            response = requests.head(url, timeout=time_out, headers=headers)
+            return response.status_code != 404
+        except requests.exceptions as e:
+            logger.info(f'url {url} not reachable in {time_out}s')
+            return False
+
+
+    def _get_cell(self, function, format='md'):
         link_func = eval(f'self._get_{function}_link()')
-        return f'[![{function}]({self._icon_dict[function]})]({link_func} "{function}")' if link_func else ' '
+        if format == 'md':
+            return f'[![{function}]({self._icon_dict[function]})]({link_func} "{function}")' if link_func else ' '
+        elif format == 'rst':
+            self.set_icon_replacement_rst(function, link_func)
+            return f'|{self._repo}_{function}|' if link_func else ' '
+        else:
+            logger.error(f'Unsupported format {format} for tool summary table cell (_get_cell)')
+            return None
 
     def _get_download_link(self):
         return f'{self._github_path}/releases/tag/{self._version}'
@@ -79,11 +128,11 @@ class CattleHead():
     def _get_manual_link(self):
         if self._version_name:
             url = f'https://{self._org}.github.io/{self._repo_name}/{self._version_name}'
-            if requests.get(url).status_code != 404:
+            if self._reachable(url):
                 return url
             elif self._version_name[0] == 'v':
                 url = f'https://{self._org}.github.io/{self._repo_name}/{self._version_name[1:]}'
-                if requests.get(url).status_code != 404:
+                if self._reachable(url):
                     return url
 
         return f'https://{self._org}.github.io/{self._repo_name}'
@@ -100,8 +149,8 @@ class CattleHead():
 
     def _get_requirements_link(self):
         url = f'https://github.com/{self._org}/{self._repo_name}/blob/master/docs/requirements/{self._version_name}/REQUIREMENTS.md'
-        logger.info(f'try url {url} for requirements')
-        if self._version_name and requests.get(url, timeout=5).status_code != 404:
+
+        if self._version_name and self._reachable(url):
             return url
         else:
             return None
@@ -112,11 +161,17 @@ class CattleHead():
     def _get_feedback_link(self):
         return f'{self._github_path}/issues/new/choose'
 
-    def get_table_row(self):
-        icon_cells = [self._get_cell(k) for k in self._icon_dict.keys()]
+    def get_table_row(self, format='md'):
+        icon_cells = [self._get_cell(k, format) for k in self._icon_dict.keys()]
 
         description = self._description[:SHORT_DESCRIPTION_LEN]
-        description += f" [...]({self._github_path} 'more')" if len(self._description)>SHORT_DESCRIPTION_LEN else ''
+        if len(self._description)>SHORT_DESCRIPTION_LEN:
+            if format=='md':
+                description += f" [...]({self._github_path} 'more')"
+            elif format=='rst':
+                description += f"`...<{self._github_path}/>`_"
+            else:
+                logger.error(f'format {format} not supported to write long description link (get_table_row)')
 
         return [self._name,
                 self._version_name if self._version_name else "None",

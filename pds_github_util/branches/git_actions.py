@@ -29,6 +29,7 @@ def loop_checkout_on_branch(repo_full_name, branch_regex, callback, token=None, 
             logger.info(f'branch {branch.name}')
             remote_url = gh_repo.git_url.replace('git://', f'https://{token}:x-oauth-basic@')
             g_repo = clone_checkout_branch(remote_url, local_path, branch.name)
+
             yield callback()
 
 
