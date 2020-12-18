@@ -8,6 +8,25 @@ import sys
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+def create_release(repo, repo_name, branch_name, tag_name, tagger, upload_assets):
+    """Create a tag, if needed, and release.
+    
+    Push the assets created in target directory.
+    """
+    logger.info("create new release")
+
+    our_branch = repo.branch(branch_name)
+    repo.create_tag(tag_name,
+                    f'release',
+                    our_branch.commit.sha,
+                    "commit",
+                    tagger)
+
+    # create the release
+    release = repo.create_release(tag_name, target_commitish=branch_name, name=repo_name + " " + tag_name, prerelease=False)
+
+    logger.info("upload assets")
+    upload_assets(repo_name, tag_name, release)
 
 def delete_snapshot_releases(_repo, suffix):
     """
@@ -39,7 +58,7 @@ def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger, uplo
     upload_assets(repo_name, tag_name, release)
 
 
-def snapshot_release_publication(suffix, get_version, upload_assets):
+def release_publication(suffix, get_version, upload_assets):
     """
     Script made to work in the context of a github action.
     """
@@ -63,18 +82,24 @@ def snapshot_release_publication(suffix, get_version, upload_assets):
         workspace = os.getcwd()
         os.environ['GITHUB_WORKSPACE'] = workspace
 
+    token = args.token or os.environ.get('GITHUB_TOKEN')
+    if not token:
+        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+
     repo_full_name_array = repo_full_name.split("/")
     org = repo_full_name_array[0]
     repo_name = repo_full_name_array[1]
 
     tag_name = get_version()
     print(tag_name)
+    tagger = {"name": "PDSEN CI Bot",
+              "email": "pdsen-ci@jpl.nasa.gov"}
+
+    gh = github3.login(token=token)
+    repo = gh.repository(org, repo_name)
+
+    delete_snapshot_releases(repo, suffix)
     if tag_name.endswith(suffix):
-        tagger = {"name": "PDSEN CI Bot",
-                  "email": "pdsen-ci@jpl.nasa.gov"}
-
-        gh = github3.login(token=args.token)
-        repo = gh.repository(org, repo_name)
-
-        delete_snapshot_releases(repo, suffix)
         create_snapshot_release(repo, repo_name, "master", tag_name, tagger, upload_assets)
+    else:
+        create_release(repo, repo_name, "master", tag_name, tagger, upload_assets)
