@@ -2,7 +2,7 @@ import unittest
 import os
 from pds_github_util.gh_pages.build_summaries import build_summaries
 
-TOKEN = os.environ.get('GITHUB_TOKEN')
+TOKEN = os.environ.get('GITHUB_TOKEN') or os.environ.get('ADMIN_GITHUB_TOKEN')
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
