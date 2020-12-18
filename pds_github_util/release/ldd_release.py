@@ -69,44 +69,26 @@ def get_info(ingest_ldd_src_dir):
     return ingest_ldd, ns_id, ldd_version
 
 
-def find_ldds(ldd_output_path, namespace_id, ldd_version):
+def find_ldds(ldd_output_path, namespace_id, ldd_version, pds4_version):
     """Search repo for LDDs."""
-    logger.info('finding the applicable PDS4 versions')
-    path_pattern = os.path.join(ldd_output_path, '*', LDD_NAME_BASE.format(namespace_id.upper(), '*') + '.xml')
-    found_ldd_xmls = glob.glob(path_pattern)
-    pds4_num_versions = []
-    if found_ldd_xmls:
-        for ldd_xml in found_ldd_xmls:
-            with open(ldd_xml) as f:
-                # get ingest ldd version
-                tree = ET.parse(ldd_xml)
-                root = tree.getroot()
-                try:
-                    pds4_num_versions.append(root.findall(f'.//{{{PDS_NS}}}Identification_Area/{{{PDS_NS}}}information_model_version')[0].text)
-                except Exception as e:
-                    logger.warn(f'{ldd_xml} not an LDD XML. skipping...')
-                    None
-
-                logger.info(f'pds4_versions: {pds4_num_versions}')
-
     logger.info('find and group LDDs into applicable groupings')
     ldd_dict = {}
-    for v in pds4_num_versions:
-        pds4_alpha_version = convert_pds4_version_to_alpha(v)
-        ldd_alpha_version = convert_pds4_version_to_alpha(ldd_version)
 
-        release_name = RELEASE_NAME.format(pds4_alpha_version, ldd_alpha_version)
-        path_pattern = os.path.join(ldd_output_path, '*', f'*{pds4_alpha_version}*')
-        all_ldds = glob.glob(path_pattern)
+    pds4_alpha_version = convert_pds4_version_to_alpha(pds4_version)
+    ldd_alpha_version = convert_pds4_version_to_alpha(ldd_version)
 
-        # pkg_name = LDD_NAME_BASE.format(namespace_id.upper(), pds4_alpha_version, ldd_alpha_version) 
-        ldd_dict[release_name] = []
-        ldd_dict[f'{release_name}_dependencies'] = []
-        for ldd in all_ldds:
-            if namespace_id.upper() in ldd:
-                ldd_dict[release_name].append(ldd)
-            else:
-                ldd_dict[f'{release_name}_dependencies'].append(ldd)
+    release_name = RELEASE_NAME.format(pds4_alpha_version, ldd_alpha_version)
+    path_pattern = os.path.join(ldd_output_path, '*', f'*{pds4_alpha_version}*')
+    all_ldds = glob.glob(path_pattern)
+
+    # pkg_name = LDD_NAME_BASE.format(namespace_id.upper(), pds4_alpha_version, ldd_alpha_version) 
+    ldd_dict[release_name] = []
+    ldd_dict[f'{release_name}_dependencies'] = []
+    for ldd in all_ldds:
+        if namespace_id.upper() in ldd:
+            ldd_dict[release_name].append(ldd)
+        else:
+            ldd_dict[f'{release_name}_dependencies'].append(ldd)
 
     return ldd_dict
 
@@ -163,6 +145,8 @@ def main():
                         help='full name of github repo (e.g. user/repo)')
     parser.add_argument('--workspace',
                         help='path of workspace. defaults to current working directory if this or GITHUB_WORKSPACE not specified')
+    parser.add_argument('--pds4_version',
+                        help='pds4 IM version')
 
     args, unknown = parser.parse_known_args()
 
@@ -187,7 +171,7 @@ def main():
     try:
         ingest_ldd, namespace_id, ldd_version = get_info(args.ingest_ldd_src_dir)
 
-        ldd_dict = find_ldds(args.ldd_output_path, namespace_id, ldd_version)
+        ldd_dict = find_ldds(args.ldd_output_path, namespace_id, ldd_version, args.pds4_version)
 
         assets = package_assets(ingest_ldd, ldd_dict, namespace_id)
 
