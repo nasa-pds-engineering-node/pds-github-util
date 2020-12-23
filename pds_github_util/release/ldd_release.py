@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 
 from pathlib import Path
 from pds_github_util.utils.ldd_gen import find_primary_ingest_ldd, convert_pds4_version_to_alpha
-from pds_github_util.release.snapshot_release import delete_snapshot_releases
+from pds_github_util.release.release import delete_snapshot_releases
 from pds_github_util.assets.assets import zip_assets
 from pds_github_util.tags.tags import Tags
 

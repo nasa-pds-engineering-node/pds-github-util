@@ -47,9 +47,11 @@ setuptools.setup(
     install_requires=pip_requirements,
     entry_points={
         # snapshot-release for backward compatibility
-        'console_scripts': ['snapshot-release=pds_github_util.release.maven_snapshot_release:main',
-                            'maven-snapshot-release=pds_github_util.release.maven_snapshot_release:main',
-                            'python-snapshot-release=pds_github_util.release.python_snapshot_release:main',
+        'console_scripts': ['snapshot-release=pds_github_util.release.maven_release:main',
+                            'maven-snapshot-release=pds_github_util.release.maven_release:main',
+                            'python-snapshot-release=pds_github_util.release.python_release:main',
+                            'maven-release=pds_github_util.release.maven_release:main',
+                            'python-release=pds_github_util.release.python_release:main',
                             'requirement-report=pds_github_util.requirements.generate_requirements:main',
                             'git-ping=pds_github_util.branches.git_ping:main',
                             'summaries=pds_github_util.gh_pages.build_summaries:main',
