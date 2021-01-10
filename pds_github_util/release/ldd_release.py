@@ -1,22 +1,20 @@
-'''
+"""
 LDD Snapshot and Release Util
 
 Tool to tag LDD releases and upload ZIP of assets
-'''
+"""
 
 import argparse
 import github3
 import os
-import re
 import logging
 import glob
 import sys
 import traceback
 import datetime
 
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ETree
 
-from pathlib import Path
 from pds_github_util.utils.ldd_gen import find_primary_ingest_ldd, convert_pds4_version_to_alpha
 from pds_github_util.release.release import delete_snapshot_releases
 from pds_github_util.assets.assets import zip_assets
@@ -35,13 +33,14 @@ LDD_NAME_BASE = 'PDS4_{}_{}'
 STAGING_DIR = f'/tmp/out_{datetime.datetime.utcnow().timestamp()}'
 RELEASE_NAME = '{}_{}'
 
-def create_release(repo, repo_name, branch_name, tag_name, tagger, prerelease=False):
+
+def create_release(repo, branch_name, tag_name, tagger, prerelease=False):
     """Create a tag and new release.
     
     From the latest commit on branch_name. Push the assets created in target directory.
     """
     if not prerelease:
-        logger.info("create new release")
+        logger.info(f"create new release {tag_name}")
     else:
         logger.info("create new SNAPSHOT release")
 
@@ -56,13 +55,14 @@ def create_release(repo, repo_name, branch_name, tag_name, tagger, prerelease=Fa
     release = repo.create_release(tag_name, target_commitish=branch_name, name=tag_name, prerelease=prerelease)
     return release
 
+
 def get_info(ingest_ldd_src_dir):
     """Get LDD version and namespace id."""
     # look in src directory for ingest LDD
     ingest_ldd = find_primary_ingest_ldd(ingest_ldd_src_dir)
 
     # get ingest ldd version
-    tree = ET.parse(ingest_ldd[0])
+    tree = ETree.parse(ingest_ldd[0])
     root = tree.getroot()
     ldd_version = root.findall(f'.//{{{PDS_NS}}}ldd_version_id')[0].text
     ns_id = root.findall(f'.//{{{PDS_NS}}}namespace_id')[0].text
@@ -85,12 +85,13 @@ def find_ldds(ldd_output_path, namespace_id, ldd_version, pds4_version):
     ldd_dict[release_name] = []
     ldd_dict[f'{release_name}_dependencies'] = []
     for ldd in all_ldds:
-        if namespace_id.upper() in ldd:
+        if namespace_id.upper() in ldd and ldd_alpha_version in ldd:
             ldd_dict[release_name].append(ldd)
-        else:
+        elif namespace_id.upper() not in ldd:
             ldd_dict[f'{release_name}_dependencies'].append(ldd)
 
     return ldd_dict
+
 
 def package_assets(ingest_ldd, ldds, namespace_id):
     """Zip up LDDs."""
@@ -106,18 +107,12 @@ def package_assets(ingest_ldd, ldds, namespace_id):
 
     return assets
 
-# def ldd_upload_assets(ingest_ldd, ldds):
-def ldd_upload_assets(repo_name, tag_name, pkg_name, release):
-    """Zip up LDDs."""
-    # copy all ZIPs to current app dir to ensure 
-    pkgs = [ os.path.join(STAGING_DIR, pkg_name + '.zip') ]
-    dependencies = os.path.join(STAGING_DIR, pkg_name + '_dependencies.zip')
-    if os.path.exists(dependencies):
-        pkgs.append(dependencies)
 
-    for p in pkgs:
-        with open(p, 'rb') as f_asset:
-            asset_filename = os.path.basename(p)
+def ldd_upload_assets(release, assets):
+    """Zip up LDDs."""
+    for a in assets:
+        with open(a, 'rb') as f_asset:
+            asset_filename = os.path.basename(a)
             logger.info(f"upload asset file {asset_filename}")
             release.upload_asset('application/zip',
                                  asset_filename,
@@ -144,7 +139,9 @@ def main():
     parser.add_argument('--repo_name',
                         help='full name of github repo (e.g. user/repo)')
     parser.add_argument('--workspace',
-                        help='path of workspace. defaults to current working directory if this or GITHUB_WORKSPACE not specified')
+                        help=('path of workspace. defaults to current working directory if this '
+                              'or GITHUB_WORKSPACE not specified')
+                        )
     parser.add_argument('--pds4_version',
                         help='pds4 IM version')
 
@@ -176,7 +173,7 @@ def main():
         assets = package_assets(ingest_ldd, ldd_dict, namespace_id)
 
         tagger = {"name": "PDSEN CI Bot",
-          "email": "pdsen-ci@jpl.nasa.gov"}
+                  "email": "pdsen-ci@jpl.nasa.gov"}
         gh = github3.login(token=token)
         repo = gh.repository(org, repo_name)
 
@@ -188,22 +185,20 @@ def main():
                 else:
                     tag_name = release_name
 
-
                 # Check tag exists before continuing
                 tags = Tags(org, repo_name, token=token)
                 if not tags.get_tag(tag_name):
-                    release = create_release(repo, repo_name, "master", tag_name, tagger, args.dev)
-                            
+                    release = create_release(repo, "master", tag_name, tagger, args.dev)
                     logger.info("upload assets")
-                    ldd_upload_assets(repo_name, tag_name, LDD_NAME_BASE.format(namespace_id.upper(), release_name), release)
+                    ldd_upload_assets(release, assets)
                 else:
-                    logger.warn(f"tag {tag_name} already exists. skipping...")
+                    logger.warning(f"tag {tag_name} already exists. skipping...")
 
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 
-    logger.info(f'SUCCESS: LDD SNAPSHOT release complete.')
+    logger.info(f'SUCCESS: LDD release complete.')
 
 
 if __name__ == "__main__":
