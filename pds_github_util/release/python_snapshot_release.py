@@ -3,7 +3,7 @@ import re
 import logging
 import glob
 from pathlib import Path
-from pds_github_util.release.release import snapshot_release_publication
+from pds_github_util.release.release import release_publication
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -87,7 +87,7 @@ def python_upload_assets(repo_name, tag_name, release):
 
 
 def main():
-    snapshot_release_publication(SNAPSHOT_TAG_SUFFIX, python_get_version, python_upload_assets)
+    release_publication(SNAPSHOT_TAG_SUFFIX, python_get_version, python_upload_assets)
 
 
 if __name__ == "__main__":
