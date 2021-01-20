@@ -10,14 +10,14 @@ Requirements
 Prior to installing this software, ensure your system meets the following
 requirements:
 
-•  Python_ 3.6 or above. Python 2 will absolutely *not* work.
+•  Python 3.6 or above. Python 2 will absolutely *not* work.
 •  ``libxml2`` version 2.9.2; later 2.9 versions are fine.  Run ``xml2-config
    --version`` to find out.
 
 Consult your operating system instructions or system administrator to install
 the required packages. For those without system administrator access and are 
-feeling anxious, you could try a local (home directory) Python_ 3 installation 
-using a Miniconda_ installation.
+feeling anxious, you could try a local (home directory) Python 3 installation
+using a Miniconda installation.
 
 
 Doing the Installation
@@ -26,14 +26,14 @@ Doing the Installation
 Install
 ^^^^^^^
 
-The easiest way to install this software is to use Pip_, the Python Package
+The easiest way to install this software is to use Pip, the Python Package
 Installer. If you have Python on your system, you probably already have Pip;
 you can run ``pip3 --help`` to check. Then run::
 
     pip3 install pds-github-util
 
 If you don't want the package dependencies to interfere with your local system
-you can also use a `virtual environment`_  for your deployment.
+you can also use a `virtual environment`  for your deployment.
 To do so::
 
     mkdir -p $HOME/.virtualenvs
