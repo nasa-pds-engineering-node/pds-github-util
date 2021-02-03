@@ -10,6 +10,7 @@ with open("README.md", "r") as fh:
 
 with open('requirements.txt', 'r') as f:
     pip_requirements = f.readlines()
+
 #pip_requirements = [ 'github3.py>=1.3',
 #                     'lxml>=4.5',
 #                     'mdutils>=1.2',
