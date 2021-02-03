@@ -2,7 +2,7 @@ import os
 import unittest
 from pds_github_util.corral.cattle_head import CattleHead
 
-TOKEN = os.environ.get('GITHUB_TOKEN')
+TOKEN = os.environ.get('GITHUB_TOKEN') or os.environ.get("ADMIN_GITHUB_TOKEN")
 
 class MyTestCase(unittest.TestCase):
     def test_get_changelog_signet(self):

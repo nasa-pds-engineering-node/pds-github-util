@@ -31,7 +31,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/NASA-PDS/pds-github-util",
-    download_url = "https://github.com/NASA-PDS/pds-github-util/releases/download/0.0.1/pds_github_util-0.0.1.tar.gz",
+    download_url = f"https://github.com/NASA-PDS/pds-github-util/releases/download/{version}/pds_github_util-{version}.tar.gz",
     packages=setuptools.find_packages(),
     include_package_data=True,
     package_data = {
@@ -47,16 +47,19 @@ setuptools.setup(
     install_requires=pip_requirements,
     entry_points={
         # snapshot-release for backward compatibility
-        'console_scripts': ['snapshot-release=pds_github_util.release.maven_snapshot_release:main',
-                            'maven-snapshot-release=pds_github_util.release.maven_snapshot_release:main',
-                            'python-snapshot-release=pds_github_util.release.python_snapshot_release:main',
+        'console_scripts': ['snapshot-release=pds_github_util.release.maven_release:main',
+                            'maven-snapshot-release=pds_github_util.release.maven_release:main',
+                            'python-snapshot-release=pds_github_util.release.python_release:main',
+                            'maven-release=pds_github_util.release.maven_release:main',
+                            'python-release=pds_github_util.release.python_release:main',
                             'requirement-report=pds_github_util.requirements.generate_requirements:main',
                             'git-ping=pds_github_util.branches.git_ping:main',
                             'summaries=pds_github_util.gh_pages.build_summaries:main',
                             'pds4-validate=pds_github_util.utils.pds4_validate:main',
                             'ldd-gen=pds_github_util.utils.ldd_gen:main',
                             'ldd-release=pds_github_util.release.ldd_release:main',
-                            'release-plan=pds_github_util.plan.plan:main'
+                            'release-plan=pds_github_util.plan.plan:main',
+                            'milestones=pds_github_util.milestones.milestones:main'
                             ],
     },
 

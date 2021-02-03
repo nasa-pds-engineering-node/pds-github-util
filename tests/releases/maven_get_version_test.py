@@ -1,7 +1,7 @@
 import unittest
 import os
 import logging
-from pds_github_util.release.maven_snapshot_release import maven_get_version
+from pds_github_util.release.maven_release import maven_get_version
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)

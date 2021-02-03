@@ -6,7 +6,7 @@ from pds_github_util.branches.git_actions import ping_repo_branch
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("ADMIN_GITHUB_TOKEN")
 
 class MyTestCase(unittest.TestCase):
     def test_ping_branch(self):
