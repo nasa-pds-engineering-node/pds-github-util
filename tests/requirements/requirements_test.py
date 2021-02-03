@@ -2,11 +2,10 @@ import unittest
 import os
 import logging
 from pds_github_util.requirements.requirements import Requirements
+from pds_github_util.utils.tokens import GITHUB_TOKEN
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("ADMIN_GITHUB_TOKEN")
 
 class MyTestCase(unittest.TestCase):
     def test_get_requirements(self):

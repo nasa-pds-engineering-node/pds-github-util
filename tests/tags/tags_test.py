@@ -3,11 +3,10 @@ import os
 import logging
 from datetime import datetime
 from pds_github_util.tags.tags import Tags
+from pds_github_util.utils.tokens import GITHUB_TOKEN
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("ADMIN_GITHUB_TOKEN")
 
 
 class MyTestCase(unittest.TestCase):
