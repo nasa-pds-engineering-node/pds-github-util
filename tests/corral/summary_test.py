@@ -7,7 +7,7 @@ from pds_github_util.gh_pages.summary import write_build_summary
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-TOKEN = os.environ.get('GITHUB_TOKEN')
+TOKEN = os.environ.get('GITHUB_TOKEN') or os.environ.get("ADMIN_GITHUB_TOKEN")
 
 class MyTestCase(unittest.TestCase):
 

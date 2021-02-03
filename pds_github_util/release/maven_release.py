@@ -1,7 +1,7 @@
 import fnmatch
 import os
 from lxml import etree
-from .snapshot_release import snapshot_release_publication
+from .release import release_publication
 
 SNAPSHOT_TAG_SUFFIX = "SNAPSHOT"
 
@@ -33,7 +33,7 @@ def maven_upload_assets(repo_name, tag_name, release):
 
 
 def main():
-    snapshot_release_publication(SNAPSHOT_TAG_SUFFIX, maven_get_version, maven_upload_assets)
+    release_publication(SNAPSHOT_TAG_SUFFIX, maven_get_version, maven_upload_assets)
 
 
 if __name__ == "__main__":
