@@ -53,7 +53,7 @@ def build_summaries(token, path=os.getcwd(), format='md'):
     herd = next(loop_checkout_on_branch('NASA-PDS/pdsen-corral',
                             'master',
                             partial(write_build_summary,
-                                    root_dir=os.getcwd(),
+                                    root_dir=path,
                                     gitmodules='/tmp/pdsen-corral/.gitmodules',
                                     token=token,
                                     dev=True,
