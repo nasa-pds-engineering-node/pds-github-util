@@ -63,7 +63,7 @@ def build_summaries(token, path=os.getcwd(), format='md'):
 
     herds.append(herd)
 
-    update_index(os.getcwd(), herds)
+    update_index(path, herds)
 
 
 def main():
