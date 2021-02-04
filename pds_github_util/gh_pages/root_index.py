@@ -38,7 +38,8 @@ class HerdTable:
                           text_align='center')
 
 
-def update_index(root_dir, herds):
+def update_index(root_dir, herds, format='md'):
+
     index_file_name = os.path.join(root_dir, 'index.md')
     index_md_file = mdutils.MdUtils(file_name=index_file_name, title=f'PDS Engineering Node software suite, builds')
 
