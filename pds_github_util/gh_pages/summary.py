@@ -105,7 +105,7 @@ def get_table_columns_rst():
 
     column_headers = []
     for column in COLUMNS:
-        column_headers.append(f'|{column}|')
+        column_headers.append(f'l|{column}|')
 
     return ["tool", "version", "last updated", "description", *column_headers]
 
@@ -160,7 +160,14 @@ def write_rst_file(herd, output_file_name, version):
 
 
 
-def write_build_summary(gitmodules=None, root_dir='.', output_file_name=None, token=None, dev=False, version=None, format='md'):
+def write_build_summary(
+        gitmodules=None,
+        root_dir='.',
+        output_file_name=None,
+        token=None,
+        dev=False,
+        version=None,
+        format='md'):
 
     herd = Herd(gitmodules=gitmodules, dev=dev, token=token)
 
