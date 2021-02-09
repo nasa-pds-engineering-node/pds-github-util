@@ -169,7 +169,7 @@ class CattleHead():
             if format=='md':
                 description += f" [...]({self._github_path} 'more')"
             elif format=='rst':
-                description += f"`...<{self._github_path}/>`_"
+                description += '...'  # not able to find an easy way to have a link in a table cell
             else:
                 logger.error(f'format {format} not supported to write long description link (get_table_row)')
 
