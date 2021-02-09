@@ -105,7 +105,7 @@ def get_table_columns_rst():
 
     column_headers = []
     for column in COLUMNS:
-        column_headers.append(f'l|{column}|')
+        column_headers.append(f'l |{column}|')
 
     return ["tool", "version", "last updated", "description", *column_headers]
 
