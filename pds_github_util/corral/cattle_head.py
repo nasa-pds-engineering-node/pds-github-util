@@ -163,15 +163,14 @@ class CattleHead():
 
     def get_table_row(self, format='md'):
         icon_cells = [self._get_cell(k, format) for k in self._icon_dict.keys()]
-
-        description = self._description[:SHORT_DESCRIPTION_LEN]
-        if len(self._description)>SHORT_DESCRIPTION_LEN:
-            if format=='md':
-                description += f" [...]({self._github_path} 'more')"
-            elif format=='rst':
-                description += '...'  # not able to find an easy way to have a link in a table cell
-            else:
-                logger.error(f'format {format} not supported to write long description link (get_table_row)')
+        if format == 'md':
+            description = self._description[:SHORT_DESCRIPTION_LEN]
+            if len(self._description)>SHORT_DESCRIPTION_LEN:
+                    description += f" [...]({self._github_path} 'more')"
+        elif format=='rst':
+            description = self._description  # not able to find an easy way to have a link in a table cell
+        else:
+            logger.error(f'format {format} not supported to write long description link (get_table_row)')
 
         return [self._name,
                 self._version_name if self._version_name else "None",
