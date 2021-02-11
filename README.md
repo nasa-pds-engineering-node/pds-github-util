@@ -39,15 +39,31 @@ Some environment variable need to be set (they are defined by default in github 
     export GITHUB_REPOSITORY=<full name of the repository which we want to publish for example NASA-PDS-Incubator/pds-app-registry>
     
 
-Get command arguments:
+# Usage
+
+Get command arguments for each of the available utilities using `--help` flag. e.g.
 
     maven-snapshot-release --help
     python-snapshot-release --help
     requirement-report --help
     git-ping --help
     summaries --help
-    
-    
+    milestones --help
+
+
+## milestones
+
+Tool for managing Github milestones.
+
+Example of creating milestones:
+  * for a single repo
+  * specified in a config file
+  * prepended by a number
+  * first due date is 2021-02-25
+
+        milestones --create --sprint_name_file conf/milestones_2021.yaml \
+                   --prepend_number 3 --due_date 2021-02-25 \
+                   --github_org NASA-PDS --github_repos pds-registry-common
 
 
 # Development
