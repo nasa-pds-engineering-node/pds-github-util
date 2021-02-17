@@ -58,7 +58,7 @@ def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger, uplo
     upload_assets(repo_name, tag_name, release)
 
 
-def release_publication(suffix, get_version, upload_assets):
+def release_publication(suffix, get_version, upload_assets, prefix='v'):
     """
     Script made to work in the context of a github action.
     """
@@ -90,7 +90,7 @@ def release_publication(suffix, get_version, upload_assets):
     org = repo_full_name_array[0]
     repo_name = repo_full_name_array[1]
 
-    tag_name = get_version()
+    tag_name = prefix + get_version()
     print(tag_name)
     tagger = {"name": "PDSEN CI Bot",
               "email": "pdsen-ci@jpl.nasa.gov"}
