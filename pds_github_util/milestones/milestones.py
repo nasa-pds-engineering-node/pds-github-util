@@ -55,8 +55,6 @@ def main():
     parser.add_argument('--github_repos',
                         nargs='*',
                         help='github repo names. if not specified, tool will include all repos in org by default.')
-    # parser.add_argument('--close', help='Specify name of milestone to close.')
-    parser.add_argument('--add', help='Specify name of milestone to close.')
     parser.add_argument('--length', default=14, help='milestone length in number of days.')
     parser.add_argument('--token', help='github token.')
     parser.add_argument('--create', action='store_true', help='create milestone.')
@@ -108,6 +106,9 @@ def main():
         # connect to github
         gh = login(token=token)
         for _repo in gh.repositories_by(args.github_org):
+            if args.github_repos and _repo.name not in args.github_repos:
+                continue
+
             if args.create:
                 logger.info(f"+++ milestone: {_sprint_name}, due: {_due_date}")
                 try:
