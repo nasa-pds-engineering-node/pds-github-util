@@ -18,13 +18,58 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+DELAYED_LABELS_RUNNING_LATE = 'd.running-late'
+DELAYED_LABELS_RUNNING_LATER = 'd.getting-later'
+DELAYED_LABELS_DONT_FORGET_ME = 'd.dont-forget-me'
+SPRINT_BACKLOG_LABEL = 'sprint-backlog'
+
+
+def get_next_milestone(repo, milestone):
+    for m in repo.milestones():
+        if m.number == milestone.number+1:
+            return m
+    return None
+
+
 def get_milestone(repo, sprint_title):
-    _milestone = None
     for m in repo.milestones():
         if m.title.lower() == sprint_title.lower():
-            _milestone = m
+            return m
+    return None
 
-    return _milestone
+
+def move_open_issues(repo, milestone, next_milestone):
+    for issue in repo.issues(milestone=milestone.number, state='open'):
+        labels = []
+        for label in issue.labels():
+            if label.name == DELAYED_LABELS_RUNNING_LATE:
+                labels.append(DELAYED_LABELS_RUNNING_LATER)
+            elif label.name == DELAYED_LABELS_RUNNING_LATER:
+                labels.append(DELAYED_LABELS_DONT_FORGET_ME)
+            else:
+                labels.append(label.name)
+
+        issue.edit(milestone=next_milestone.number, labels=labels)
+
+
+def remove_closed_issues_from_sprint_backlog(repo, milestone):
+    for issue in repo.issues(milestone=milestone.number, state='closed'):
+        labels = []
+        for label in issue.labels():
+            if SPRINT_BACKLOG_LABEL != label.name:
+                labels.append(label.name)
+        issue.edit(labels=labels)
+
+
+def defer_open_issues(repo, milestone):
+
+    next_milestone = get_next_milestone(repo, milestone)
+    if next_milestone:
+        logger.info("defer open issues from milestone %s to milestone %s", milestone.title, next_milestone.title)
+        move_open_issues(repo, milestone, next_milestone)
+    else:
+        logger.info("no next milestone available, skipping repo")
+
 
 
 def main():
@@ -49,10 +94,10 @@ def main():
     # group.add_argument('--num_sprints', type=int, default=1, help='Number of sprints to create. Uses "days" configuration for increasing due date.')
     # group.add_argument('--counter_start', type=int, default=1, help='Number to start counter if auto-title enabled and using counter in format.')
 
-    parser.add_argument('--github_org',
+    parser.add_argument('--github-org',
                         help='github org',
                         default=DEFAULT_GITHUB_ORG)
-    parser.add_argument('--github_repos',
+    parser.add_argument('--github-repos',
                         nargs='*',
                         help='github repo names. if not specified, tool will include all repos in org by default.')
     parser.add_argument('--length', default=14, help='milestone length in number of days.')
@@ -60,11 +105,11 @@ def main():
     parser.add_argument('--create', action='store_true', help='create milestone.')
     parser.add_argument('--delete', action='store_true', help='delete milestone.')
     parser.add_argument('--close', action='store_true', help='close milestone.')
-    parser.add_argument('--due_date', help='Due date of first sprint. Format: YYYY-MM-DD')
-    parser.add_argument('--sprint_name_file', help=('yaml file containing list of sprint names. tool will create '
+    parser.add_argument('--due-date', help='Due date of first sprint. Format: YYYY-MM-DD')
+    parser.add_argument('--sprint-name-file', help=('yaml file containing list of sprint names. tool will create '
                                                     'as many milestones as specified in file.'))
-    parser.add_argument('--sprint_names', nargs='*', help='create one sprint with this name')
-    parser.add_argument('--prepend_number', type=int,
+    parser.add_argument('--sprint-names', nargs='*', help='create one sprint with this name')
+    parser.add_argument('--prepend-number', type=int,
                         help='specify number to prepend sprint names or to start with. e.g. 01.foo')
 
     args = parser.parse_args()
@@ -81,13 +126,13 @@ def main():
             _sprint_names = f.read().splitlines()
 
     if not _sprint_names:
-        logger.error(f'One of --sprint_names or --sprint_name_file must be specified.')
+        logger.error(f'One of --sprint-names or --sprint-name_file must be specified.')
         sys.exit(1)
 
     _due_date = None
     if args.create:
         if not args.due_date:
-            logger.error(f'--due_date must be specified.')
+            logger.error(f'--due-date must be specified.')
             sys.exit(1)
         else:
             _due_date = datetime.datetime.strptime(args.due_date, '%Y-%m-%d') + datetime. timedelta(hours=8)
@@ -122,6 +167,8 @@ def main():
                 _milestone = get_milestone(_repo, _sprint_name)
                 if _milestone:
                     logger.info(f"CLOSE repo: {_repo.name}")
+                    remove_closed_issues_from_sprint_backlog(_repo, _milestone)
+                    defer_open_issues(_repo, _milestone)
                     _milestone.update(state='closed')
                 else:
                     logger.info(f"CLOSE repo: {_repo.name}, skipping...")

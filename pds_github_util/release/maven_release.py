@@ -6,9 +6,10 @@ from .release import release_publication
 SNAPSHOT_TAG_SUFFIX = "SNAPSHOT"
 
 
-def maven_get_version():
+def maven_get_version(workspace=None):
     # read current version
-    pom_path = os.path.join(os.environ.get('GITHUB_WORKSPACE'), 'pom.xml')
+    workspace = workspace or os.environ.get('GITHUB_WORKSPACE')
+    pom_path = os.path.join(workspace, 'pom.xml')
     pom_doc = etree.parse(pom_path)
     r = pom_doc.xpath('/pom:project/pom:version',
                       namespaces={'pom': 'http://maven.apache.org/POM/4.0.0'})

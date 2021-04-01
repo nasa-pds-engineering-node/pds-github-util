@@ -8,6 +8,7 @@ import sys
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 def create_release(repo, repo_name, branch_name, tag_name, tagger, upload_assets):
     """Create a tag, if needed, and release.
     
@@ -15,18 +16,23 @@ def create_release(repo, repo_name, branch_name, tag_name, tagger, upload_assets
     """
     logger.info("create new release")
 
-    our_branch = repo.branch(branch_name)
-    repo.create_tag(tag_name,
-                    f'release',
-                    our_branch.commit.sha,
-                    "commit",
-                    tagger)
+    try:
+        our_branch = repo.branch(branch_name)
+        repo.create_tag(tag_name,
+                        f'release',
+                        our_branch.commit.sha,
+                        "commit",
+                        tagger)
 
-    # create the release
-    release = repo.create_release(tag_name, target_commitish=branch_name, name=repo_name + " " + tag_name, prerelease=False)
+        # create the release
+        release = repo.create_release(tag_name, target_commitish=branch_name, name=repo_name + " " + tag_name, prerelease=False)
 
-    logger.info("upload assets")
-    upload_assets(repo_name, tag_name, release)
+        logger.info("upload assets")
+        upload_assets(repo_name, tag_name, release)
+
+    except github3.GitHubError as error:
+        logger.error(error.errors)
+
 
 def delete_snapshot_releases(_repo, suffix):
     """
@@ -44,18 +50,24 @@ def create_snapshot_release(repo, repo_name, branch_name, tag_name, tagger, uplo
     Push the assets created in target directory.
     """
     logger.info("create new snapshot release")
-    our_branch = repo.branch(branch_name)
-    repo.create_tag(tag_name,
-                    f'SNAPSHOT release',
-                    our_branch.commit.sha,
-                    "commit",
-                    tagger)
 
-    # create the release
-    release = repo.create_release(tag_name, target_commitish=branch_name, name=repo_name + " " + tag_name, prerelease=True)
 
-    logger.info("upload assets")
-    upload_assets(repo_name, tag_name, release)
+    try:
+        our_branch = repo.branch(branch_name)
+        repo.create_tag(tag_name,
+                        f'SNAPSHOT release',
+                        our_branch.commit.sha,
+                        "commit",
+                        tagger)
+
+        # create the release
+        release = repo.create_release(tag_name, target_commitish=branch_name, name=repo_name + " " + tag_name, prerelease=True)
+
+        logger.info("upload assets")
+        upload_assets(repo_name, tag_name, release)
+
+    except GitHubError as error:
+        print(error.errors)
 
 
 def release_publication(suffix, get_version, upload_assets, prefix='v'):
@@ -90,7 +102,7 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
     org = repo_full_name_array[0]
     repo_name = repo_full_name_array[1]
 
-    tag_name = prefix + get_version()
+    tag_name = prefix + get_version(workspace)
     print(tag_name)
     tagger = {"name": "PDSEN CI Bot",
               "email": "pdsen-ci@jpl.nasa.gov"}

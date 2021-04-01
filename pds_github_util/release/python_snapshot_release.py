@@ -10,21 +10,22 @@ logger = logging.getLogger(__name__)
 
 SNAPSHOT_TAG_SUFFIX = "-dev"
 
-def python_get_version():
+def python_get_version(workspace=None):
     get_version_funcs = [
         'python_get_version_from_version_txt',
         'python_get_version_from_init',
         'python_get_version_from_setup'
     ]
     for get_version_func in get_version_funcs:
-        v = eval(get_version_func)()
+        v = eval(get_version_func)(workspace)
         if v:
             return v
 
 
-def python_get_version_from_setup():
+def python_get_version_from_setup(workspace=None):
     logger.info("get version from setup.py file")
-    setup_path = os.path.join(os.environ.get('GITHUB_WORKSPACE'), 'setup.py')
+    workspace = workspace or os.environ.get('GITHUB_WORKSPACE')
+    setup_path = os.path.join(workspace, 'setup.py')
     prog = re.compile("version=.*")
     try:
         with open(setup_path, 'r') as f:
@@ -38,9 +39,11 @@ def python_get_version_from_setup():
     except FileNotFoundError:
         return None
 
-def python_get_version_from_init():
+
+def python_get_version_from_init(workspace=None):
     logger.info("get version from package __init__.py file")
-    init_path_pattern =  os.path.join(os.environ.get('GITHUB_WORKSPACE'), "*", "__init__.py")
+    workspace = workspace or os.environ.get('GITHUB_WORKSPACE')
+    init_path_pattern =  os.path.join(workspace, "*", "__init__.py")
     found_init = glob.glob(init_path_pattern)
     if len(found_init):
         init_path = found_init[0]
@@ -55,7 +58,7 @@ def python_get_version_from_init():
     else:
         return None
 
-def python_get_version_from_version_txt():
+def python_get_version_from_version_txt(workspace=None):
     logger.info("get version from version.text file")
     version_text_filename = 'version.txt'
     try:
