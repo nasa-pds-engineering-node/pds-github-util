@@ -65,6 +65,15 @@ Example of creating milestones:
                    --prepend_number 3 --due_date 2021-02-25 \
                    --github_org NASA-PDS --github_repos pds-registry-common
 
+## pds-issues
+
+Tool for generating simple Markdown issue reports. (WARNING: not well tested beyond this example use case)
+
+Example of generating a report for open [NASA-PDS/validate repo](https://github.com/NASA-PDS/validate) issues.
+
+        pds-issues --github_repos validate --issue_state open
+
+Currently outputs to file: `pdsen_issues.md`
 
 # Development
  
