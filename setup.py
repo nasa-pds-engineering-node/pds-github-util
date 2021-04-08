@@ -60,7 +60,9 @@ setuptools.setup(
                             'ldd-gen=pds_github_util.utils.ldd_gen:main',
                             'ldd-release=pds_github_util.release.ldd_release:main',
                             'release-plan=pds_github_util.plan.plan:main',
-                            'milestones=pds_github_util.milestones.milestones:main'
+                            'milestones=pds_github_util.milestones.milestones:main',
+                            'pds-issues=pds_github_util.issues.issues:main',
+                            'pds-labels=pds_github_util.issues.labels:main'
                             ],
     },
 
