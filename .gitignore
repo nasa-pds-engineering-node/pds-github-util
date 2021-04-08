@@ -1,9 +1,3 @@
-venv
-__pycache__/
-dist/
-build/
-*.egg-info
-
 # Object files
 *.o
 *.pkl
@@ -50,3 +44,9 @@ pom.xml.versionsBackup
 *.javac
 .gwt/
 target/
+.sass-cache/
+_site/
+
+# Sphinx stuff
+docs/build/
+
