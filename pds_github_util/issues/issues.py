@@ -55,7 +55,7 @@ def get_issues_groupby_type(repo, state, start_time, ignore_types=None):
 
         issues[t] = []
         for issue in repo.issues(state=state, labels=t, direction='asc', since=start_time):
-            if ignore_issue(issue.labels):
+            if ignore_issue(issue.labels()):
                 continue
 
             issues[t].append(issue)
