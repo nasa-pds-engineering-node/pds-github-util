@@ -75,6 +75,12 @@ Example of generating a report for open [NASA-PDS/validate repo](https://github.
 
 Currently outputs to file: `pdsen_issues.md`
 
+For the RDD generation:
+
+    pds-issues  --github-repos validate --issue_state closed --format rst --start-time 2020-10-26T00:00:00Z
+    
+Generates `pdsen_issues.rst`
+
 # Development
  
     git clone ...
