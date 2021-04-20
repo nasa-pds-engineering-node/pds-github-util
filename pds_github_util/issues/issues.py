@@ -9,9 +9,10 @@ import sys
 
 
 from mdutils.mdutils import MdUtils
+from .utils import get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type
 
-
-from pds_github_util.utils import GithubConnection, RstClothReferenceable
+from pds_github_util.utils import GithubConnection
+from pds_github_util.issues import RstRddReport
 
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
@@ -21,49 +22,6 @@ logger.setLevel(level=logging.WARNING)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-ISSUE_TYPES = ['bug', 'enhancement', 'requirement', 'theme']
-TOP_PRIORITIES = ['p.must-have', 's.high', 's.critical']
-IGNORE_LABELS = ['wontfix', 'duplicate', 'invalid']
-
-
-def get_issue_type(issue):
-    for label in issue.labels():
-        if label.name in ISSUE_TYPES:
-            return label.name
-
-
-def get_issue_priority(short_issue):
-    for label in short_issue.labels():
-        if 'p.' in label.name or 's.' in label.name:
-            return label.name
-
-    return "unk"
-
-
-def ignore_issue(labels):
-    for label in labels:
-        if label.name in IGNORE_LABELS:
-            return True
-
-    return False
-
-
-def get_issues_groupby_type(repo, state='all', start_time=None, ignore_types=None):
-    issues = {}
-    for t in ISSUE_TYPES:
-        print(f'++++++++{t}')
-        if ignore_types and t in ignore_types:
-            continue
-
-        issues[t] = []
-        for issue in repo.issues(state=state, labels=t, direction='asc', since=start_time):
-            if ignore_issue(issue.labels()):
-                continue
-
-            issues[t].append(issue)
-
-    return issues
 
 
 def convert_issues_to_planning_report(md_file, repo_name, issues_map):
@@ -89,40 +47,6 @@ def convert_issues_to_planning_report(md_file, repo_name, issues_map):
         md_file.new_table(columns=3, rows=int(len(table)/3), text=table, text_align='left')
 
 
-
-def add_rst_sub_section(d, repo, type, issues):
-    d.h3(type)
-
-    columns = ["Issue", "Priority / Bug Severity"]
-
-    #issue = f'[{repo_name}#{short_issue.number}]({short_issue.html_url}) - {short_issue.title}'
-
-    data = []
-    for issue in issues:
-        d.hyperlink(f'{repo}_{issue.number}', issue.html_url)
-        data.append([f'{repo}_{issue.number}_ {issue.title}'.replace('|', ''), get_issue_priority(issue)])
-
-    d.table(columns,
-            data=data)
-
-
-
-
-def write_rst_repo_section(d, repo, issues_map):
-    
-    d.h2(repo)
-
-    for issue_type,issues in issues_map.items():
-        if issues:
-            print(issues)
-            add_rst_sub_section(d, repo, issue_type, issues)
-
-
-
-
-
-
-
 def create_md_issue_report(org, repos, issue_state='all', start_time=None, token=None):
 
     gh = GithubConnection.getConnection(token=token)
@@ -135,28 +59,6 @@ def create_md_issue_report(org, repos, issue_state='all', start_time=None, token
         convert_issues_to_planning_report(_md_file, _repo.name, issues_map)
 
     md_file.create_md_file()
-
-
-def create_rst_issue_report(org, repos,
-                            title='Release Description Document (build 11.1)',
-                            issue_state='all',
-                            start_time=None,
-                            token=None):
-
-    gh = GithubConnection.getConnection(token=token)
-
-    d = RstClothReferenceable()
-    d.title(title)
-
-    for _repo in gh.repositories_by(org):
-        if repos and _repo.name not in repos:
-            continue
-        issues_map = get_issues_groupby_type(_repo, state=issue_state, start_time=start_time)
-
-        write_rst_repo_section(d, _repo.name, issues_map)
-
-    logger.info(f'Create file pdsen_issues.rst.rst')
-    d.write(f'pdsen_issues.rst')
 
 
 def main():
@@ -194,13 +96,19 @@ def main():
         )
 
     elif args.format == 'rst':
-        create_rst_issue_report(
+
+        rst_rdd_report = RstRddReport(
             args.github_org,
-            args.github_repos,
-            issue_state=args.issue_state,
             start_time=args.start_time,
             token=args.token
         )
+
+        for _repo in rst_rdd_report.available_repos():
+            if not args.github_repos or _repo.name in args.github_repos:
+                rst_rdd_report.add_repo(_repo)
+
+        rst_rdd_report.write('pdsen_issues.rst')
+
     else:
         logger.error("unsupported format %s, must be rst or md", args.format)
 
