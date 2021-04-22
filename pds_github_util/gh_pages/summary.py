@@ -1,6 +1,7 @@
 import os
 import logging
 from pds_github_util.tags.tags import Tags
+from pds_github_util.utils import RstClothReferenceable
 from pds_github_util.corral.herd import Herd
 from uuid import uuid4
 

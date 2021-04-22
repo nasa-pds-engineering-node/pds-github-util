@@ -135,7 +135,7 @@ class CattleHead():
                 if self._reachable(url):
                     return url
 
-        return f'https://{self._org}.github.io/{self._repo_name}'
+        return f'https://github.com/{self._org}/{self._repo_name}'
 
 
     def _get_changelog_link(self):
