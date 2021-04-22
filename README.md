@@ -64,6 +64,13 @@ Example of creating milestones:
         milestones --create --sprint_name_file conf/milestones_2021.yaml \
                    --prepend_number 3 --due_date 2021-02-25 \
                    --github_org NASA-PDS --github_repos pds-registry-common
+                   
+                   
+To close a milestone and move the open ticket to the next milestone use, for example:
+
+    milestones --github-org NASA-PDS --close --sprint-names 06.Mary.Decker.Slaney
+
+Note that the next milestone is automatically retrieved from the number (here 06) in the prefix. That might not work if the next sprint is not found this way.
 
 ## pds-issues
 
