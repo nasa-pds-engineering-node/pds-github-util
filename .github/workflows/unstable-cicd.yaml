@@ -44,20 +44,24 @@ jobs:
     unstable-assembly:
         name: 🧩 Unstable Assembly
         runs-on: ubuntu-latest
+        if: github.actor != 'pdsen-ci'
         steps:
             -
                 name: 💳 Checkout
                 uses: actions/checkout@v2
                 with:
                     lfs: true
+                    token: ${{secrets.ADMIN_GITHUB_TOKEN}}
+
             -
                 name: 🤠 Roundup
                 uses: NASA-PDS/roundup-action@master
                 with:
                     assembly: unstable
                 env:
-                    pypi_username: ${{secrets.TEST_PYPI_USERNAME}}
-                    pypi_password: ${{secrets.TEST_PYPI_PASSWORD}}
+                    ossrh_username: ${{secrets.OSSRH_USERNAME}}
+                    ossrh_password: ${{secrets.OSSRH_PASSWORD}}
+                    CODE_SIGNING_KEY: ${{secrets.CODE_SIGNING_KEY}}
                     ADMIN_GITHUB_TOKEN: ${{secrets.ADMIN_GITHUB_TOKEN}}
 
 
