@@ -156,7 +156,8 @@ def main():
         prep_ldd_output_path(args.ldd_output_path)
         
         pkg = download_asset(get_latest_release(token, dev=args.use_lddtool_unstable), 
-                                                args.deploy_dir, file_extension='.zip')
+                                                args.deploy_dir, startswith='lddtool',
+                                                file_extension='.zip')
         sw_dir = unzip_asset(pkg, args.deploy_dir)
 
         # Generate dependency LDDs
