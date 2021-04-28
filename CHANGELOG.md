@@ -1,16 +1,12 @@
 # Changelog
 
-## [Unreleased](https://github.com/NASA-PDS/pds-github-util/tree/HEAD)
+## [v0.18.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.18.0) (2021-04-28)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.18.0...HEAD)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.17.0...v0.18.0)
 
 **Other closed issues:**
 
 - Update changelog and requirements software to accept user/repo argument [\#1](https://github.com/NASA-PDS/pds-github-util/issues/1)
-
-## [v0.18.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.18.0) (2021-04-22)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.17.0...v0.18.0)
 
 ## [v0.17.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.17.0) (2021-04-01)
 
