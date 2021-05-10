@@ -29,8 +29,7 @@ def get_max_tag(tag, other_tag):
     return tag if (vers > other_vers) else other_tag
 
 
-
-class CattleHead():
+class CattleHead:
 
     _icon_dict = {
         'manual': 'https://nasa-pds.github.io/pdsen-corral/images/manual.png',
@@ -41,7 +40,7 @@ class CattleHead():
         'feedback': 'https://nasa-pds.github.io/pdsen-corral/images/feedback.png'
     }
 
-    def __init__(self, name, github_path, version=None, dev=False, token=None):
+    def __init__(self, name, github_path, version=None, type=None, dev=False, token=None):
         logger.info(f'create cattleHead {name}, {github_path}')
         self._name = name
         self._github_path = github_path
@@ -63,7 +62,19 @@ class CattleHead():
         else:
             self._update = None
 
+        self._type = type
+
         self.rst_doc = None
+
+    @property
+    def type(self):
+        """'type' property."""
+        return self._type
+
+    @property
+    def repo_name(self):
+        """'repo_name' property, for example 'pds-doi-service'"""
+
 
     def set_rst(self, d):
         self.rst_doc = d
@@ -126,16 +137,12 @@ class CattleHead():
         return f'{self._github_path}/releases/tag/{self._version}'
 
     def _get_manual_link(self):
-        if self._version_name:
-            url = f'https://{self._org}.github.io/{self._repo_name}/{self._version_name}'
-            if self._reachable(url):
-                return url
-            elif self._version_name[0] == 'v':
-                url = f'https://{self._org}.github.io/{self._repo_name}/{self._version_name[1:]}'
-                if self._reachable(url):
-                    return url
 
-        return f'https://{self._org}.github.io/{self._repo_name}'
+        url = f'https://{self._org}.github.io/{self._repo_name}/'
+        if self._reachable(url):
+            return url
+        else:
+            return f'https://github.com/{self._org}/{self._repo_name}'
 
 
     def _get_changelog_link(self):

@@ -1,4 +1,5 @@
 import os
+import re
 from configparser import ConfigParser
 from datetime import datetime
 import logging
@@ -34,13 +35,17 @@ class Herd:
         self._update_date = None
         for section in self._config.sections():
             if 'submodule "."' not in section:
-                module_array = section.split(" ")
-                if len(module_array) >= 2:
-                    module_name = module_array[1].strip('"')
+                module_name_search = re.search('submodule "(.*)"', section, re.IGNORECASE)
+                if module_name_search:
+                    module_name = module_name_search.group(1)
+
+                #module_array = section.split(" ")
+                #if len(module_array) >= 2:
+                #    module_name = module_array[1].strip('"')
                 else:
                     logger.error(f'section {section} is malformed, expected format is: [submodule "<module name>"]')
 
-                optional_module_options = {k:self._config.get(section, k).strip("/") for k in ['version'] if self._config.has_option(section, k)}
+                optional_module_options = {k:self._config.get(section, k).strip("/") for k in ['version', 'type'] if self._config.has_option(section, k)}
                 cattle_head = CattleHead(module_name,
                                                      self._config.get(section, "url").strip("/"),
                                                      dev=self._dev,
