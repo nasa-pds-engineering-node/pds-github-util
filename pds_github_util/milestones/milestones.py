@@ -74,7 +74,6 @@ def defer_open_issues(repo, milestone):
         logger.info("no next milestone available, skipping repo")
 
 
-
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=__doc__)
@@ -171,6 +170,7 @@ def main():
         if _due_date:
             # Increment due date for next milestone
             _due_date = _due_date + datetime.timedelta(days=args.length)
+
 
 if __name__ == "__main__":
     main()

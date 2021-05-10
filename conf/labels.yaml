@@ -58,3 +58,15 @@ labels:
   B16.1: ff94ff
   B17.0: ff94ff
   B17.1: ff94ff
+
+   Projects
+  proj.devops: ffffff
+  proj.doi-service: ffffff
+  proj.dldd-mgmt: ffffff
+  proj.pds-ux: ffffff
+  proj.registry+api: ffffff
+  proj.deep-archive: ffffff
+  proj.pds4-scrs: ffffff
+  proj.validate: ffffff
+  proj.plaid: ffffff
+  proj.cloud-project: ffffff

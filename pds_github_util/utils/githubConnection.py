@@ -1,5 +1,15 @@
+import logging
 import os
+import sys
+
 from github3 import login
+
+# Quiet github3 logging
+logger = logging.getLogger('github3')
+logger.setLevel(level=logging.WARNING)
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class GithubConnection():

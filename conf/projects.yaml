@@ -1,0 +1,44 @@
+key_dates:
+  scr_date: 08/24/2021
+  doc_update_date: 08/24/2021
+  delivery_date: 09/17/2021
+  trr_date: 09/30/2021
+  beta_test_date: 10/15/2021 - 11/12/2021
+  dldd_int_date: 10/15/2021 - 11/12/2021
+  doc_review_date: 11/12/2021
+  ddr_date: 11/17/2021
+  release_date: 12/03/2021
+
+projects:
+  proj.devops:
+    - name: PDSEN DevOps
+      description: Operations and DevOps tasks, primarily associated with CI/CD tools and services for PDS Engineering Node to streamline the build, deploy, and release lifecycle, as well as a simplified view for requirements tracing and I&T.
+  proj.doi-service:
+    - name: PDS DOI Service
+      description: Service and web form for creating and tracking DOIs. Development efforts include the development of requirements and implementation of the service and form.
+  proj.dldd-mgmt:
+    - name: dLDD Management
+      description: |
+        This task involves both:
+          1. the development of processes and applicable software in order to enable the integrated build and deployment of all PDS4 local data dictionaries, and provide an integrated mechanism for change requests and other inputs.
+          2. The PDS4 Local Data Dictionary Tool (LDDTool) - parses a local data dictionary definition file (Ingest LDD) and generates PDS4 data standard dictionaries. Development efforts include changes dictated by DDWG as well as new user requests.
+  proj.pds-ux:
+    - name: PDS Web Modernization
+      description: |
+        Task to reimagine pds.nasa.gov and how people access the PDS at the top-level, transforming the PDS into a more integrated, search-driven user experience. Includes performing user interviews and heuristic analysis, developing an integrated web design, and user interface upgrades. Additionally, it will provide a new approach to search and accessibility to PDS data products and integration with discipline node product-level search engines. This task also involves extensive user testing and analytics in order to better understand how our users want to access the PDS.
+  proj.registry+api:
+    - name: PDS Registry and API
+      description: |
+        The overarching task for developing and managing the PDS Registry, OpenAPI specification, PDS Search API, and the underlying service and tool implementation.
+  proj.deep-archive:
+    - name: PDS Deep Archive
+      description: PDS Open Archival Information System (OAIS) utilities, including Submission Information Package (SIP) and Archive Information Package (AIP) generators
+  proj.plaid:
+    - name: PLAID
+      description: APPS PDS Label Assistant for Interactive Design (PLAID).
+  proj.cloud-project:
+    - name: PDS Cloud Initiative
+      description: Per the roadmap layed out in the PDS Cloud Study whitepaper, develop pilot projects, tools, cost models, and plans for migrating to AWS.
+  proj.validate:
+    - name: Validate Tool
+      description: Validates PDS4 product labels, data and PDS3 Volumes. Improvement efforts include the continued implementation of requirements and other improvements and bug fixes

@@ -7,9 +7,13 @@ import os
 import sys
 import traceback
 
+from pds_github_util.issues.utils import get_labels, is_theme
 from pds_github_util.zenhub.zenhub import Zenhub
+from pds_github_util.utils import GithubConnection
+
 from pkg_resources import resource_string
 from pystache import Renderer
+from yaml import FullLoader, load
 
 # PDS Github Org
 GITHUB_ORG = 'NASA-PDS'
@@ -35,6 +39,22 @@ logger.setLevel(level=logging.WARNING)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+def append_to_project(proj, output):
+    if 'output' in proj.keys():
+        proj['output'] += output
+    else:
+        proj['output'] = output
+
+
+def get_project(projects, gh_issue, labels):
+    intersection = list(set(projects.keys()) & set(labels))
+    if intersection:
+        return projects[intersection[0]]
+    else:
+        raise Exception(f"Unknown project for theme '{gh_issue.title}': {labels}")
+
+
 def main():
 
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -58,35 +78,9 @@ def main():
     parser.add_argument('--release_date',
                         help='EN DDR date',
                         required=True)
-
-    # parser.add_argument('--deploy_dir',
-    #                     help='directory to deploy the validate tool on the file system',
-    #                     default='/tmp')
-    # parser.add_argument('--schemas',
-    #                     help='path(s) to schemas to validate against')
-    # parser.add_argument('--schematrons',
-    #                     help='path(s) to schematrons to validate against')
-    # parser.add_argument('--skip_content_validation',
-    #                     help='validate: skip content validation',
-    #                     action='store_true', default=False)
-    # parser.add_argument('--failure_expected', dest='failure_expected',
-    #                     help='validate expected to fail',
-    #                     action='store_true', default=False)
-    # parser.add_argument('--datapath',
-    #                     help='path(s) to data to validate',
-    #                     required=True)
-    # parser.add_argument('--output_log_path',
-    #                     help='path(s) to output validate run log file',
-    #                     default=os.path.join('tmp', 'logs'))
-    # parser.add_argument('--with_pds4_version',
-    #                     help=('force the following PDS4 version. software will '
-    #                           'download and validate with this version of the '
-    #                           'PDS4 Information Model. this version should be '
-    #                           'the semantic numbered version. e.g. 1.14.0.0'))
-    # parser.add_argument('--development_release',
-    #                     help=('flag to indicate this should be tested with a '
-    #                           'development release of the PDS4 Standard.'),
-    #                     action='store_true', default=False)
+    parser.add_argument('--projects_config',
+                        help='Path to config file with project information',
+                        required=True)
 
     args = parser.parse_args()
 
@@ -108,7 +102,7 @@ def main():
         sys.exit(1)
 
     try:
-        gh = github3.login(token=github_token)
+        gh = GithubConnection.getConnection(token=github_token)
         org = gh.organization(GITHUB_ORG)
         repos = org.repositories()
 
@@ -127,6 +121,16 @@ def main():
         for issue in issues:
             repo_dict[issue['repo_id']]['issues'].append(issue['issue_number'])
 
+        # Create project-based dictionary
+        with open(args.projects_config) as _file:
+            _conf = load(_file, Loader=FullLoader)
+
+        # get project info
+        projects = _conf['projects']
+
+        # get key dates info
+        key_dates = _conf['key_dates']
+
         # Loop through repos
         plan_output = ''
         maintenance_output = ''
@@ -140,17 +144,25 @@ def main():
                     gh_issue = gh.issue(org.login, repo_dict[repo_id]['repo'].name, issue_num)
                     zen_issue = zen.issue(repo_id, issue_num)
 
+                    # we only want release themes in the plan (is_epic + label:theme)
+                    labels = get_labels(gh_issue)
+
                     # Custom handling for pds4-information-model SCRs
                     if 'CCB-' in gh_issue.title:
                         ddwg_plans += f'* `{r.name}#{issue_num} <{gh_issue.html_url}>`_ **{gh_issue.title}**\n'
 
-                    # we only want epics in the plan
-                    elif zen_issue['is_epic']:
+                    elif is_theme(labels, zen_issue):
                         repo_output += f'* `{r.name}#{issue_num} <{gh_issue.html_url}>`_ **{gh_issue.title}**\n'
+
+                        # proj_id = get_project(projects, gh_issue, labels)
+                        # append_to_project(projects[proj_id], f'* `{r.name}#{issue_num} <{gh_issue.html_url}>`_ **{gh_issue.title}**\n')
+
                         for child in zen.get_epic_children(gh, org, repo_id, issue_num):
                             child_repo = child['repo']
                             child_issue = child['issue']
                             repo_output += f'   * `{child_repo.name}#{child_issue.number} <{child_issue.html_url}>`_ {child_issue.title}\n'
+
+                            # append_to_project(projects[proj_id], f'   * `{child_repo.name}#{child_issue.number} <{child_issue.html_url}>`_ {child_issue.title}\n')
                     # print(repo_output)
 
             repo_info = REPO_INFO.format(r.name,
@@ -172,10 +184,15 @@ def main():
             pystache_dict = {
                 'output': output_fname,
                 'build_number': args.build_number,
-                'delivery_date': args.delivery_date,
-                'trr_date': args.trr_date,
-                'ddr_date': args.ddr_date,
-                'release_date': args.release_date,
+                'scr_date': key_dates['scr_date'],
+                'doc_update_date': key_dates['doc_update_date'],
+                'delivery_date': key_dates['delivery_date'],
+                'trr_date': key_dates['trr_date'],
+                'beta_test_date': key_dates['beta_test_date'],
+                'dldd_int_date': key_dates['dldd_int_date'],
+                'doc_review_date': key_dates['doc_review_date'],
+                'ddr_date': key_dates['ddr_date'],
+                'release_date': key_dates['release_date'],
                 'pds4_changes': ddwg_plans,
                 'planned_changes': plan_output
             }

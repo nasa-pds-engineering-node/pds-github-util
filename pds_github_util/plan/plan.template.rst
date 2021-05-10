@@ -20,8 +20,41 @@ A more detailed breakdown of these tasks by date and priority can be found in ou
 Key Dates
 +++++++++
 
-.. list-table:: Key Dates
-    :widths: 15 10 30
+.. list-table:: Key Dates for Discipline Nodes
+    :widths: 20 20 20 40
+    :header-rows: 1
+
+    * - Date
+      - Name
+      - Responsible Party
+      - Description
+    * - {{scr_date}}
+      - SCR Freeze Date
+      - DDWG
+      - Freeze date for identifying SCRs to be implemented in this release.
+    * - {{doc_update_date}}
+      - Standards Documents Updates Due
+      - Document Authoring Team
+      - Updates to PDS4 standards documents due to EN for review.
+    * - {{beta_test_date}}
+      - Beta Testing Period
+      - DNs, IPDA
+      - Changes to PDS4 IM and system components available for beta testing.
+    * - {{dldd_int_date}}
+      - dLDD Integration and Test
+      - dLDD Stewards
+      - Auto-generated dLDDs should be reviews by dLDD Stewards, and final updates to dLDDs should be completed during this time.
+    * - {{doc_review_date}}
+      - Standards Documents Review Due
+      - Document Review Team
+      - Review updates to PDS4 standards documents.
+    * - {{release_date}}
+      - System Release
+      - EN
+      - PDS4 system is operationally deployed and website is updated accordingly.
+
+.. list-table:: Key Dates for Engineering Node
+    :widths: 20 40 40
     :header-rows: 1
 
     * - Date

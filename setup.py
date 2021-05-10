@@ -11,17 +11,6 @@ with open("README.md", "r") as fh:
 with open('requirements.txt', 'r') as f:
     pip_requirements = f.readlines()
 
-#pip_requirements = [ 'github3.py>=1.3',
-#                     'lxml>=4.5',
-#                     'mdutils>=1.2',
-#                     'packaging>=20.4',
-#                     'markdown2==2.3',
-#                     'pystache==0.5.4',
-#                     'emoji==0.5',
-#                     'gitpython==3.1',
-#                     'requests==2.23.0',
-#                     'beautifulsoup4==4.9.0' ]
-
 setuptools.setup(
     name="pds_github_util", # Replace with your own package name
     version=version,

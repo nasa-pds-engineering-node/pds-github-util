@@ -7,9 +7,8 @@ import logging
 import os
 import sys
 
-
 from mdutils.mdutils import MdUtils
-from .utils import get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type
+from .utils import TOP_PRIORITIES, get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type, is_theme
 
 from pds_github_util.utils import GithubConnection
 from pds_github_util.issues import RstRddReport
@@ -58,7 +57,7 @@ def create_md_issue_report(org, repos, issue_state='all', start_time=None, token
         issues_map = get_issues_groupby_type(_repo, state=issue_state, start_time=start_time)
         convert_issues_to_planning_report(_md_file, _repo.name, issues_map)
 
-    md_file.create_md_file()
+    _md_file.create_md_file()
 
 
 def main():
