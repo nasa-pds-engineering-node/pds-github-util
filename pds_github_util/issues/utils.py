@@ -38,3 +38,24 @@ def get_issues_groupby_type(repo, state='all', start_time=None, ignore_types=Non
                 issues[t].append(issue)
 
     return issues
+
+def get_labels(gh_issue):
+    """Get Label Names.
+    Return list of label names for easier access
+    """
+    labels = []
+    for label in gh_issue.labels():
+        labels.append(label.name)
+
+    return labels
+
+
+def is_theme(labels, zen_issue):
+    """Check If Issue Is a Release Theme.
+    Use the input Github Issue object and Zenhub Issue object to check:
+    * if issue is an Epic (Zenhub)
+    * if issue contains a `theme` label
+    """
+    if zen_issue['is_epic']:
+        if 'theme' in labels:
+            return True

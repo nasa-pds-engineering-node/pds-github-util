@@ -137,7 +137,6 @@ class CattleHead:
         return f'{self._github_path}/releases/tag/{self._version}'
 
     def _get_manual_link(self):
-
         url = f'https://{self._org}.github.io/{self._repo_name}/'
         if self._reachable(url):
             return url
