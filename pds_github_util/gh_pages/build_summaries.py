@@ -32,36 +32,40 @@ def copy_resources():
 
 
 
-def build_summaries(token, path=os.getcwd(), format='md'):
+def build_summaries(token, path=os.getcwd(), format='md', version_pattern=None):
     copy_resources()
 
     herds = []
-    # loop on stable releases
-    for herd in loop_checkout_on_branch('NASA-PDS/pdsen-corral',
-                            '[0-9]+\.[0-9]+',
-                            partial(write_build_summary,
-                                    root_dir=path,
-                                    gitmodules='/tmp/pdsen-corral/.gitmodules',
-                                    token=token,
-                                    dev=False,
-                                    format=format),
-                            token=token,
-                            local_git_tmp_dir='/tmp'):
+
+    if not version_pattern:
+        # dev release on master
+        herd = next(loop_checkout_on_branch(
+            'NASA-PDS/pdsen-corral',
+            'master',
+            partial(write_build_summary,
+                root_dir=path,
+                gitmodules='/tmp/pdsen-corral/.gitmodules',
+                token=token,
+                dev=True,
+                format=format),
+            token=token,
+            local_git_tmp_dir='/tmp'))
         herds.append(herd)
+        version_pattern = '[0-9]+\.[0-9]+'
 
-    # dev release on master
-    herd = next(loop_checkout_on_branch('NASA-PDS/pdsen-corral',
-                            'master',
-                            partial(write_build_summary,
-                                    root_dir=path,
-                                    gitmodules='/tmp/pdsen-corral/.gitmodules',
-                                    token=token,
-                                    dev=True,
-                                    format=format),
-                            token=token,
-                            local_git_tmp_dir='/tmp'))
-
-    herds.append(herd)
+    # loop on selected version patterns
+    for herd in loop_checkout_on_branch(
+            'NASA-PDS/pdsen-corral',
+            version_pattern,
+            partial(write_build_summary,
+                    root_dir=path,
+                    gitmodules='/tmp/pdsen-corral/.gitmodules',
+                    token=token,
+                    dev=False,
+                    format=format),
+            token=token,
+            local_git_tmp_dir='/tmp'):
+        herds.append(herd)
 
     update_index(path, herds)
 

@@ -1,0 +1,60 @@
+labels:
+  # Type
+  bug: 00ff00
+  enhancement: 00ff00
+  requirement: 00ff00
+  theme: 00ff00
+
+  # Category
+  security: 38761d
+  untestable: 38761d
+  "I&T": 38761d
+  pending-scr: 38761d
+
+  # Priorities
+  p.must-have: 00ffff
+  p.should-have: 00ffff
+  p.could-have : 00ffff
+  p.wont-have: 00ffff
+
+  # Bug Severity
+  s.low: 00ffff
+  s.medium: 00ffff
+  s.high: ff0000
+  s.critical: ff0000
+
+  # Status
+  product-backlog: ff9900
+  release-backlog: ff9900
+  sprint-backlog : ff9900
+  d.running-late: ffd385
+  d.getting-later: ffd385
+  d.dont-forget-me: ffd385
+
+  # Needs
+  needs:triage : b4a7d6
+  needs:req: b4a7d6
+  needs:more-info: b4a7d6
+
+  # Blockers
+  needs:dependency : ffff00
+  needs:receivable : ffff00
+
+  # Closeout
+  invalid: ffffff
+  wontfix: ffffff
+  duplicate: ffffff
+
+  # PDS Build(s)
+  B12.0: ff94ff
+  B12.1: ff94ff
+  B13.0: ff94ff
+  B13.1: ff94ff
+  B14.0: ff94ff
+  B14.1: ff94ff
+  B15.0: ff94ff
+  B15.1: ff94ff
+  B16.0: ff94ff
+  B16.1: ff94ff
+  B17.0: ff94ff
+  B17.1: ff94ff

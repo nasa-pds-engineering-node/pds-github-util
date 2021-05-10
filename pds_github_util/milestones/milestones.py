@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Tool for closing milestones and producing Github issue reports.
+"""
 
 import argparse
 import datetime
@@ -73,26 +76,8 @@ def defer_open_issues(repo, milestone):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Tool for closing milestones and producing Github issue reports.")
-
-    # group = parser.add_argument_group('Login / Repo Info')
-    # group.add_argument('-u', '--username', help='Username to use for authentication')
-    # group.add_argument('-p', '--password', help='Password to use for authentication')
-    # parser.add_argument('--token',
-    #                     help='github token')
-    # group.add_argument('-r', '--repos', nargs='*', help='Subset of repositories to use from config.')
-    #
-    # group = parser.add_argument_group('Milestone Management')
-    # group.add_argument('-d', '--due_date', help='Due date. Format: YYYY-MM-DD')
-    # group.add_argument('-D', '--delete_milestone', help='Specify name of milestone to DELETE.')
-    # group.add_argument('-a', '--add_milestone', help='Specify name of milestone to ADD. Must also specify due_date.')
-    # group.add_argument('-c', '--close_milestone', help='Specify name of milestone to CLOSE.')
-    # group.add_argument('-f', '--force', action='store_true', help='Force action. i.e. Force close milestone with open issues.')
-    #
-    # group = parser.add_argument_group('Multiple Milestone Creation')
-    # group.add_argument('--auto', action='store_true', help='Auto-generate sprints and titles with format specified in config starting from due date specified.')
-    # group.add_argument('--num_sprints', type=int, default=1, help='Number of sprints to create. Uses "days" configuration for increasing due date.')
-    # group.add_argument('--counter_start', type=int, default=1, help='Number to start counter if auto-title enabled and using counter in format.')
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+                                     description=__doc__)
 
     parser.add_argument('--github-org',
                         help='github org',
@@ -100,7 +85,7 @@ def main():
     parser.add_argument('--github-repos',
                         nargs='*',
                         help='github repo names. if not specified, tool will include all repos in org by default.')
-    parser.add_argument('--length', default=14, help='milestone length in number of days.')
+    parser.add_argument('--length', default=21, help='milestone length in number of days.')
     parser.add_argument('--token', help='github token.')
     parser.add_argument('--create', action='store_true', help='create milestone.')
     parser.add_argument('--delete', action='store_true', help='delete milestone.')

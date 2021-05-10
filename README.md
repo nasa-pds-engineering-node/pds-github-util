@@ -66,6 +66,39 @@ Example of creating milestones:
                    --github_org NASA-PDS --github_repos pds-registry-common
 
 
+Example of creating milestones:
+  * for a single repo
+  * specified in a config file
+  * prepended by a number
+  * first due date is 2021-02-25
+
+        milestones --create --sprint_name_file conf/milestones_2021.yaml \
+                   --prepend_number 3 --due_date 2021-02-25 \
+                   --github_org NASA-PDS --github_repos pds-registry-common
+                   
+                   
+To close a milestone and move the open ticket to the next milestone use, for example:
+
+    milestones --github-org NASA-PDS --close --sprint-names 06.Mary.Decker.Slaney
+
+Note that the next milestone is automatically retrieved from the number (here 06) in the prefix. That might not work if the next sprint is not found this way.
+
+## pds-issues
+
+Tool for generating simple Markdown issue reports. (WARNING: not well tested beyond this example use case)
+
+Example of generating a report for open [NASA-PDS/validate repo](https://github.com/NASA-PDS/validate) issues.
+
+        pds-issues --github_repos validate --issue_state open
+
+Currently outputs to file: `pdsen_issues.md`
+
+For the RDD generation:
+
+    pds-issues  --github-repos validate --issue_state closed --format rst --start-time 2020-10-26T00:00:00Z
+    
+Generates `pdsen_issues.rst`
+
 # Development
  
     git clone ...
