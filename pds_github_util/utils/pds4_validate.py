@@ -161,7 +161,7 @@ def main():
         validate_args.extend(glob.glob(args.datapath, recursive=True))
 
 
-        pkg = download_asset(get_latest_release(token), args.deploy_dir, file_extension='.zip')
+        pkg = download_asset(get_latest_release(token), args.deploy_dir, startswith="validate", file_extension='.zip')
         sw_dir = unzip_asset(pkg, args.deploy_dir)
 
         exec_validate(os.path.join(sw_dir, 'bin', 'validate'), validate_args, log_path=args.output_log_path)

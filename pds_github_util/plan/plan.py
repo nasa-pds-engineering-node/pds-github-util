@@ -109,7 +109,6 @@ def main():
 
     try:
         gh = github3.login(token=github_token)
-        # gh = github3.GitHub('jordanpadams','Ph1ll1es$8008')
         org = gh.organization(GITHUB_ORG)
         repos = org.repositories()
 

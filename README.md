@@ -64,6 +64,17 @@ Example of creating milestones:
         milestones --create --sprint_name_file conf/milestones_2021.yaml \
                    --prepend_number 3 --due_date 2021-02-25 \
                    --github_org NASA-PDS --github_repos pds-registry-common
+
+
+Example of creating milestones:
+  * for a single repo
+  * specified in a config file
+  * prepended by a number
+  * first due date is 2021-02-25
+
+        milestones --create --sprint_name_file conf/milestones_2021.yaml \
+                   --prepend_number 3 --due_date 2021-02-25 \
+                   --github_org NASA-PDS --github_repos pds-registry-common
                    
                    
 To close a milestone and move the open ticket to the next milestone use, for example:

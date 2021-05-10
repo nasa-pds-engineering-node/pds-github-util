@@ -9,11 +9,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def download_asset(release, output_path, file_extension=None):
+def download_asset(release, output_path, startswith='', file_extension=''):
     """Download asset from Github"""
     for _asset in release.assets():
         # print(a.name)
-        if (_asset.name.endswith(file_extension)):
+
+        if _asset.name.startswith(startswith) and _asset.name.endswith(file_extension):
             logger.info(f'Downloading asset {_asset.name}')
             _output = os.path.join(output_path, _asset.name)
             _asset.download(path=_output)

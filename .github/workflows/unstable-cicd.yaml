@@ -2,6 +2,7 @@
 # =================================================
 #
 # Note: for this workflow to succeed, the following secrets must be installed
+# in the repository:
 # in the repository or inherited from the organization:
 #
 # ``ADMIN_GITHUB_TOKEN``
@@ -16,6 +17,11 @@
 #     Username for the Central Repository.
 # ``OSSRH_USERNAME``
 #     Password for the Central Repository.
+# ``TEST_PYPI_USERNAME``
+#     Username for test.pypi.org.
+# ``TEST_PYPI_PASSWORD``
+#     Password for ``TEST_PYPI_USERNAME``.
+#
 
 
 ---
@@ -44,12 +50,14 @@ jobs:
     unstable-assembly:
         name: 🧩 Unstable Assembly
         runs-on: ubuntu-latest
+        if: github.actor != 'pdsen-ci'
         steps:
             -
                 name: 💳 Checkout
                 uses: actions/checkout@v2
                 with:
                     lfs: true
+                    token: ${{secrets.ADMIN_GITHUB_TOKEN}}
             -
                 name: 🤠 Roundup
                 uses: NASA-PDS/roundup-action@master
