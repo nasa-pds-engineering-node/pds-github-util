@@ -12,6 +12,9 @@
 *.project
 *.classpath
 
+# Python files
+*.egg-info/
+
 # IntelliJ files
 .idea/
 *.iml
