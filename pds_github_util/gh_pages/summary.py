@@ -10,6 +10,13 @@ logger = logging.getLogger(__name__)
 
 COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedback']
 
+REPO_TYPES = {
+    'tool': 'Discipline Node Tools',
+    'library': 'Libraries',
+    'core': 'Core tools and services',
+    'other': 'Other software assets (back-end services or libraries)',
+    'unknown': 'Unclassified software assets'
+}
 
 
 def get_table_columns_md():
@@ -62,20 +69,39 @@ def write_md_file(herd, output_file_name, version):
     software_summary_md.create_md_file()
 
 
+def write_rst_introduction(d: RstClothReferenceable, version: str):
+    d.title(f'Software Summary (build {version})')
+
+    d.content(f'The software provided for the build {version} are listed hereafter and organized by category:')
+    d.newline()
+    for t, section in REPO_TYPES.items():
+        if t != 'unknown':
+            d.li(f'`{section}`_')
+            d.newline()
+
 def write_rst_file(herd, output_file_name, version):
 
     d = RstClothReferenceable()
-    d.title(f'Software Summary (build {version})')
 
-    data = []
+    write_rst_introduction(d, version)
+
+    # create one section per type of repo
+    data = {t: [] for t in REPO_TYPES}
     for k, ch in herd.get_cattle_heads().items():
         ch.set_rst(d)
-        data.append(ch.get_table_row(format='rst'))
+        if ch.type in REPO_TYPES.keys():
+            data[ch.type].append(ch.get_table_row(format='rst'))
+        else:
+            logger.warning("unknown type for repo %s in build version %s", ch.repo_name, version)
+            data['unknown'].append(ch.get_table_row(format='rst'))
 
-    d.table(
-        get_table_columns_rst(),
-        data=data
-    )
+    for type, type_data in data.items():
+        if type_data:
+            d.h1(REPO_TYPES[type])
+            d.table(
+                get_table_columns_rst(),
+                data=type_data
+            )
 
     rst_column_header_images(d)
 

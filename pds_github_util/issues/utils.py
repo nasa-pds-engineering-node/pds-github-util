@@ -39,7 +39,6 @@ def get_issues_groupby_type(repo, state='all', start_time=None, ignore_types=Non
 
     return issues
 
-
 def get_labels(gh_issue):
     """Get Label Names.
     Return list of label names for easier access

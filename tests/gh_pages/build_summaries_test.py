@@ -12,6 +12,10 @@ class MyTestCase(unittest.TestCase):
         #pass
         build_summaries(GITHUB_TOKEN, path='tmp', format='rst')
 
+    def test_rst_summaries_one_version(self):
+        # pass
+        build_summaries(GITHUB_TOKEN, path='tmp', format='rst', version_pattern="11.1")
+
 
 if __name__ == '__main__':
     unittest.main()

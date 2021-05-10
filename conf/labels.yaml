@@ -59,7 +59,7 @@ labels:
   B17.0: ff94ff
   B17.1: ff94ff
 
-   Projects
+  # Projects
   proj.devops: ffffff
   proj.doi-service: ffffff
   proj.dldd-mgmt: ffffff
