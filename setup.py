@@ -27,7 +27,7 @@ setuptools.setup(
     package_data = {
         '' : ['*.template', 'gh_pages/resources/*', 'gh_pages/resources/images/*']},
     keywords=['github', 'action', 'github action', 'snapshot', 'release', 'maven'],
-
+    test_suite="tests",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
