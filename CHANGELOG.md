@@ -1,5 +1,13 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/pds-github-util/tree/«unknown») (2021-05-13)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.20.0...«unknown»)
+
+**Requirements:**
+
+- As a PDS software user, I want to have a hierarchical view of the PDS EN components that apply to my user interests [\#7](https://github.com/NASA-PDS/pds-github-util/issues/7)
+
 ## [v0.20.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.20.0) (2021-05-11)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.19.0...v0.20.0)
