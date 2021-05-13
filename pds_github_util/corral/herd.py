@@ -5,6 +5,9 @@ from datetime import datetime
 import logging
 from pds_github_util.corral import CattleHead
 
+logger = logging.getLogger('github3')
+logger.setLevel(level=logging.WARNING)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

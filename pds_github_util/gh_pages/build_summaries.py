@@ -1,12 +1,14 @@
 import os
 import logging
 import argparse
+import sys
 from pkg_resources import resource_filename
 from functools import partial
 from shutil import copytree, rmtree, copy
 from pds_github_util.branches.git_actions import loop_checkout_on_branch
 from pds_github_util.gh_pages.summary import write_build_summary
 from pds_github_util.gh_pages.root_index import update_index
+from pds_github_util.utils.tokens import GITHUB_TOKEN
 
 logger = logging.getLogger('github3')
 logger.setLevel(level=logging.WARNING)
@@ -74,13 +76,18 @@ def main():
     parser = argparse.ArgumentParser(description='Create new snapshot release')
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
-    parser.add_argument('--path', dest='path',
+    parser.add_argument('--path', dest='path', default='./output/',
                         help='directory where the summary will be created')
-    parser.add_argument('--format', dest='format',
+    parser.add_argument('--format', dest='format', default='rst',
                         help='format of the summary, accepted formats are md and rst')
     args = parser.parse_args()
-    build_summaries(args.token, args.path, args.format)
 
+    token = args.token or GITHUB_TOKEN
+    if not token:
+        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+        sys.exit(1)
+
+    build_summaries(token, args.path, args.format)
 
 
 if __name__ == "__main__":
