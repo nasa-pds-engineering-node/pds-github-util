@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedback']
 
 REPO_TYPES = {
-    'tool': 'Discipline Node Tools',
+    'tool': 'PDS Tools',
+    'service': 'Discipline Node Services',
     'library': 'Libraries',
-    'core': 'Core tools and services',
-    'other': 'Other software assets (back-end services or libraries)',
+    'core': 'Other Core Services and Libraries',
     'unknown': 'Unclassified software assets'
 }
 

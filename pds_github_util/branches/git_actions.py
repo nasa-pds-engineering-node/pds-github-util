@@ -9,7 +9,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-
 def loop_checkout_on_branch(repo_full_name, branch_regex, callback, token=None, local_git_tmp_dir='/tmp'):
     repo_full_name_array = repo_full_name.split("/")
     org = repo_full_name_array[0]
@@ -52,6 +51,7 @@ def ping_repo_branch(repo_full_name, branch, message, token=None):
 
 def clone_checkout_branch(git_remote_url, local_repo, branch):
     os.makedirs(local_repo, exist_ok=True)
+
     repo = Repo.init(local_repo)
     if len(repo.remotes) == 0 or 'origin' not in [r.name for r in repo.remotes]:
         repo.create_remote('origin', git_remote_url)

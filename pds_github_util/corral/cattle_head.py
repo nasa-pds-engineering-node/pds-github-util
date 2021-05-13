@@ -9,8 +9,8 @@ logging.basicConfig(level=logging.INFO)
 import http.client
 http.client.HTTPConnection.debuglevel = 1
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
