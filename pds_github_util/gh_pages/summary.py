@@ -5,13 +5,10 @@ from pds_github_util.utils import RstClothReferenceable
 from pds_github_util.corral.herd import Herd
 from uuid import uuid4
 
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-COLUMNS = ['Manual', 'Changelog', 'Requirements', 'Download', 'License', 'Feedback']
+COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedback']
 
 REPO_TYPES = {
     'tool': 'PDS Tools',

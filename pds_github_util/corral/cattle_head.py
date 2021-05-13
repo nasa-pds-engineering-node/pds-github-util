@@ -9,14 +9,11 @@ logging.basicConfig(level=logging.INFO)
 import http.client
 http.client.HTTPConnection.debuglevel = 1
 
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.WARNING)
+requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
 VOID_URL = 'https://en.wikipedia.org/wiki/Void_(astronomy)'

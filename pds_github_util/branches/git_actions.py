@@ -5,12 +5,6 @@ import re
 from git import Repo
 import github3
 
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
-logger = logging.getLogger('git')
-logger.setLevel(level=logging.WARNING)
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
