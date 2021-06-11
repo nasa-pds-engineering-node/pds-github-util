@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.22.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.0-dev) (2021-06-08)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.21.0...v0.22.0-dev)
+
 ## [v0.21.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.21.0) (2021-06-08)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.20.0...v0.21.0)
