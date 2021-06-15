@@ -7,7 +7,7 @@ from pds_github_util.release.release import release_publication
 from ._python_version import getVersion
 
 # 🧐 FYI, logging config should once happen on exec; calling `basicConfig` at the top of
-# every mdodule resets any configuration the user may have set up:
+# every module resets any configuration the user may have set up:
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 

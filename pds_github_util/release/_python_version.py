@@ -25,6 +25,9 @@ class VersionDetective(object):
     ``registerDetective``.
     '''
     def __init__(self, workspace: str):
+        '''Initialize this detective by saving the given workspace (a path to a directory as a string)
+        into the instance of this object.
+        '''
         self.workspace = workspace
 
     def findFile(self, fn: str):
@@ -107,7 +110,9 @@ class _SetupDetective(VersionDetective):
         '''Tell what file we're looking for'''
         raise NotImplementedError('Subclasses must implement ``getFile``')
     def getRegexp(self):
-        '''Give us a good regexp to use in the file'''
+        '''Give us a good regexp to use in the file; the regexp must provide one capture
+        group that contains the version string.
+        '''
         raise NotImplementedError('Subclasses must implement ``getRegexp``')
 
     def detect(self):
@@ -141,10 +146,12 @@ class SetupModuleDetective(_SetupDetective):
 # ---------
 
 
-def registerDetective(detective: VersionDetective):
+def registerDetective(detective: type):
     '''✍️ Register the given ``detective`` with the set of potential detetives to use to detect
     version information in a Python source tree.
     '''
+    if not issubclass(detective, VersionDetective):
+        raise ValueError('Only register ``VersionDetective`` classes/subclasses with this function')
     _detectives.add(detective)
 
 
