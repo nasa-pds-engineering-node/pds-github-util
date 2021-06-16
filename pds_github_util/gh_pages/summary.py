@@ -3,7 +3,6 @@ import logging
 from pds_github_util.tags.tags import Tags
 from pds_github_util.utils import RstClothReferenceable
 from pds_github_util.corral.herd import Herd
-from uuid import uuid4
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -11,11 +10,30 @@ logger = logging.getLogger(__name__)
 COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedback']
 
 REPO_TYPES = {
-    'tool': 'PDS Tools',
-    'service': 'Discipline Node Services',
-    'library': 'Libraries',
-    'core': 'Other Core Services and Libraries',
-    'unknown': 'Unclassified software assets'
+    'tool': {
+        'title': 'Standalone Tools and Libraries',
+        'description': 'PDS tools for discipline nodes, data providers and users.'
+    },
+    'service': {
+        'title': 'Discipline Node Services',
+        'description': 'PDS servers that Discipline Node should deploy to publish their archive at PDS level'
+    },
+    'library': {
+        'title': 'Libraries',
+        'description': 'Libraries supported by PDS'
+    },
+    'core': {
+        'title': 'Engineering Node Services',
+        'description': 'PDS servers deployed by PDS Engineering Node at central level'
+    },
+    'other': {
+        'title': 'Other Tools and Libraries (dependencies)',
+        'description': 'Other software assets re-used in previously listed applications'
+    },
+    'unknown': {
+        'title': 'Unclassified software assets',
+        'description': ''
+    }
 }
 
 
@@ -70,13 +88,13 @@ def write_md_file(herd, output_file_name, version):
 
 
 def write_rst_introduction(d: RstClothReferenceable, version: str):
-    d.title(f'Software Summary (build {version})')
+    d.title(f'Software Catalog (build {version})')
 
     d.content(f'The software provided for the build {version} are listed hereafter and organized by category:')
     d.newline()
     for t, section in REPO_TYPES.items():
         if t != 'unknown':
-            d.li(f'`{section}`_')
+            d.li(f"`{section['title']}`_")
             d.newline()
 
 def write_rst_file(herd, output_file_name, version):
@@ -97,7 +115,8 @@ def write_rst_file(herd, output_file_name, version):
 
     for type, type_data in data.items():
         if type_data:
-            d.h1(REPO_TYPES[type])
+            d.h1(REPO_TYPES[type]['title'])
+            d.content(REPO_TYPES[type]['description'])
             d.table(
                 get_table_columns_rst(),
                 data=type_data

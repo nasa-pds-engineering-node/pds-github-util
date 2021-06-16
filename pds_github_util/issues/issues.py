@@ -8,7 +8,7 @@ import os
 import sys
 
 from mdutils.mdutils import MdUtils
-from .utils import TOP_PRIORITIES, get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type, is_theme
+from pds_github_util.issues.utils import TOP_PRIORITIES, get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type, is_theme
 
 from pds_github_util.utils import GithubConnection
 from pds_github_util.issues import RstRddReport
@@ -82,8 +82,12 @@ def main():
                         help='End datetime for tickets to find. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.')
     parser.add_argument('--format', default='md',
                         help='rst or md')
+    parser.add_argument('--build', default='B11.1',
+                        help='build label, for example B11.1 or B12.0')
 
     args = parser.parse_args()
+
+    logger.info('Working on build %s', args.build)
 
     if args.format == 'md':
         create_md_issue_report(
@@ -99,14 +103,12 @@ def main():
         rst_rdd_report = RstRddReport(
             args.github_org,
             start_time=args.start_time,
+            end_time=args.end_time,
+            build=args.build,
             token=args.token
         )
 
-        for _repo in rst_rdd_report.available_repos():
-            if not args.github_repos or _repo.name in args.github_repos:
-                rst_rdd_report.add_repo(_repo)
-
-        rst_rdd_report.write('pdsen_issues.rst')
+        rst_rdd_report.create(args.github_repos, 'pdsen_issues.rst')
 
     else:
         logger.error("unsupported format %s, must be rst or md", args.format)
