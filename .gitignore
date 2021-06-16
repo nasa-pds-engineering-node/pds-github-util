@@ -42,6 +42,9 @@ src/test/temp/
 *.sublime-*
 *.DS_Store
 pom.xml.versionsBackup
+venv/
+_config.yml
+images/
 
 # Java stuff
 *.javac
