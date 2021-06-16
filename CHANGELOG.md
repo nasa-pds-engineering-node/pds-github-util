@@ -1,6 +1,14 @@
 # Changelog
 
-## [v0.22.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.0-dev) (2021-06-08)
+## [«unknown»](https://github.com/NASA-PDS/pds-github-util/tree/«unknown») (2021-06-16)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.0-dev...«unknown»)
+
+**Other closed issues:**
+
+- As a release engineer, I want version numbers to be retrieved from Python packages [\#11](https://github.com/NASA-PDS/pds-github-util/issues/11)
+
+## [v0.22.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.0-dev) (2021-06-11)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.21.0...v0.22.0-dev)
 
