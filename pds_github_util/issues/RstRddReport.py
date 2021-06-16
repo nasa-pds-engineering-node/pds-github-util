@@ -130,9 +130,11 @@ class MetricsRddReport(RddReport):
                 else:
                     self.bugs_open_closed[issue.state] = 1
 
-                self._logger.info("%s#%i %s %s %s", repo, issue.number, issue.title, severity, issue.state)
+
                 if issue.state == 'open' and severity in {'s.critical', 's.high'}:
-                    self.high_and_critical_open_bugs.append("%s#%i %s %s\n" % repo, issue.number, issue.title, severity)
+                  :q
+                  self._logger.info("%s#%i %s %s %s", repo, issue.number, issue.title, severity, issue.state)
+                    self.high_and_critical_open_bugs += "%s#%i %s %s\n" % (repo, issue.number, issue.title, severity)
 
 
                 # get count
