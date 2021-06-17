@@ -43,9 +43,9 @@ class RddReport:
             for issue in repo.issues(state=state,
                                      labels=t,
                                      direction='asc',
-                                     since=self._start_time,
-                                     until=self._end_time):
-                if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS):
+                                     since=self._start_time):
+                if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS) \
+                        and (self._end_time is None or issue.created_at < datetime.fromisoformat(self._end_time)):
                     issues[t].append(issue)
 
         return issues
@@ -71,9 +71,11 @@ class MetricsRddReport(RddReport):
             self.issues_type_five_biggest[t] = []
 
         self.bugs_open_closed = {}
-        self.bugs_severity = {};
+        self.bugs_severity = {}
 
         self.high_and_critical_open_bugs = ""
+
+        self.epic_closed_for_the_build = {}
 
 
     def create(self, repos):
@@ -92,6 +94,10 @@ class MetricsRddReport(RddReport):
 
         print('Open high and critical bugs')
         print(self.high_and_critical_open_bugs)
+
+        print('Closed EPICS')
+        print(self.epic_closed_for_the_build)
+
 
     def _non_bug_metrics(self, type, repo):
         for issue in repo.issues(
@@ -132,8 +138,7 @@ class MetricsRddReport(RddReport):
 
 
                 if issue.state == 'open' and severity in {'s.critical', 's.high'}:
-                  :q
-                  self._logger.info("%s#%i %s %s %s", repo, issue.number, issue.title, severity, issue.state)
+                    self._logger.info("%s#%i %s %s %s", repo, issue.number, issue.title, severity, issue.state)
                     self.high_and_critical_open_bugs += "%s#%i %s %s\n" % (repo, issue.number, issue.title, severity)
 
 
@@ -143,16 +148,39 @@ class MetricsRddReport(RddReport):
                 else:
                     self._logger.info("this issues is still open %s#%i: %s", repo, issue.number, issue.title)
 
+
+    def _get_epics_count(self, repo, build):
+
+        epics = repo.issues(state='closed', labels=f'{build},Epic')
+        n = 0
+
+        for _ in epics:
+            n += 1
+
+        return n
+
+
+
+
+
     def _get_issue_type_count(self, repo):
+
+        # count epics
+        n_epics = self._get_epics_count(repo, 'B11.1')
+        if n_epics>0:
+            self.epic_closed_for_the_build[repo.name] = n_epics
+
         for t in RstRddReport.ISSUE_TYPES:
             if t == 'bug':
                 self._bug_metrics(repo)
             else:
                 self._non_bug_metrics(t, repo)
 
+
     def add_repo(self, repo):
         self._logger.info("add repo %s", repo)
         self._get_issue_type_count(repo)
+
 
 
 class RstRddReport(RddReport):
@@ -196,11 +224,10 @@ class RstRddReport(RddReport):
     def add_repo(self, repo):
         issues_map = self._get_issues_groupby_type(
             repo,
-            state='closed',
-            start_time=self._start_time,
-            end_time=self._end_time
+            state='closed'
         )
         issue_count = sum([len(issues) for _, issues in issues_map.items()])
+
         if issue_count > 0:
             self._write_repo_section(repo.name, issues_map)
 
