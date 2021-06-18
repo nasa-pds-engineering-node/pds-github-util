@@ -50,7 +50,7 @@ class CattleHead:
         gh = github3.login(token=self._token)
         self._repo = gh.repository(self._org, self._repo_name)
         self._description = self._repo.description
-        self._changelog_url = f'https://github.com/{self._org}/{self._repo_name}/blob/master/CHANGELOG.md'
+        self._changelog_url = f'https://github.com/{self._org}/{self._repo_name}/blob/main/CHANGELOG.md'
         self._changelog_signets = self._get_changelog_signet()
         self._dev = dev
 
@@ -154,7 +154,7 @@ class CattleHead:
             return "https://www.gnupg.org/gph/en/manual/r1943.html"
 
     def _get_requirements_link(self):
-        url = f'https://github.com/{self._org}/{self._repo_name}/blob/master/docs/requirements/{self._version_name}/REQUIREMENTS.md'
+        url = f'https://github.com/{self._org}/{self._repo_name}/blob/main/docs/requirements/{self._version_name}/REQUIREMENTS.md'
 
         if self._version_name and self._reachable(url):
             return url
@@ -162,7 +162,7 @@ class CattleHead:
             return None
 
     def _get_license_link(self):
-        return f'https://raw.githubusercontent.com/NASA-PDS/{self._repo_name}/master/LICENSE.txt'
+        return f'https://raw.githubusercontent.com/NASA-PDS/{self._repo_name}/main/LICENSE.txt'
 
     def _get_feedback_link(self):
         return f'{self._github_path}/issues/new/choose'
