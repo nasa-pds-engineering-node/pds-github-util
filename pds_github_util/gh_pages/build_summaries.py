@@ -40,10 +40,10 @@ def build_summaries(token, path=os.getcwd(), format='md', version_pattern=None):
     herds = []
 
     if not version_pattern:
-        # dev release on master
+        # dev release on main
         herd = next(loop_checkout_on_branch(
             'NASA-PDS/pdsen-corral',
-            'master',
+            'main',
             partial(write_build_summary,
                 root_dir=path,
                 gitmodules='/tmp/pdsen-corral/.gitmodules',
