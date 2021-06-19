@@ -44,7 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
   <description>
     This application enables a PDS node to register all its data products for long term preservation and sharing with the rest of the PDS system.
   </description>
-  <url>https://nasa-pds-incubator.github.io/pds-app-registry/</url>
+  <url>https://nasa-pds.github.io/pds-app-registry/</url>
 
   <parent>
     <groupId>gov.nasa</groupId>
@@ -79,7 +79,7 @@ POSSIBILITY OF SUCH DAMAGE.
 			</goals>
 			<configuration>
 			         
-				<url>https://github.com/NASA-PDS-Incubator/registry/releases/download/v${registry.version}/registry-manager-${registry.version}-bin.tar.gz</url>
+				<url>https://github.com/NASA-PDS/registry/releases/download/v${registry.version}/registry-manager-${registry.version}-bin.tar.gz</url>
 				<unpack>true</unpack>
 				<outputDirectory>${project.build.directory}</outputDirectory>
 				<!-- md5>f3e2e164407a542888d8738487100118</md5 -->
@@ -92,7 +92,7 @@ POSSIBILITY OF SUCH DAMAGE.
 				<goal>wget</goal>
 			</goals>
 			<configuration>
-				<url>https://github.com/NASA-PDS-Incubator/harvest/releases/download/v${harvest.version}/harvest-${harvest.version}-bin.tar.gz</url>
+				<url>https://github.com/NASA-PDS/harvest/releases/download/v${harvest.version}/harvest-${harvest.version}-bin.tar.gz</url>
 				<unpack>true</unpack>
 				<outputDirectory>${project.build.directory}</outputDirectory>
 				<!--  md5>f1c732a27e5e190dee52f041e58a1884</md5-->
@@ -150,12 +150,12 @@ POSSIBILITY OF SUCH DAMAGE.
           <execution>
             <id>default-cli</id>
             <configuration>
-              <owner>NASA-PDS-Incubator</owner>
+              <owner>NASA-PDS</owner>
               <repository>pds-app-registry</repository>
               <server>github-oauth</server>
               <tagName>${project.version}</tagName>
               <name>${project.version}</name>
-              <targetCommitish>master</targetCommitish>
+              <targetCommitish>main</targetCommitish>
               <body>release description overwritten by release notes</body>
               <releaseNotes>src/main/resources/release-notes.md</releaseNotes>
               <assets>
