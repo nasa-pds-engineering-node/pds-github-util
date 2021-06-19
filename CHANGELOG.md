@@ -1,8 +1,8 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-github-util/tree/«unknown») (2021-06-19)
+## [v0.22.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.0) (2021-06-19)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.21.0...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.21.0...v0.22.0)
 
 **Other closed issues:**
 
@@ -18,7 +18,11 @@
 
 ## [v0.20.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.20.0) (2021-05-11)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.19.0...v0.20.0)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.20.0-dev...v0.20.0)
+
+## [v0.20.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.20.0-dev) (2021-05-02)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.19.0...v0.20.0-dev)
 
 ## [v0.19.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.19.0) (2021-05-02)
 
