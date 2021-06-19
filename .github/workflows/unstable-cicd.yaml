@@ -32,8 +32,7 @@ name: 🤪 Unstable integration & delivery
 # Driving Event
 # -------------
 #
-# What event starts this workflow: a push to ``main`` (or ``master`` in old
-# parlance).
+# What event starts this workflow: a push to ``main``
 
 on:
     push:
