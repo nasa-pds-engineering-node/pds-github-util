@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>📦 Installation &mdash; pds-github-util  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pds-github-util
+          
+
+          
+            
+            <img src="../_static/PDS_Planets.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">📦 Installation</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#doing-the-installation">Doing the Installation</a><ul>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#configure">Configure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pds-github-util</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>📦 Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/installation/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="installation">
+<h1>📦 Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how to install the PDS Github Util.</p>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Prior to installing this software, ensure your system meets the following
+requirements:</p>
+<ul class="simple">
+<li><p>Python 3.6 or above. Python 2 will absolutely <em>not</em> work.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">libxml2</span></code> version 2.9.2; later 2.9 versions are fine.  Run <code class="docutils literal notranslate"><span class="pre">xml2-config</span>
+<span class="pre">--version</span></code> to find out.</p></li>
+</ul>
+<p>Consult your operating system instructions or system administrator to install
+the required packages. For those without system administrator access and are
+feeling anxious, you could try a local (home directory) Python 3 installation
+using a Miniconda installation.</p>
+</section>
+<section id="doing-the-installation">
+<h2>Doing the Installation<a class="headerlink" href="#doing-the-installation" title="Permalink to this headline">¶</a></h2>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
+<p>The easiest way to install this software is to use Pip, the Python Package
+Installer. If you have Python on your system, you probably already have Pip;
+you can run <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">--help</span></code> to check. Then run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">pds</span><span class="o">-</span><span class="n">github</span><span class="o">-</span><span class="n">util</span>
+</pre></div>
+</div>
+<p>If you don’t want the package dependencies to interfere with your local system
+you can also use a <cite>virtual environment</cite>  for your deployment.
+To do so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir -p $HOME/.virtualenvs
+python3 -m venv $HOME/.virtualenvs/pds-github-util
+source $HOME/.virtualenvs/pds-doi-service/bin/activate
+pip3 install pds-github-util
+</pre></div>
+</div>
+</section>
+<section id="configure">
+<h3>Configure<a class="headerlink" href="#configure" title="Permalink to this headline">¶</a></h3>
+<p>Some environment variable need to be set (they are defined by default in github action but need to be set manually otherwise):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">GITHUB_WORKSPACE</span><span class="o">=&lt;</span><span class="n">where</span> <span class="n">the</span> <span class="n">repository</span> <span class="n">which</span> <span class="n">we</span> <span class="n">want</span> <span class="n">to</span> <span class="n">publish</span> <span class="n">a</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="n">cloned</span><span class="o">&gt;</span>
+<span class="n">export</span> <span class="n">GITHUB_REPOSITORY</span><span class="o">=&lt;</span><span class="n">full</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">repository</span> <span class="n">which</span> <span class="n">we</span> <span class="n">want</span> <span class="n">to</span> <span class="n">publish</span> <span class="k">for</span> <span class="n">example</span> <span class="n">NASA</span><span class="o">-</span><span class="n">PDS</span><span class="o">-</span><span class="n">Incubator</span><span class="o">/</span><span class="n">pds</span><span class="o">-</span><span class="n">app</span><span class="o">-</span><span class="n">registry</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020 California Institute of Technology
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
