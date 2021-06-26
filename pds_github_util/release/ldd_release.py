@@ -188,7 +188,7 @@ def main():
                 # Check tag exists before continuing
                 tags = Tags(org, repo_name, token=token)
                 if not tags.get_tag(tag_name):
-                    release = create_release(repo, "master", tag_name, tagger, args.dev)
+                    release = create_release(repo, "main", tag_name, tagger, args.dev)
                     logger.info("upload assets")
                     ldd_upload_assets(release, assets)
                 else:
