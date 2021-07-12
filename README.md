@@ -112,6 +112,11 @@ For the RDD generation:
 
     pds-issues  --github-repos validate --issue_state closed --format rst --start-time 2020-10-26T00:00:00Z
     
+For RD metrics:
+
+    pds-issues --issue_state closed --format metrics --start-time 2020-10-26T00:00:00+00:00 --end-time 2021-04-19T00:00:00+00:00
+
+    
 Generates `pdsen_issues.rst`
 
 # Development
