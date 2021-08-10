@@ -44,13 +44,19 @@ def get_milestone(repo, sprint_title):
 def move_open_issues(repo, milestone, next_milestone):
     for issue in repo.issues(milestone=milestone.number, state='open'):
         labels = []
+        already_late = False
         for label in issue.labels():
             if label.name == DELAYED_LABELS_RUNNING_LATE:
                 labels.append(DELAYED_LABELS_RUNNING_LATER)
+                already_late = True
             elif label.name == DELAYED_LABELS_RUNNING_LATER:
                 labels.append(DELAYED_LABELS_DONT_FORGET_ME)
+                already_late = True
             else:
                 labels.append(label.name)
+
+        if not already_late:
+            labels.append(DELAYED_LABELS_RUNNING_LATE)
 
         issue.edit(milestone=next_milestone.number, labels=labels)
 
