@@ -7,7 +7,7 @@ import logging
 
 
 from mdutils.mdutils import MdUtils
-from pds_github_util.issues.utils import TOP_PRIORITIES, get_issue_priority, get_issues_groupby_type
+from pds_github_util.issues.utils import TOP_PRIORITIES, get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type, is_theme
 
 from pds_github_util.utils import GithubConnection
 from pds_github_util.issues import RstRddReport
@@ -83,7 +83,12 @@ def main():
     parser.add_argument('--format', default='md',
                         help='rst or md or metrics')
 
+    parser.add_argument('--build', default='B11.1',
+                        help='build label, for example B11.1 or B12.0')
+
     args = parser.parse_args()
+
+    logger.info('Working on build %s', args.build)
 
     if args.format == 'md':
         create_md_issue_report(
@@ -99,6 +104,8 @@ def main():
         rst_rdd_report = RstRddReport(
             args.github_org,
             start_time=args.start_time,
+            end_time=args.end_time,
+            build=args.build,
             token=args.token
         )
 
