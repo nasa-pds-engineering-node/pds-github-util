@@ -65,19 +65,20 @@ class Requirements:
         requirements_issue_map = {}
         requirements_tag_map = {}
         for issue in self._repo.issues(state='closed', direction='asc'):
-            body_sections = issue.body.split("**Applicable requirements")
-            if len(body_sections) > 1:
-                impacted_requirements_str = body_sections[1]
-                prog = re.compile("#[0-9]+")
-                requirements = prog.findall(impacted_requirements_str)
-                requirements = [ int(req[1:]) for req in requirements] # remove leading # and convert to int to be consistent with requirement dictionnary
-                for req in requirements:
-                    if req not in requirements_tag_map.keys():
-                        requirements_tag_map[req] = {'issues': set(),  'tags': set()}
-                    issue_date_isoz = issue.closed_at.isoformat().replace('+00:00', 'Z')
-                    earliest_tag_closed_after = self._tags.get_earliest_tag_after(issue_date_isoz)
-                    requirements_tag_map[req]['issues'].add(issue.number)
-                    requirements_tag_map[req]['tags'].add(earliest_tag_closed_after)
+            if issue.body:
+                body_sections = issue.body.split("**Applicable requirements")
+                if len(body_sections) > 1:
+                    impacted_requirements_str = body_sections[1]
+                    prog = re.compile("#[0-9]+")
+                    requirements = prog.findall(impacted_requirements_str)
+                    requirements = [ int(req[1:]) for req in requirements] # remove leading # and convert to int to be consistent with requirement dictionnary
+                    for req in requirements:
+                        if req not in requirements_tag_map.keys():
+                            requirements_tag_map[req] = {'issues': set(),  'tags': set()}
+                        issue_date_isoz = issue.closed_at.isoformat().replace('+00:00', 'Z')
+                        earliest_tag_closed_after = self._tags.get_earliest_tag_after(issue_date_isoz)
+                        requirements_tag_map[req]['issues'].add(issue.number)
+                        requirements_tag_map[req]['tags'].add(earliest_tag_closed_after)
         return requirements_tag_map
 
     def get_requirements(self):

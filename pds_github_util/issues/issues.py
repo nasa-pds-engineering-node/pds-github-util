@@ -4,14 +4,14 @@ Tool to generate simple markdown issue reports
 """
 import argparse
 import logging
-import os
-import sys
+
 
 from mdutils.mdutils import MdUtils
 from pds_github_util.issues.utils import TOP_PRIORITIES, get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type, is_theme
 
 from pds_github_util.utils import GithubConnection
 from pds_github_util.issues import RstRddReport
+from pds_github_util.issues import MetricsRddReport
 
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
@@ -81,7 +81,8 @@ def main():
     parser.add_argument('--end-time',
                         help='End datetime for tickets to find. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.')
     parser.add_argument('--format', default='md',
-                        help='rst or md')
+                        help='rst or md or metrics')
+
     parser.add_argument('--build', default='B11.1',
                         help='build label, for example B11.1 or B12.0')
 
@@ -110,6 +111,17 @@ def main():
 
         rst_rdd_report.create(args.github_repos, 'pdsen_issues.rst')
 
+    elif args.format == 'metrics':
+
+        rdd_metrics = MetricsRddReport(
+            args.github_org,
+            start_time=args.start_time,
+            end_time=args.end_time,
+            token=args.token
+        )
+
+        rdd_metrics.create(args.github_repos)
+
     else:
-        logger.error("unsupported format %s, must be rst or md", args.format)
+        logger.error("unsupported format %s, must be rst or md or metrics", args.format)
 

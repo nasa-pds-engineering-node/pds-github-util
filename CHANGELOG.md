@@ -1,8 +1,24 @@
 # Changelog
 
-## [v0.22.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.0-dev) (2021-06-08)
+## [v0.23.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.0-dev) (2021-06-27)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.21.0...v0.22.0-dev)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.2...v0.23.0-dev)
+
+## [v0.22.2](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.2) (2021-06-27)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.1...v0.22.2)
+
+## [v0.22.1](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.1) (2021-06-22)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.0...v0.22.1)
+
+## [v0.22.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.0) (2021-06-19)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.21.0...v0.22.0)
+
+**Other closed issues:**
+
+- As a release engineer, I want version numbers to be retrieved from Python packages [\#11](https://github.com/NASA-PDS/pds-github-util/issues/11)
 
 ## [v0.21.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.21.0) (2021-06-08)
 
@@ -42,15 +58,15 @@
 
 ## [v0.16.7](https://github.com/NASA-PDS/pds-github-util/tree/v0.16.7) (2021-02-10)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.16.6...v0.16.7)
-
-## [v0.16.6](https://github.com/NASA-PDS/pds-github-util/tree/v0.16.6) (2021-02-10)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.16.6...v0.16.6)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.16.6...v0.16.7)
 
 ## [0.16.6](https://github.com/NASA-PDS/pds-github-util/tree/0.16.6) (2021-02-10)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.16.5...0.16.6)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.16.6...0.16.6)
+
+## [v0.16.6](https://github.com/NASA-PDS/pds-github-util/tree/v0.16.6) (2021-02-10)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.16.5...v0.16.6)
 
 ## [v0.16.5](https://github.com/NASA-PDS/pds-github-util/tree/v0.16.5) (2021-02-09)
 

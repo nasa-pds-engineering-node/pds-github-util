@@ -32,13 +32,12 @@ name: 🤪 Unstable integration & delivery
 # Driving Event
 # -------------
 #
-# What event starts this workflow: a push to ``main`` (or ``master`` in old
-# parlance).
+# What event starts this workflow: a push to ``main``
 
 on:
     push:
         branches:
-             - '**'
+             - main
 
 
 # What to Do
@@ -60,7 +59,7 @@ jobs:
                     token: ${{secrets.ADMIN_GITHUB_TOKEN}}
             -
                 name: 🤠 Roundup
-                uses: NASA-PDS/roundup-action@master
+                uses: NASA-PDS/roundup-action@main
                 with:
                     assembly: unstable
                 env:

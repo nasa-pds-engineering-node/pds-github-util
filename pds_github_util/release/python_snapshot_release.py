@@ -4,71 +4,18 @@ import logging
 import glob
 from pathlib import Path
 from pds_github_util.release.release import release_publication
+from ._python_version import getVersion
 
+# 🧐 FYI, logging config should once happen on exec; calling `basicConfig` at the top of
+# every module resets any configuration the user may have set up:
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 SNAPSHOT_TAG_SUFFIX = "-dev"
 
+
 def python_get_version(workspace=None):
-    get_version_funcs = [
-        'python_get_version_from_version_txt',
-        'python_get_version_from_init',
-        'python_get_version_from_setup'
-    ]
-    for get_version_func in get_version_funcs:
-        v = eval(get_version_func)(workspace)
-        if v:
-            return v
-
-
-def python_get_version_from_setup(workspace=None):
-    logger.info("get version from setup.py file")
-    workspace = workspace or os.environ.get('GITHUB_WORKSPACE')
-    setup_path = os.path.join(workspace, 'setup.py')
-    prog = re.compile("version=.*")
-    try:
-        with open(setup_path, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if prog.match(line):
-                    version = line[9:-2]
-                    logger.info(f'version {version}')
-                    return version
-        return None
-    except FileNotFoundError:
-        return None
-
-
-def python_get_version_from_init(workspace=None):
-    logger.info("get version from package __init__.py file")
-    workspace = workspace or os.environ.get('GITHUB_WORKSPACE')
-    init_path_pattern =  os.path.join(workspace, "*", "__init__.py")
-    found_init = glob.glob(init_path_pattern)
-    if len(found_init):
-        init_path = found_init[0]
-        with open(init_path) as fi:
-            result = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fi.read())
-            if result:
-                version = result.group(1)
-                logger.info(f"version {version}")
-                return version
-            else:
-                return None
-    else:
-        return None
-
-def python_get_version_from_version_txt(workspace=None):
-    logger.info("get version from version.text file")
-    version_text_filename = 'version.txt'
-    try:
-        versiontext_file = next(Path('src').rglob(version_text_filename))
-        with open(versiontext_file) as f:
-            version = f.read()
-        return version.strip()
-    except StopIteration:
-        logger.info(f"no {version_text_filename} file found")
-        return None
+    return getVersion(workspace)
 
 
 def python_upload_assets(repo_name, tag_name, release):

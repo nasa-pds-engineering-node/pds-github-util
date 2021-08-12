@@ -112,6 +112,6 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
 
     delete_snapshot_releases(repo, suffix)
     if tag_name.endswith(suffix):
-        create_snapshot_release(repo, repo_name, "master", tag_name, tagger, upload_assets)
+        create_snapshot_release(repo, repo_name, "main", tag_name, tagger, upload_assets)
     else:
-        create_release(repo, repo_name, "master", tag_name, tagger, upload_assets)
+        create_release(repo, repo_name, "main", tag_name, tagger, upload_assets)
