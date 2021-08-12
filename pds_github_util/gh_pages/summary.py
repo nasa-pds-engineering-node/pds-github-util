@@ -31,7 +31,7 @@ REPO_TYPES = {
         'description': 'Other software assets re-used in previously listed applications'
     },
     'unknown': {
-        'title': 'Unclassified software assets',
+        'title': 'Additional software assets',
         'description': ''
     }
 }
