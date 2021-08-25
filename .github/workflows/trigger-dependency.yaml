@@ -1,0 +1,53 @@
+# 🏃‍♀️ Continuous Integration and Delivery: Stable
+# ===============================================
+#
+# Note: for this workflow to succeed, the following secrets must be installed
+# in the repository:
+#
+# ``ADMIN_GITHUB_TOKEN``
+#     A personal access token of a user with collaborator or better access to
+#     the project repository. You can generate this by visiting GitHub →
+#     Settings → Developer settings → Personal access tokens → Generate new
+#     token. Give the token scopes on ``repo``, ``write:packages``,
+#     ``delete:packages``, ``workflow``, and ``read:gpg_key``.
+# ``PYPI_USERNAME``
+#     Username for pypi.org.
+# ``PYPI_PASSWORD``
+#     Password for ``PYPI_USERNAME``.
+#
+
+
+---
+
+name: 😌 Trigger Dependency
+
+
+# Driving Event
+# -------------
+#
+# What event starts this workflow: a push of a release tag. Note: according to
+# https://git.io/JJZQt we have been doing our tag matching wrong. It's not
+# regexp, it's not glob…it's more like…glob++ 😮
+
+on:
+    push:
+        tags:
+            -  v*
+
+# What to Do
+# ----------
+#
+# Round up, yee-haw!
+
+jobs:
+    stable-assembly:
+        name: 🐴 Trigger Dependency
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Trigger github-actions-base build
+                uses: peter-evans/repository-dispatch@v1
+                with:
+                    token: ${{secrets.ADMIN_GITHUB_TOKEN}}
+                    repository: NASA-PDS/github-actions-base
+                    event-type: pds-github-util-built
