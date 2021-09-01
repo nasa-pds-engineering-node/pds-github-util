@@ -8,9 +8,6 @@ version = result.group(1)
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open('requirements.txt', 'r') as f:
-    pip_requirements = f.readlines()
-
 setuptools.setup(
     name="pds_github_util", # Replace with your own package name
     version=version,
@@ -34,7 +31,21 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=pip_requirements,
+    install_requires=[
+        "github3.py>=1.3",
+        "lxml>=4.5",
+        "mdutils>=1.2",
+        "packaging>=20.4",
+        "markdown2==2.3",
+        "pystache==0.5.4",
+        "emoji==0.5",
+        "gitpython==3.1",
+        "requests==2.23.0",
+        "beautifulsoup4==4.9.0",
+        "rstcloth==0.3.1",
+        "pyyaml==5.4.1",
+        "packaging==20.9"
+    ],
     entry_points={
         # snapshot-release for backward compatibility
         'console_scripts': ['snapshot-release=pds_github_util.release.maven_release:main',
