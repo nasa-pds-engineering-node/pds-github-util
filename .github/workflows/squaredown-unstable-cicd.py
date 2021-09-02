@@ -19,13 +19,13 @@
 
 ---
 
-name: Roundup-action-free unstable integration & delivery ⛔🐔and🥚
+name: Roundup action free unstable integration and delivery ⛔🐔and🥚
 
 
 on:
     push:
         tag:
-            - v*_rc*
+            - v*.*.*-rc*
 
 
 jobs:
