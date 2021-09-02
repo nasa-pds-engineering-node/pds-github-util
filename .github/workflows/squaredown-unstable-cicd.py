@@ -24,10 +24,9 @@ name: Roundup action free unstable integration and delivery ⛔🐔and🥚
 
 on:
     push:
-        tag:
+        tags:
             - v*.*.*-rc*
             - v*
-
 
 jobs:
     unstable-assembly:
