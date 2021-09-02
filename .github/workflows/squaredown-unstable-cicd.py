@@ -26,6 +26,7 @@ on:
     push:
         tag:
             - v*.*.*-rc*
+            - v*
 
 
 jobs:
