@@ -4,6 +4,8 @@ import logging
 import github3
 import sys
 
+from pds_github_util.utils import addStandardArguments
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -75,6 +77,7 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
     Script made to work in the context of a github action.
     """
     parser = argparse.ArgumentParser(description='Create new snapshot release')
+    addStandardArguments(parser)
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
     parser.add_argument('--repo_name',

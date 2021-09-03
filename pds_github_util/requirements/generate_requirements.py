@@ -1,12 +1,15 @@
 import argparse
 import logging
 from pds_github_util.requirements.requirements import Requirements, NoAppropriateVersionFoundException
+from pds_github_util.utils import addStandardArguments
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 def main():
     parser = argparse.ArgumentParser(description='Create a requirement report')
+    addStandardArguments(parser)
     parser.add_argument('--organization', dest='organization',
                         help='github organization owning the repo (e.g. NASA-PDS)')
     parser.add_argument('--repository', dest='repository',

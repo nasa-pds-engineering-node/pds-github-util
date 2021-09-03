@@ -9,6 +9,8 @@ from pds_github_util.branches.git_actions import loop_checkout_on_branch
 from pds_github_util.gh_pages.summary import write_build_summary
 from pds_github_util.gh_pages.root_index import update_index
 from pds_github_util.utils.tokens import GITHUB_TOKEN
+from pds_github_util.utils import addStandardArguments
+
 
 logger = logging.getLogger('github3')
 logger.setLevel(level=logging.WARNING)
@@ -74,6 +76,7 @@ def build_summaries(token, path=os.getcwd(), format='md', version_pattern=None):
 
 def main():
     parser = argparse.ArgumentParser(description='Create new snapshot release')
+    addStandardArguments(parser)
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
     parser.add_argument('--path', dest='path', default='./output/',

@@ -1,8 +1,11 @@
 import argparse
 from pds_github_util.branches.git_actions import ping_repo_branch
+from pds_github_util.utils import addStandardArguments
+
 
 def main():
     parser = argparse.ArgumentParser(description='empty commit on a repo branch')
+    addStandardArguments(parser)
     parser.add_argument('--repo', dest='repo',
                         help='repostory full name with owner, e.g. nasa-pds/pdsen-corral')
     parser.add_argument('--token', dest='token',

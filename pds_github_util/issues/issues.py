@@ -9,9 +9,10 @@ import logging
 from mdutils.mdutils import MdUtils
 from pds_github_util.issues.utils import TOP_PRIORITIES, get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type, is_theme
 
-from pds_github_util.utils import GithubConnection
+from pds_github_util.utils import GithubConnection, addStandardArguments
 from pds_github_util.issues import RstRddReport
 from pds_github_util.issues import MetricsRddReport
+
 
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
@@ -63,7 +64,7 @@ def create_md_issue_report(org, repos, issue_state='all', start_time=None, token
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=__doc__)
-
+    addStandardArguments(parser)
     parser.add_argument('--github-org',
                         help='github org',
                         default=DEFAULT_GITHUB_ORG)

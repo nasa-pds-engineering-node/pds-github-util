@@ -19,6 +19,8 @@ from pds_github_util.utils.ldd_gen import find_primary_ingest_ldd, convert_pds4_
 from pds_github_util.release.release import delete_snapshot_releases
 from pds_github_util.assets.assets import zip_assets
 from pds_github_util.tags.tags import Tags
+from pds_github_util.utils import addStandardArguments
+
 
 # Quiet github3 logging
 logger = logging.getLogger('github3')
@@ -123,7 +125,7 @@ def main():
     """Main."""
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=__doc__)
-
+    addStandardArguments(parser)
     parser.add_argument('--ldd_output_path',
                         help='directory to output generated LDDs',
                         required=True)

@@ -11,6 +11,9 @@ import os
 
 from github3 import login, exceptions
 
+from pds_github_util.utils import addStandardArguments
+
+
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
 # Quiet github3 logging
@@ -83,7 +86,7 @@ def defer_open_issues(repo, milestone):
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=__doc__)
-
+    addStandardArguments(parser)
     parser.add_argument('--github-org',
                         help='github org',
                         default=DEFAULT_GITHUB_ORG)

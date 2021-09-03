@@ -9,7 +9,7 @@ import traceback
 
 from pds_github_util.issues.utils import get_labels, is_theme
 from pds_github_util.zenhub.zenhub import Zenhub
-from pds_github_util.utils import GithubConnection
+from pds_github_util.utils import GithubConnection, addStandardArguments
 
 from pkg_resources import resource_string
 from pystache import Renderer
@@ -59,6 +59,7 @@ def main():
 
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
         description=__doc__)
+    addStandardArguments(parser)
     parser.add_argument('--github_token',
                         help='github API token')
     parser.add_argument('--zenhub_token',

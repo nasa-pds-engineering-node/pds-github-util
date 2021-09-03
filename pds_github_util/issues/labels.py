@@ -13,6 +13,9 @@ import yaml
 from github3 import login, exceptions
 from github3.exceptions import UnprocessableEntity, ConnectionError, ForbiddenError, NotFoundError
 
+from pds_github_util.utils import addStandardArguments
+
+
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
 # Quiet github3 logging
@@ -68,7 +71,7 @@ class Labels:
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=__doc__)
-
+    addStandardArguments(parser)
     parser.add_argument('--github_org',
                         help='github org',
                         default=DEFAULT_GITHUB_ORG)

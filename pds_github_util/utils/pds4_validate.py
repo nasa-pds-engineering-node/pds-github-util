@@ -19,6 +19,8 @@ from zipfile import ZipFile
 from pds_github_util.tags.tags import Tags
 from pds_github_util.assets.assets import download_asset, unzip_asset
 from pds_github_util.utils.ldd_gen import convert_pds4_version_to_alpha
+from pds_github_util.utils import addStandardArguments
+
 
 GITHUB_ORG = 'NASA-PDS'
 GITHUB_REPO = 'validate'
@@ -86,6 +88,7 @@ def main():
 
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
         description=__doc__)
+    addStandardArguments(parser)
     parser.add_argument('--deploy_dir',
                         help='directory to deploy the validate tool on the file system',
                         default='/tmp')
