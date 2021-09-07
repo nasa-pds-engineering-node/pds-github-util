@@ -1,4 +1,4 @@
-# 🏃‍♀️ Continuous Integration and Delivery: Unstable
+# 🏃‍♀️ Continuous Integration and Delivery: Stable
 # ===============================================
 #
 # Note: for this workflow to succeed, the following secrets must be installed
@@ -19,17 +19,17 @@
 
 ---
 
-name: Roundup action free unstable integration and delivery ⛔🐔and🥚
+name: Roundup action free stable integration and delivery
 
 
 on:
-    push:
+    create:
         tags:
-            - v*.*.*-rc*
+            - '*'
 
 jobs:
-    unstable-assembly:
-        name: 🐴 Unstable Assembly
+    stable-assembly:
+        name: 🐴 stable Assembly
         runs-on: ubuntu-latest
         steps:
             -
@@ -50,8 +50,6 @@ jobs:
                     key: pds-${{runner.os}}-py-${{hashFiles('**/*.whl')}}
                     # To restore a set of files, we only need to match a prefix of the saved key.
                     restore-keys: pds-${{runner.os}}-py-
-            # Pretty much everything after this is likely not a great way to do this but ...
-            # it's a work in progress ... so here we are.
             - 
                 name: Set up Python 3.9
                 uses: actions/setup-python@v1
