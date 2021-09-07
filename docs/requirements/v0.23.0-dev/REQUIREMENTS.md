@@ -8,3 +8,7 @@ Requirements Summary
 
 
 This requirement is not impacted by the current version
+## As a user, I want to see the status of the tickets shown in the current build plan ([#14](https://github.com/NASA-PDS/pds-github-util/issues/14)) 
+
+
+This requirement is not impacted by the current version
