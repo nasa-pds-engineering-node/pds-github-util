@@ -23,9 +23,8 @@ name: Roundup action free stable integration and delivery
 
 
 on:
-    create:
-        tags:
-            - '*'
+    release:
+        types: [published]
 
 jobs:
     stable-assembly:
