@@ -1,7 +1,7 @@
 import unittest
 import os
 import logging
-from pds_github_util.release.python_snapshot_release import python_get_version
+from pds_github_util.release.python_release import python_get_version
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)

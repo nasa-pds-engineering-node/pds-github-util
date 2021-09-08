@@ -76,7 +76,7 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
     """
     Script made to work in the context of a github action.
     """
-    parser = argparse.ArgumentParser(description='Create new snapshot release')
+    parser = argparse.ArgumentParser(description='Create new release')
     addStandardArguments(parser)
     parser.add_argument('--token', dest='token',
                         help='github personal access token')
@@ -84,6 +84,7 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
                         help='full name of github repo (e.g. user/repo)')
     parser.add_argument('--workspace',
                         help='path of workspace. defaults to current working directory if this or GITHUB_WORKSPACE not specified')
+    parser.add_argument('--snapshot', action="store_true", help="Mark release as a SNAPSHOT release.")
     args, unknown = parser.parse_known_args()
 
     # read organization and repository name
@@ -106,7 +107,6 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
     repo_name = repo_full_name_array[1]
 
     tag_name = prefix + get_version(workspace)
-    print(tag_name)
     tagger = {"name": "PDSEN CI Bot",
               "email": "pdsen-ci@jpl.nasa.gov"}
 
@@ -114,7 +114,9 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
     repo = gh.repository(org, repo_name)
 
     delete_snapshot_releases(repo, suffix)
-    if tag_name.endswith(suffix):
+    if tag_name.endswith(suffix) or args.snapshot:
+        if not tag_name.endswith(suffix):
+            tag_name = tag_name + suffix
         create_snapshot_release(repo, repo_name, "main", tag_name, tagger, upload_assets)
     else:
         create_release(repo, repo_name, "main", tag_name, tagger, upload_assets)
