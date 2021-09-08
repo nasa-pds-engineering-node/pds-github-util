@@ -81,7 +81,7 @@ Planned PDS4 Information Model Changes
 
 This section details the planned changes to the PDS4 Information Model for this build. These changes are deliverables by the PDS Data Design Working Group (DDWG) to the Engineering Node for implementation.
 
-{{{pds4_changes}}}
+{{pds4_changes}}
 
 
 Planned Software Changes
@@ -101,7 +101,7 @@ Planned tasks for the next release cycle are grouped by software component, and 
 
 **Have a new feature or tool you think we should be working on?** Create a ticket in the applicable Github repo or in our `PDS EN Operations repo <https://github.com/NASA-PDS/pdsen-operations/issues/new/choose>`_ and we will see how that can fit into our plans moving forward.
 
-{{{planned_changes}}}
+{{planned_changes}}
 
 Other Information
 +++++++++++++++++
