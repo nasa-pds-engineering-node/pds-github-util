@@ -37,7 +37,7 @@ setuptools.setup(
         "mdutils>=1.2",
         "packaging>=20.4",
         "markdown2==2.3",
-        "pystache==0.5.0",
+        "jinja2==3.0.1",
         "emoji==0.5",
         "gitpython==3.1",
         "requests==2.23.0",

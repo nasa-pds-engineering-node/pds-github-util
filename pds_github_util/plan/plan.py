@@ -12,7 +12,7 @@ from pds_github_util.zenhub.zenhub import Zenhub
 from pds_github_util.utils import GithubConnection, addStandardArguments
 
 from pkg_resources import resource_string
-from pystache import Renderer
+from jinja2 import Template
 from yaml import FullLoader, load
 
 # PDS Github Org
@@ -182,7 +182,7 @@ def main():
 
         with open(output_fname, 'w') as f_out:
 
-            pystache_dict = {
+            template_kargs = {
                 'output': output_fname,
                 'build_number': args.build_number,
                 'scr_date': key_dates['scr_date'],
@@ -197,9 +197,8 @@ def main():
                 'pds4_changes': ddwg_plans,
                 'planned_changes': plan_output
             }
-            renderer = Renderer()
-            template = resource_string(__name__,  'plan.template.rst')
-            rst_str = renderer.render(template, pystache_dict)
+            template = Template(resource_string(__name__,  'plan.template.rst').decode("utf-8"))
+            rst_str = template.render(template_kargs)
             f_out.write(rst_str)
 
             # else:
