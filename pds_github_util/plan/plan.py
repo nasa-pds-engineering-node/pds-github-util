@@ -197,7 +197,6 @@ def main():
                 'pds4_changes': ddwg_plans,
                 'planned_changes': plan_output
             }
-            print(plan_output)
             template = Template(resource_string(__name__,  'plan.template.rst').decode("utf-8"))
             rst_str = template.render(template_kargs)
             f_out.write(rst_str)
