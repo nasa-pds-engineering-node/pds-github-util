@@ -11,7 +11,7 @@ from ._python_version import getVersion
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-SNAPSHOT_TAG_SUFFIX = "-dev"
+SNAPSHOT_TAG_SUFFIX = "-SNAPSHOT"
 
 
 def python_get_version(workspace=None):
