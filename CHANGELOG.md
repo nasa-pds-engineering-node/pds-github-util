@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.25.2](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.2) (2021-09-09)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.24.0...v0.25.2)
+
+**Defects:**
+
+- Refactor pystache to jinja2 to fix incompatibility between pystache and latest setuptools [\#33](https://github.com/NASA-PDS/pds-github-util/issues/33) [[s.medium](https://github.com/NASA-PDS/pds-github-util/labels/s.medium)]
+
+**Other closed issues:**
+
+- python\_snapshot\_release and version / tag handling isn't cooperating [\#36](https://github.com/NASA-PDS/pds-github-util/issues/36)
+
 ## [v0.24.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.24.0) (2021-09-08)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.4-rc10...v0.24.0)
@@ -87,7 +99,11 @@
 
 ## [v0.22.2](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.2) (2021-06-27)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.1...v0.22.2)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.0-dev...v0.22.2)
+
+## [v0.23.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.0-dev) (2021-06-22)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.1...v0.23.0-dev)
 
 ## [v0.22.1](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.1) (2021-06-22)
 
