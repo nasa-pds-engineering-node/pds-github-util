@@ -28,7 +28,7 @@ from pds_github_util.issues.utils import get_issue_priority, ignore_issue
 class RddReport:
 
     ISSUE_TYPES = ['bug', 'enhancement', 'requirement', 'theme']
-    IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable'}
+    IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'skip-i&t'}
     IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral', 'pdsen-operations',
                      'roundup-action', 'github-actions-base'}
     REPO_INFO = '*{}*\n\n' \
@@ -464,7 +464,7 @@ class RstRddReport(RddReport):
         issue_count = sum([len(issues) for _, issues in issues_map.items()])
 
         if issue_count > 0:
-            self._write_repo_section(repo.name, issues_map)
+            self._write_repo_change_section(repo, issues_map)
 
     def write(self, filename):
         self._logger.info('Create file %s', filename)
