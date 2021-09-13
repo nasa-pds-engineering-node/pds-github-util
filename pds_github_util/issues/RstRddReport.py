@@ -30,7 +30,7 @@ class RddReport:
     ISSUE_TYPES = ['bug', 'enhancement', 'requirement', 'theme']
     IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'skip-i&t'}
     IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral', 'pdsen-operations',
-                     'roundup-action', 'github-actions-base'}
+                     'roundup-action', 'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util', 'pds-template-repo-java'}
     REPO_INFO = '*{}*\n\n' \
                 '.. list-table:: \n' \
                 '   :widths: 15 15 15 15 15 15\n\n' \
