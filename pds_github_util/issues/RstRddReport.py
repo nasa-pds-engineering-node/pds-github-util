@@ -1,13 +1,17 @@
+import os
+import sys
 from pds_github_util.utils import GithubConnection, RstClothReferenceable
 from datetime import datetime
+from enum import Enum
 
 import logging
 from datetime import datetime
 
-from github3.issues.issue import ShortIssue
-
-from pds_github_util.issues.utils import get_issue_priority, ignore_issue
-
+from github3.issues.issue import ShortIssue, Issue
+from zenhub import Zenhub
+from pds_github_util.issues.utils import get_issue_priority, ignore_issue, has_label
+from itertools import chain
+from collections import deque
 
 class PDSIssue(ShortIssue):
 
@@ -27,7 +31,8 @@ from pds_github_util.issues.utils import get_issue_priority, ignore_issue
 
 class RddReport:
 
-    ISSUE_TYPES = ['bug', 'enhancement', 'requirement', 'theme']
+    ISSUE_TYPES = ['bug', 'requirement', 'theme', 'enhancement'] # non hierarchical tickets
+    THEME = 'theme' # head of theme-epic-task enhancement hierarchy
     IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'skip-i&t'}
     IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral', 'pdsen-operations',
                      'roundup-action', 'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util', 'pds-template-repo-java'}
@@ -41,7 +46,6 @@ class RddReport:
                 '     - `Stable Release <{}/releases/latest>`_ \n' \
                 '     - `Dev Release <{}/releases>`_ \n\n'
     SWG_REPO_NAME = 'pds-swg'
-
 
     def __init__(self,
                  org,
@@ -98,9 +102,6 @@ class RddReport:
         return issues
 
 
-
-
-
 class MetricsRddReport(RddReport):
 
     def __init__(self,
@@ -144,7 +145,6 @@ class MetricsRddReport(RddReport):
         print('Closed EPICS')
         print(self.epic_closed_for_the_build)
 
-
     def _non_bug_metrics(self, type, repo):
         for issue in repo.issues(
                 state='closed',
@@ -182,7 +182,6 @@ class MetricsRddReport(RddReport):
                 else:
                     self.bugs_open_closed[issue.state] = 1
 
-
                 if issue.state == 'open' and severity in {'s.critical', 's.high'}:
                     self._logger.info("%s#%i %s %s %s", repo, issue.number, issue.title, severity, issue.state)
                     self.high_and_critical_open_bugs += "%s#%i %s %s\n" % (repo, issue.number, issue.title, severity)
@@ -194,20 +193,15 @@ class MetricsRddReport(RddReport):
                 else:
                     self._logger.info("this issues is still open %s#%i: %s", repo, issue.number, issue.title)
 
+    def _get_epics_count(self, repo):
 
-    def _get_epics_count(self, repo, build):
-
-        epics = repo.issues(state='closed', labels=f'{build},Epic')
+        epics = repo.issues(state='closed', labels=f'{self._build},Epic')
         n = 0
 
         for _ in epics:
             n += 1
 
         return n
-
-
-
-
 
     def _get_issue_type_count(self, repo):
 
@@ -222,14 +216,81 @@ class MetricsRddReport(RddReport):
             else:
                 self._non_bug_metrics(t, repo)
 
-
     def add_repo(self, repo):
         self._logger.info("add repo %s", repo)
         self._get_issue_type_count(repo)
 
 
+class EpicFactory:
+    def __init__(self, zenhub, logger):
+        self._zenhub = zenhub
+        self._logger = logger
+
+    def create_enhancement(self, repo, gh_issue, build):
+        self._logger.info('Create enhancement for repo %s for issue %i', repo.name, gh_issue.number)
+
+        enhancement = Enhancement(gh_issue, log=self._logger)
+        self._logger.info(enhancement.type.value)
+        if enhancement.type.value == EnhancementTypes.THEME.value \
+                or enhancement.type.value == EnhancementTypes.EPIC.value:  # not leaf in the tree
+            self._logger.info("search for epic children")
+            epic_child_issues = self._zenhub.get_epic_data(repo.id, gh_issue.number)
+            self._logger.info(epic_child_issues)
+            for issue in epic_child_issues['issues']:
+                gh_child_issue = repo.issue(issue['issue_number'])
+                if has_label(gh_child_issue, build) and gh_child_issue.state == 'closed':
+                    enhancement_child = self.create_enhancement(repo, gh_child_issue, build)
+                    enhancement.add_child(enhancement_child)
+
+            # TODO: throw exception for theme with no closed tickets
+
+        return enhancement
+
+
+class EnhancementTypes(Enum):
+    THEME = 'theme'
+    EPIC = 'epic'
+    ENHANCEMENT = 'enhancement'
+    REQUIREMENT = 'requirement'
+    BUG = 'bug'
+    TASK = 'task'
+
+
+class Enhancement(Issue):
+    def __init__(self, issue, log=None):
+        if log:
+            self._logger = log
+            log.info("Create enhancement for issue %i", issue.number)
+
+        self.issue = issue
+        self.children = []
+        self.type = Enhancement._get_enhancement_type(issue)
+
+    def crawl(self):
+        self._logger.info("yield issue %i", self.issue.number)
+        yield self
+        for child in self.children:
+            self._logger.info("crawl issue %i", child.issue.number)
+            yield from child.crawl()
+
+    @staticmethod
+    def _get_enhancement_type(issue):
+        enhancement_type = EnhancementTypes.TASK
+        for label in issue.labels():
+            if label.name in {item.value for item in EnhancementTypes}:
+                enhancement_type = EnhancementTypes(label.name)
+                print(label.name, enhancement_type.value)
+                break
+
+        return enhancement_type
+
+    def add_child(self, issue):
+        self.children.append(issue)
+
 
 class RstRddReport(RddReport):
+
+    ZENHUB_TOKEN = 'ZENHUB_TOKEN'
 
     def __init__(self,
                  org,
@@ -249,9 +310,12 @@ class RstRddReport(RddReport):
         self._rst_doc = RstClothReferenceable()
         self._rst_doc.title(title)
 
+        if RstRddReport.ZENHUB_TOKEN not in os.environ.keys():
+            self._logger.error("missing %s environment variable", RstRddReport.ZENHUB_TOKEN)
+            sys.exit(1)
 
-    def _write_repo_section(self, repo, issues_map):
-        self._rst_doc.h2(repo)
+        zenhub_token = os.environ.get('ZENHUB_TOKEN')
+        self._zenhub = Zenhub(zenhub_token)
 
     def _get_change_requests(self):
         self._logger.info(
@@ -286,17 +350,58 @@ class RstRddReport(RddReport):
                                      repo.html_url)
         self._rst_doc._add(repo_info)
 
-    def _write_repo_change_section(self, repo, issues_map):
+    def _get_theme_trees(self, repo):
+        labels = [self.THEME, self._build]
+        theme_issues = repo.issues(state='all', labels=','.join(labels), direction='asc')
+        theme_trees = []
+        for theme_issue in theme_issues:
+            theme = EpicFactory(self._zenhub, self._logger).create_enhancement(repo, theme_issue, self._build)
+            theme_trees.append(theme)
+        return theme_trees
+
+    def _write_repo_change_section(self, repo):
         self._rst_doc.h2(repo.name)
 
         self._add_repo_description(repo)
 
-        for issue_type, issues in issues_map.items():
-            if issues:
-                self._add_rst_repo_change_sub_section(repo, issue_type, issues)
+        self._add_bugs_and_requirements(repo)
+        self._add_enhancements(repo)
+
+    def _add_bugs_and_requirements(self, repo):
+        issues_map = self._get_issues_groupby_type(
+            repo,
+            state='closed'
+        )
+
+        issue_count = sum([len(issues) for _, issues in issues_map.items()])
+        if issue_count > 0:
+            for issue_type, issues in issues_map.items():
+                if issues:
+                    self._add_rst_repo_change_sub_section(repo, issue_type, issues)
+
+    def _add_enhancements(self, repo):
+        themes = self._get_theme_trees(repo)
+        self._rst_doc.h3("Enhancements")
+
+        columns = ["Issue", "Level", "Priority / Bug Severity"]
+
+        data = []
+        for theme in themes:
+            for enhancement in theme.crawl():
+                issue = enhancement.issue
+                self._logger.info("crawl theme tree %i", issue.number)
+                self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
+                data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
+                             enhancement.type.value,
+                             get_issue_priority(issue)])
+
+        self._rst_doc.table(
+            columns,
+            data=data)
+
 
     def _add_rst_repo_change_sub_section(self, repo, type, issues):
-        self._rst_doc.h3(type)
+        self._rst_doc.h3(type.capitalize())
 
         columns = ["Issue", "Priority / Bug Severity"]
 
@@ -314,7 +419,7 @@ class RstRddReport(RddReport):
         self._rst_doc.h1('Software changes')
         for _repo in self.available_repos():
             if not repos or _repo.name in repos:
-                self.add_repo(_repo)
+                self._write_repo_change_section(_repo)
 
     def _add_liens(self):
         self._logger.info("Add liens")
