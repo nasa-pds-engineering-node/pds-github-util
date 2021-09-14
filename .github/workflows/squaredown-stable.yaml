@@ -1,5 +1,5 @@
 # 🏃‍♀️ Continuous Integration and Delivery: Squaredown Stable
-# ===============================================
+# =========================================================
 #
 # Note: for this workflow to succeed, the following secrets must be installed
 # in the repository:
@@ -77,3 +77,7 @@ jobs:
                      token: ${{secrets.ADMIN_GITHUB_TOKEN}}
                      repository: NASA-PDS/github-actions-base
                      event-type: pds-github-util-built
+
+...
+
+# -*- mode: yaml; indent: 4; fill-column: 120; coding: utf-8 -*-
