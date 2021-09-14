@@ -49,6 +49,12 @@ def get_labels(gh_issue):
 
     return labels
 
+def has_label(gh_issue, label_name):
+    for _label in gh_issue.labels():
+        if _label.name == label_name:
+            return True
+    return False
+
 
 def is_theme(labels, zen_issue):
     """Check If Issue Is a Release Theme.
