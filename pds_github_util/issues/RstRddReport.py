@@ -32,7 +32,7 @@ from pds_github_util.issues.utils import get_issue_priority, ignore_issue
 class RddReport:
 
     ISSUE_TYPES = ['bug', 'requirement', 'theme', 'enhancement'] # non hierarchical tickets
-    THEME = 'theme' # head of theme-epic-task enhancement hierarchy
+    THEME = 'theme'
     IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'skip-i&t'}
     IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral', 'pdsen-operations',
                      'roundup-action', 'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util', 'pds-template-repo-java'}
@@ -237,12 +237,12 @@ class EpicFactory:
             epic_child_issues = self._zenhub.get_epic_data(repo.id, gh_issue.number)
             self._logger.info(epic_child_issues)
             for issue in epic_child_issues['issues']:
-                gh_child_issue = repo.issue(issue['issue_number'])
-                if has_label(gh_child_issue, build) and gh_child_issue.state == 'closed':
-                    enhancement_child = self.create_enhancement(repo, gh_child_issue, build)
-                    enhancement.add_child(enhancement_child)
-
-            # TODO: throw exception for theme with no closed tickets
+                if issue['repo_id'] == repo.id:
+                    self._logger.debug("github api request, get issue %i", issue['issue_number'])
+                    gh_child_issue = repo.issue(issue['issue_number'])
+                    if has_label(gh_child_issue, build) and gh_child_issue.state == 'closed':
+                        enhancement_child = self.create_enhancement(repo, gh_child_issue, build)
+                        enhancement.add_child(enhancement_child)
 
         return enhancement
 
@@ -364,10 +364,14 @@ class RstRddReport(RddReport):
 
         self._add_repo_description(repo)
 
-        self._add_bugs_and_requirements(repo)
-        self._add_enhancements(repo)
+        planned_tickets = self._add_planned_updates(repo)
+        self._add_other_updates(repo, ignore_tickets=planned_tickets)
 
-    def _add_bugs_and_requirements(self, repo):
+
+    def _add_other_updates(self, repo, ignore_tickets=None):
+
+        self._rst_doc.h3("Other updates")
+
         issues_map = self._get_issues_groupby_type(
             repo,
             state='closed'
@@ -376,43 +380,66 @@ class RstRddReport(RddReport):
         issue_count = sum([len(issues) for _, issues in issues_map.items()])
         if issue_count > 0:
             for issue_type, issues in issues_map.items():
-                if issues:
-                    self._add_rst_repo_change_sub_section(repo, issue_type, issues)
+                if issues and issue_type != RddReport.THEME:
+                    self._add_rst_repo_change_sub_section(repo, issue_type, issues, ignore_tickets=ignore_tickets)
 
-    def _add_enhancements(self, repo):
+    def _flush_theme_updates(self, theme_line, ticket_lines):
+        if ticket_lines:
+            self._rst_doc.li(theme_line)
+            columns = ["Issue", "Level", "Priority / Bug Severity"]
+            self._rst_doc.table(
+                columns,
+                data=ticket_lines)
+            self._rst_doc.newline()
+
+    @staticmethod
+    def _get_theme_head(repo, issue):
+        return f'`{repo.name}#{issue.number}`_ {issue.title}'
+
+    def _add_planned_updates(self, repo):
         themes = self._get_theme_trees(repo)
-        self._rst_doc.h3("Enhancements")
+        self._rst_doc.h3("Planned Updates")
 
-        columns = ["Issue", "Level", "Priority / Bug Severity"]
+        planned_tickets = set()
 
-        data = []
         for theme in themes:
-            for enhancement in theme.crawl():
+            theme_crawler = theme.crawl()
+            theme_head = RstRddReport._get_theme_head(repo,
+                                                      next(theme_crawler).issue
+                                                      )
+            data = []
+            for enhancement in theme_crawler:
                 issue = enhancement.issue
                 self._logger.info("crawl theme tree %i", issue.number)
                 self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
                 data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
                              enhancement.type.value,
                              get_issue_priority(issue)])
+                planned_tickets.add(issue.number)
 
-        self._rst_doc.table(
-            columns,
-            data=data)
+            self._flush_theme_updates(theme_head, data)
+        return planned_tickets
 
 
-    def _add_rst_repo_change_sub_section(self, repo, type, issues):
-        self._rst_doc.h3(type.capitalize())
-
-        columns = ["Issue", "Priority / Bug Severity"]
+    def _add_rst_repo_change_sub_section(self,
+                                         repo,
+                                         type,
+                                         issues,
+                                         ignore_tickets=None
+                                         ):
 
         data = []
         for issue in issues:
-            self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
-            data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''), get_issue_priority(issue)])
+            if issue.number not in ignore_tickets:
+                self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
+                data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''), get_issue_priority(issue)])
 
-        self._rst_doc.table(
-            columns,
-            data=data)
+        if data:
+            self._rst_doc.h4(type.capitalize() + 's')
+            columns = ["Issue", "Priority / Bug Severity"]
+            self._rst_doc.table(
+                columns,
+                data=data)
 
     def _add_software_changes(self, repos):
         self._logger.info("Add software changes")
