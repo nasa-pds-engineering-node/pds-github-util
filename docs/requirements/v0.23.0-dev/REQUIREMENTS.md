@@ -12,3 +12,7 @@ This requirement is not impacted by the current version
 
 
 This requirement is not impacted by the current version
+## Retrofit repo to use versioneer properly ([#38](https://github.com/NASA-PDS/pds-github-util/issues/38)) 
+
+
+This requirement is not impacted by the current version
