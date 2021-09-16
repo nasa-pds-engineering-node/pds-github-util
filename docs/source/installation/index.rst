@@ -1,7 +1,7 @@
 📦 Installation
 ===============
 
-This section describes how to install the PDS Github Util.
+This section describes how to install the PDS GitHub Utility.
 
 
 Requirements
@@ -22,6 +22,8 @@ using a Miniconda installation.
 
 Doing the Installation
 ----------------------
+
+This section describes how to actually install the PDS GitHub Utility.
 
 Install
 ^^^^^^^
@@ -49,5 +51,3 @@ Some environment variable need to be set (they are defined by default in github 
 
     export GITHUB_WORKSPACE=<where the repository which we want to publish a snapshot is cloned>
     export GITHUB_REPOSITORY=<full name of the repository which we want to publish for example NASA-PDS-Incubator/pds-app-registry>
-
-

@@ -16,9 +16,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'pds-github-util'
-copyright = '2020 California Institute of Technology'
-author = 'pds engineering node'
+project = 'PDS GitHub Utility'
+copyright = '2021 California Institute of Technology'
+author = 'NASA Planetary Data System Engineering Node'
 
 
 # -- General configuration ---------------------------------------------------
@@ -60,6 +60,16 @@ html_static_path = ['_static']
 
 # -- Read the docs config -------
 
+html_logo = '_static/images/PDS_Planets.png'
+
+html_context = {
+    'css_files': [
+        '_static/theme_overrides.css',  # override wide tables in RTD theme
+    ],
+}
+
+# -- Projeect specific config -------
+
 html_theme_options = {
     'canonical_url': '',
     'logo_only': False,
@@ -73,6 +83,3 @@ html_theme_options = {
     'includehidden': True,
     'titles_only': False
 }
-
-html_logo = '_static/images/PDS_Planets.png'
-

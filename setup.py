@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pds_github_util", # Replace with your own package name
+    name="pds_github_util",
     version=version,
     license="apache-2.0",
     author="thomas loubrieu",
@@ -18,11 +18,11 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/NASA-PDS/pds-github-util",
-    download_url = f"https://github.com/NASA-PDS/pds-github-util/releases/download/{version}/pds_github_util-{version}.tar.gz",
+    download_url=f"https://github.com/NASA-PDS/pds-github-util/releases/download/{version}/pds_github_util-{version}.tar.gz",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    package_data = {
-        '' : ['*.template', 'gh_pages/resources/*', 'gh_pages/resources/images/*']},
+    package_data={
+        '': ['*.template', 'gh_pages/resources/*', 'gh_pages/resources/images/*']},
     keywords=['github', 'action', 'github action', 'snapshot', 'release', 'maven'],
     test_suite="tests",
     classifiers=[

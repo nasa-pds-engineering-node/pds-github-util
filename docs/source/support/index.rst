@@ -1,6 +1,9 @@
 🚑 Support
 ===========
 
+This document describes how to get support with the PDS GitHub Utility.
+
+
 Bugs and New Features
 ---------------------
 
