@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.25.4](https://github.com/NASA-PDS/pds-github-util/tree/0.25.4) (2021-09-16)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.3-SNAPSHOT...0.25.4)
+
+**Other closed issues:**
+
+- Duplicate package requirements causing build instability [\#41](https://github.com/NASA-PDS/pds-github-util/issues/41)
+
+## [v0.25.3-SNAPSHOT](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.3-SNAPSHOT) (2021-09-16)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.3...v0.25.3-SNAPSHOT)
+
 ## [v0.25.3](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.3) (2021-09-09)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.24.1...v0.25.3)
@@ -74,15 +86,15 @@
 
 ## [v0.23.4-rc3](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.4-rc3) (2021-09-02)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.4_rc1...v0.23.4-rc3)
-
-## [v0.23.4_rc1](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.4_rc1) (2021-09-01)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.4_rc2...v0.23.4_rc1)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.4_rc2...v0.23.4-rc3)
 
 ## [v0.23.4_rc2](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.4_rc2) (2021-09-01)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.2...v0.23.4_rc2)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.4_rc1...v0.23.4_rc2)
+
+## [v0.23.4_rc1](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.4_rc1) (2021-09-01)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.2...v0.23.4_rc1)
 
 **Improvements:**
 
@@ -103,7 +115,7 @@
 
 ## [v0.23.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.0) (2021-08-25)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.2...v0.23.0)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.0-dev...v0.23.0)
 
 **Improvements:**
 
@@ -113,13 +125,13 @@
 
 - requirements generation does not support issues with empty description [\#16](https://github.com/NASA-PDS/pds-github-util/issues/16)
 
+## [v0.23.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.0-dev) (2021-06-27)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.2...v0.23.0-dev)
+
 ## [v0.22.2](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.2) (2021-06-27)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.23.0-dev...v0.22.2)
-
-## [v0.23.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.23.0-dev) (2021-06-22)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.1...v0.23.0-dev)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.22.1...v0.22.2)
 
 ## [v0.22.1](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.1) (2021-06-22)
 
@@ -128,10 +140,6 @@
 ## [v0.22.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.22.0) (2021-06-19)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.21.0...v0.22.0)
-
-**Other closed issues:**
-
-- As a release engineer, I want version numbers to be retrieved from Python packages [\#11](https://github.com/NASA-PDS/pds-github-util/issues/11)
 
 ## [v0.21.0](https://github.com/NASA-PDS/pds-github-util/tree/v0.21.0) (2021-06-08)
 
