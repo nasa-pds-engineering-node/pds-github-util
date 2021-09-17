@@ -1,12 +1,11 @@
 import re
 import setuptools
-
-with open("./pds_github_util/__init__.py") as fi:
-    result = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', fi.read())
-version = result.group(1)
+import versioneer
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+
+version = versioneer.get_version()
 
 setuptools.setup(
     name="pds_github_util",
