@@ -1,1 +1,5 @@
-__version__ = "0.25.5"
+from ._version import get_versions
+
+__version__ = get_versions()["version"]
+__date__ = get_versions()["date"]
+del get_versions
