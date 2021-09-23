@@ -33,9 +33,11 @@ class RddReport:
 
     ISSUE_TYPES = ['bug', 'requirement', 'theme', 'enhancement'] # non hierarchical tickets
     THEME = 'theme'
-    IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'skip-i&t'}
+    IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable'}
+    NOT_TESTED = 'skip-i&t'
     IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral', 'pdsen-operations',
-                     'roundup-action', 'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util', 'pds-template-repo-java'}
+                     'roundup-action', 'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util',
+                     'pds-template-repo-java', 'devops-BROKEN', 'kdp'}
     REPO_INFO = '*{}*\n\n' \
                 '.. list-table:: \n' \
                 '   :widths: 15 15 15 15 15 15\n\n' \
@@ -49,11 +51,12 @@ class RddReport:
 
     def __init__(self,
                  org,
-                 title='Release Description Document (build 11.1)',
+                 title=None,
                  start_time=None,
                  end_time=None,
                  build=None,
                  token=None):
+
 
         # Quiet github3 logging
         self._logger = logging.getLogger('github3')
@@ -68,6 +71,7 @@ class RddReport:
         self._end_time = end_time
         self._build = build
         self._rst_doc = RstClothReferenceable()
+
         self._rst_doc.title(title)
 
     def available_repos(self):
@@ -273,6 +277,9 @@ class Enhancement(Issue):
             self._logger.info("crawl issue %i", child.issue.number)
             yield from child.crawl()
 
+
+
+
     @staticmethod
     def _get_enhancement_type(issue):
         enhancement_type = EnhancementTypes.TASK
@@ -294,12 +301,15 @@ class RstRddReport(RddReport):
 
     def __init__(self,
                  org,
-                 title='Release Description Document (build 11.1), software changes',
+                 title=None,
                  start_time=None,
                  end_time=None,
                  build=None,
                  token=None):
 
+        if not title:
+            build_text = f"(build {build})" if build else ''
+            title = f"Release Description Document " + build_text
         super().__init__(org,
                          title=title,
                          start_time=start_time,
@@ -360,37 +370,51 @@ class RstRddReport(RddReport):
         return theme_trees
 
     def _write_repo_change_section(self, repo):
-        self._rst_doc.h2(repo.name)
-
-        self._add_repo_description(repo)
-
-        planned_tickets = self._add_planned_updates(repo)
-        self._add_other_updates(repo, ignore_tickets=planned_tickets)
-
-
-    def _add_other_updates(self, repo, ignore_tickets=None):
-
-        self._rst_doc.h3("Other updates")
-
-        issues_map = self._get_issues_groupby_type(
+        issue_map = self._get_issues_groupby_type(
             repo,
             state='closed'
         )
+        issue_count = sum([len(issues) for issues in issue_map.values()])
 
-        issue_count = sum([len(issues) for _, issues in issues_map.items()])
-        if issue_count > 0:
+        if issue_count:
+            self._rst_doc.h2(repo.name)
+            self._add_repo_description(repo)
+            planned_tickets = self._add_planned_updates(repo)
+            self._add_other_updates(repo, issue_map, ignore_tickets=planned_tickets)
+
+    def _add_other_updates(self, repo, issues_map, ignore_tickets=None):
+
+        for issues in issues_map.values():
+            issues = list(set(issues) - ignore_tickets)
+
+        issue_count = sum([len(issues) for issues in issues_map.values()])
+
+        if issue_count>0:
+            self._rst_doc.h3("Other updates")
             for issue_type, issues in issues_map.items():
                 if issues and issue_type != RddReport.THEME:
                     self._add_rst_repo_change_sub_section(repo, issue_type, issues, ignore_tickets=ignore_tickets)
 
     def _flush_theme_updates(self, theme_line, ticket_lines):
+        done = False
         if ticket_lines:
+
             self._rst_doc.li(theme_line)
-            columns = ["Issue", "Level", "Priority / Bug Severity"]
+            columns = ["Issue", "I&T", "Level", "Priority / Bug Severity"]
             self._rst_doc.table(
                 columns,
                 data=ticket_lines)
             self._rst_doc.newline()
+            done = True
+        return done
+
+    @staticmethod
+    def _is_tested(issue):
+        for label in issue.labels():
+            if label.name == RstRddReport.NOT_TESTED:
+                return False
+
+        return True
 
     @staticmethod
     def _get_theme_head(repo, issue):
@@ -399,27 +423,34 @@ class RstRddReport(RddReport):
     def _add_planned_updates(self, repo):
         themes = self._get_theme_trees(repo)
         self._rst_doc.h3("Planned Updates")
-
         planned_tickets = set()
-
+        done = False
         for theme in themes:
             theme_crawler = theme.crawl()
+            theme = next(theme_crawler)
+            self._rst_doc.hyperlink(f'{repo.name}#{theme.issue.number}', theme.issue.html_url)
             theme_head = RstRddReport._get_theme_head(repo,
-                                                      next(theme_crawler).issue
+                                                      theme.issue
                                                       )
             data = []
             for enhancement in theme_crawler:
                 issue = enhancement.issue
                 self._logger.info("crawl theme tree %i", issue.number)
                 self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
+                i_and_t = '|iandt|' if RstRddReport._is_tested(issue) else ''
                 data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
+                             i_and_t,
                              enhancement.type.value,
                              get_issue_priority(issue)])
                 planned_tickets.add(issue.number)
 
-            self._flush_theme_updates(theme_head, data)
-        return planned_tickets
+            done = self._flush_theme_updates(theme_head, data) or done
 
+        if not done:
+            self._rst_doc.content("No planned update realised in the build in this repository.")
+            self._rst_doc.newline()
+
+        return planned_tickets
 
     def _add_rst_repo_change_sub_section(self,
                                          repo,
@@ -431,19 +462,38 @@ class RstRddReport(RddReport):
         data = []
         for issue in issues:
             if issue.number not in ignore_tickets:
+                i_and_t = '|iandt|' if RstRddReport._is_tested(issue) else ''
                 self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
-                data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''), get_issue_priority(issue)])
+                data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
+                             i_and_t,
+                             get_issue_priority(issue)])
 
         if data:
             self._rst_doc.h4(type.capitalize() + 's')
-            columns = ["Issue", "Priority / Bug Severity"]
+            columns = ["Issue", "I&T", "Priority / Bug Severity"]
             self._rst_doc.table(
                 columns,
                 data=data)
 
     def _add_software_changes(self, repos):
         self._logger.info("Add software changes")
+        self._rst_doc.deffered_directive('image',
+                                         arg=f'https://nasa-pds.github.io/_static/images/noun_certified_18093.png',
+                                         fields=[('alt', 'I&T'), ('width', '20')],
+                                         reference='iandt')
         self._rst_doc.h1('Software changes')
+        self._rst_doc.content("The changes types are 'bug', 'enhancement' or 'requirement'. "
+                              "For each software repository, the changes are listed in 2 categories: ")
+        self._rst_doc.li("planned updates")
+        self._rst_doc.li("other updates")
+        self._rst_doc.newline()
+
+        self._rst_doc.content(f"The 'planned updates' are organized by 'themes' which are defined at the planing phase (see `plan {self._build}`_')")
+        self._rst_doc.content(f"The 'other updates' occurs during the build cycle witout being planned or attached to a theme. They are organized by types (bug, enhancements, requirements...)")
+        self._rst_doc.newline()
+        self._rst_doc.content(f"The deliveries are validated by the development team and most of time, when relevant, also go through an additional Integration & Test process as indicated by a specific icon in the following tables.")
+
+
         for _repo in self.available_repos():
             if not repos or _repo.name in repos:
                 self._write_repo_change_section(_repo)
@@ -548,7 +598,7 @@ class RstRddReport(RddReport):
         self._rst_doc.content('The following sections can be found in this document:')
         self._rst_doc.hyperlink(f'plan {self._build}', f'https://nasa-pds.github.io/releases/{self._build[1:]}/plan.html')  # remove B prefix from the build code
         self._rst_doc.newline()
-        self._rst_doc.directive('toctree', fields=[('glob', ''), ('maxdepth', 2)], content='rdd.rst')
+        self._rst_doc.directive('toctree', fields=[('glob', ''), ('maxdepth', 3)], content='rdd.rst')
         self._rst_doc.newline()
 
     def _add_standard_and_information_model_changes(self):
@@ -566,7 +616,8 @@ class RstRddReport(RddReport):
         data = []
 
         repository = self._gh.repository(self._org, IM_REPO)
-        for issue in repository.issues(state='closed', labels='pending-scr', direction='asc', since=self._start_time):
+        labels = ['pending-src', self._build]
+        for issue in repository.issues(state='closed', labels=','.join(labels), direction='asc', since=self._start_time):
             self._rst_doc.hyperlink(f'{IM_REPO}#{issue.number}', issue.html_url)
             data.append([f'`{IM_REPO}#{issue.number}`_'.replace('|', ''), issue.title])
 
