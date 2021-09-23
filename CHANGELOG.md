@@ -1,5 +1,25 @@
 # Changelog
 
+## [«unknown»](https://github.com/NASA-PDS/pds-github-util/tree/«unknown») (2021-09-23)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.5-SNAPSHOT...«unknown»)
+
+**Requirements:**
+
+- Retrofit repo to use versioneer properly [\#38](https://github.com/NASA-PDS/pds-github-util/issues/38)
+
+**Defects:**
+
+- Revert Python SNAPSHOT release naming changes [\#44](https://github.com/NASA-PDS/pds-github-util/issues/44)
+
+**Other closed issues:**
+
+- As a release engineer, I want version numbers to be retrieved from Python packages [\#11](https://github.com/NASA-PDS/pds-github-util/issues/11)
+
+## [v0.25.5-SNAPSHOT](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.5-SNAPSHOT) (2021-09-16)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.4-SNAPSHOT...v0.25.5-SNAPSHOT)
+
 ## [v0.25.4-SNAPSHOT](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.4-SNAPSHOT) (2021-09-16)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.25.4...v0.25.4-SNAPSHOT)
@@ -231,15 +251,15 @@
 
 ## [0.14.4](https://github.com/NASA-PDS/pds-github-util/tree/0.14.4) (2020-10-13)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.3...0.14.4)
-
-## [0.14.3](https://github.com/NASA-PDS/pds-github-util/tree/0.14.3) (2020-10-13)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.2...0.14.3)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.2...0.14.4)
 
 ## [0.14.2](https://github.com/NASA-PDS/pds-github-util/tree/0.14.2) (2020-10-13)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.1...0.14.2)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.3...0.14.2)
+
+## [0.14.3](https://github.com/NASA-PDS/pds-github-util/tree/0.14.3) (2020-10-13)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.1...0.14.3)
 
 ## [0.14.1](https://github.com/NASA-PDS/pds-github-util/tree/0.14.1) (2020-10-13)
 
