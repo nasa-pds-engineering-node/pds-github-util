@@ -10,6 +10,7 @@ version = versioneer.get_version()
 setuptools.setup(
     name="pds_github_util",
     version=version,
+    cmdclass=versioneer.get_cmdclass(),
     license="apache-2.0",
     author="thomas loubrieu",
     author_email="loubrieu@jpl.nasa.gov",

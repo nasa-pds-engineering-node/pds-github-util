@@ -1,0 +1,2 @@
+include versioneer.py
+include pds_github_util/_version.py
