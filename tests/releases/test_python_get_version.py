@@ -15,13 +15,9 @@ class PythonGetVersionTestCase(unittest.TestCase):
             os.environ['GITHUB_WORKSPACE'] = os.path.join(current_dir, '..', '..')
 
     def test_python_get_version(self):
-        pass
-        # 🤔 TODO: figure out why this fails but only on GitHub Actions.
-        # Hint: it works *just fine* in an identical container environment—or at least as
-        # identical as we can make it without the inner arcane knowledge of GitHub Actions.
-        # version = python_get_version()
-        # logger.info(f"found version is {version}")
-        # self.assertGreaterEqual(len(version), 3)
+        version = python_get_version()
+        logger.info(f"found version is {version}")
+        self.assertGreaterEqual(len(version), 3)
 
     def tearDown(self):
         del os.environ['GITHUB_WORKSPACE']
