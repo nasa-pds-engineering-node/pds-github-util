@@ -1,7 +1,7 @@
 import os
 import sys
 from pds_github_util.utils import GithubConnection, RstClothReferenceable
-from datetime import datetime
+
 from enum import Enum
 
 import logging
@@ -9,9 +9,8 @@ from datetime import datetime
 
 from github3.issues.issue import ShortIssue, Issue
 from zenhub import Zenhub
-from pds_github_util.issues.utils import get_issue_priority, ignore_issue, has_label
-from itertools import chain
-from collections import deque
+from pds_github_util.issues.utils import has_label
+
 
 class PDSIssue(ShortIssue):
 
@@ -377,6 +376,8 @@ class RstRddReport(RddReport):
         issue_count = sum([len(issues) for issues in issue_map.values()])
 
         if issue_count:
+            self._rst_doc.content("--------")
+            self._rst_doc.newline()
             self._rst_doc.h2(repo.name)
             self._add_repo_description(repo)
             planned_tickets = self._add_planned_updates(repo)
@@ -492,7 +493,7 @@ class RstRddReport(RddReport):
         self._rst_doc.content(f"The 'other updates' occurs during the build cycle witout being planned or attached to a theme. They are organized by types (bug, enhancements, requirements...)")
         self._rst_doc.newline()
         self._rst_doc.content(f"The deliveries are validated by the development team and most of time, when relevant, also go through an additional Integration & Test process as indicated by a specific icon in the following tables.")
-
+        self._rst_doc.newline()
 
         for _repo in self.available_repos():
             if not repos or _repo.name in repos:
@@ -616,7 +617,7 @@ class RstRddReport(RddReport):
         data = []
 
         repository = self._gh.repository(self._org, IM_REPO)
-        labels = ['pending-src', self._build]
+        labels = ['pending-scr', self._build]
         for issue in repository.issues(state='closed', labels=','.join(labels), direction='asc', since=self._start_time):
             self._rst_doc.hyperlink(f'{IM_REPO}#{issue.number}', issue.html_url)
             data.append([f'`{IM_REPO}#{issue.number}`_'.replace('|', ''), issue.title])
