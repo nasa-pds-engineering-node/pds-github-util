@@ -44,7 +44,8 @@ setuptools.setup(
         "beautifulsoup4==4.9.0",
         "rstcloth==0.3.1",
         "pyyaml==5.4.1",
-        "packaging==20.9"
+        "packaging==20.9",
+        "pyzenhub==0.2.1"
     ],
     entry_points={
         # snapshot-release for backward compatibility
