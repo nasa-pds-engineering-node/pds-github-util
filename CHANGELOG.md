@@ -1,6 +1,6 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-github-util/tree/«unknown») (2021-09-23)
+## [«unknown»](https://github.com/NASA-PDS/pds-github-util/tree/«unknown») (2021-09-30)
 
 [Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.25.4...«unknown»)
 
@@ -14,6 +14,7 @@
 
 **Other closed issues:**
 
+- Drop versioneer [\#49](https://github.com/NASA-PDS/pds-github-util/issues/49)
 - As a release engineer, I want version numbers to be retrieved from Python packages [\#11](https://github.com/NASA-PDS/pds-github-util/issues/11)
 
 ## [0.25.4](https://github.com/NASA-PDS/pds-github-util/tree/0.25.4) (2021-09-16)
