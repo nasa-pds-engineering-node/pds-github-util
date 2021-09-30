@@ -1,16 +1,15 @@
 import re
 import setuptools
-import versioneer
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-version = versioneer.get_version()
+with open("pds_github_util/VERSION.txt") as fh:
+    version = fh.read().strip()
 
 setuptools.setup(
     name="pds_github_util",
     version=version,
-    cmdclass=versioneer.get_cmdclass(),
     license="apache-2.0",
     author="thomas loubrieu",
     author_email="loubrieu@jpl.nasa.gov",

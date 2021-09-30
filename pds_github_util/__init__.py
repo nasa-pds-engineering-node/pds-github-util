@@ -1,8 +1,3 @@
-from ._version import get_versions
+import pkg_resources
 
-__version__ = get_versions()["version"]
-__date__ = get_versions()["date"]
-del get_versions
-
-from . import _version
-__version__ = _version.get_versions()['version']
+__version__ = pkg_resources.resource_string(__name__, "VERSION.txt").decode("utf-8").strip()
