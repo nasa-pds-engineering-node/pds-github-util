@@ -107,7 +107,7 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
     repo_name = repo_full_name_array[1]
 
     tag_name = prefix + get_version(workspace)
-    print(f'YO YO YO USING tag_name of «{tag_name}»', file=sys.stderr)
+    print(f'YO YO YO USING tag_name of «{tag_name}»', file=sys.stdout)
     tagger = {"name": "PDSEN CI Bot",
               "email": "pdsen-ci@jpl.nasa.gov"}
 
