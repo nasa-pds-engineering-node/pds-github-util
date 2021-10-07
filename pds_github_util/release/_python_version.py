@@ -6,7 +6,6 @@
 import logging, os, packaging.version, re, sys, subprocess
 
 
-logging.basicConfig(level=logging.DEBUG)  # SIGH, we shouldn't have to do this
 _logger = logging.getLogger(__name__)
 _detectives = set()
 
@@ -72,7 +71,7 @@ class VersioneerDetective(VersionDetective):
 class TextFileDetective(VersionDetective):
     '''Detective that looks for a ``version.txt`` file of some kind for a version indication'''
     def detect(self):
-        for dirpath, dirnames, filenames in os.walk(self.workspace):
+        for dirpath, dirnames, filenames in os.walk(os.path.join(self.workspace, 'src')):
             for fn in filenames:
                 if fn.lower() == 'version.txt':
                     versionFile = os.path.join(dirpath, fn)
@@ -88,7 +87,7 @@ class ModuleInitDetective(VersionDetective):
     '''
     def detect(self):
         expr = re.compile(r'^__version__\s*=\s*[\'"]([^\'"]+)[\'"]')
-        for dirpath, dirnames, filenames in os.walk(self.workspace):
+        for dirpath, dirnames, filenames in os.walk(os.path.join(self.workspace, 'src')):
             for fn in filenames:
                 if fn == '__init__.py':
                     init = os.path.join(dirpath, '__init__.py')

@@ -9,7 +9,9 @@ Enforces the PDS engineering node software lifecycle:
 These routines are called from [GitHub Actions](https://github.com/features/actions).
 
 They are orchestrated around the [pdsen-corral](https://github.com/nasa-pds/pdsen-corral/) repository.
-  
+
+**👉 Note:** You cannot use `pds-github-util`  on `pds-github-util` because it does not follow the PDS standard directory layout with its source code under `src`. Do _not_ try to "Roundup" it or run `python-release` on it.
+
 
 # Prerequisites
 
