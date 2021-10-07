@@ -6,6 +6,7 @@
 import logging, os, packaging.version, re, sys, subprocess
 
 
+logging.basicConfig(level=logging.DEBUG)  # SIGH, we shouldn't have to do this
 _logger = logging.getLogger(__name__)
 _detectives = set()
 
