@@ -70,15 +70,30 @@ class VersioneerDetective(VersionDetective):
 
 class TextFileDetective(VersionDetective):
     '''Detective that looks for a ``version.txt`` file of some kind for a version indication'''
-    def detect(self):
-        for dirpath, dirnames, filenames in os.walk(os.path.join(self.workspace, 'src')):
+
+    @classmethod
+    def locate_file(cls, root_dir):
+        src_dir = os.path.join(root_dir, 'src')
+        if not os.path.isdir(src_dir):
+            raise ValueError('Unable to locate ./src directory in workspace.')
+
+        version_file = None
+        for dirpath, dirnames, filenames in os.walk(src_dir):
             for fn in filenames:
                 if fn.lower() == 'version.txt':
-                    versionFile = os.path.join(dirpath, fn)
-                    _logger.debug('🪄 Found a version.txt in %s', versionFile)
-                    with open(versionFile, 'r') as inp:
-                        return inp.read().strip()
-        return None
+                    version_file = os.path.join(dirpath, fn)
+                    _logger.debug('🪄 Found a version.txt in %s', version_file)
+                    break
+
+        return version_file
+
+    def detect(self):
+        version_file = self.locate_file(self.workspace)
+        if version_file is not None:
+            with open(versionFile, 'r') as inp:
+                return inp.read().strip()
+        else:
+            return None
 
 
 class ModuleInitDetective(VersionDetective):
