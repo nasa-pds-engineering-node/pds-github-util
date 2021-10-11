@@ -41,7 +41,7 @@ class HerdTable:
 def update_index(root_dir, herds, format='md'):
 
     index_file_name = os.path.join(root_dir, 'index.md')
-    index_md_file = mdutils.MdUtils(file_name=index_file_name, title=f'PDS Engineering Node software suite, builds')
+    index_md_file = mdutils.MdUtils(file_name=index_file_name, title='PDS Engineering Node software suite, builds')
 
     herds.sort(key=lambda x: x.get_release_datetime(), reverse=True)
     herds_iterator = iter(herds)

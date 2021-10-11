@@ -9,7 +9,6 @@ from pds_github_util.tags.tags import Tags
 
 from pds_github_util.html.md_to_html import md_to_html
 
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

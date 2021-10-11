@@ -5,7 +5,6 @@ import re
 from git import Repo
 import github3
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

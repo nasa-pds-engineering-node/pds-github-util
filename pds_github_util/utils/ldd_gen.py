@@ -8,8 +8,6 @@ import argparse
 import glob
 import logging
 import os
-import requests
-import shutil
 import sys
 import traceback
 
@@ -32,12 +30,7 @@ PDS_SCHEMA_URL = 'https://pds.nasa.gov/pds4/pds/v1/'
 PDS_DEV_SCHEMA_URL = 'https://pds.nasa.gov/datastandards/schema/develop/pds/'
 DOWNLOAD_PATH = '/tmp'
 
-# Quiet github3 logging
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 def convert_pds4_version_to_alpha(pds4_version):
@@ -74,11 +67,11 @@ def prep_ldd_output_path(ldd_output_path):
     parent_dir = os.path.dirname(os.path.dirname(ldd_output_path.rstrip(os.sep)))
     # parent_dir = ldd_output_path
 
-    logger.info(f'Cleaning up {parent_dir}')
+    _logger.info(f'Cleaning up {parent_dir}')
     for path, dirs, files in os.walk(parent_dir):
         for f in files:
             filepath = os.path.join(path, f)
-            logger.info(f'Removing {filepath}')
+            _logger.info(f'Removing {filepath}')
             os.remove(filepath)
 
     if not os.path.exists(ldd_output_path):
@@ -94,7 +87,7 @@ def exec_lddtool(executable, execution_cwd, args, ingest_ldds, log_path=os.path.
     cmd = ['bash', executable ]
     args.extend(ingest_ldds)
     cmd.extend(args)
-    logger.info(cmd)
+    _logger.info(cmd)
 
     with Popen(cmd, cwd=execution_cwd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
         with open(log_out, 'w') as f:
@@ -137,16 +130,17 @@ def main():
                         action='store_true', default=False)
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
     token = args.token or os.environ.get('GITHUB_TOKEN')
 
     if not token:
-        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+        _logger.error('Github token must be provided or set as environment variable (GITHUB_TOKEN).')
         sys.exit(1)
 
     try:
 
-        lddtool_args = [ LDDTOOL_DEFAULT_ARGS ]
+        lddtool_args = [LDDTOOL_DEFAULT_ARGS]
 
         if args.with_pds4_version:
             lddtool_args.extend(['-V', convert_pds4_version_to_alpha(args.with_pds4_version)])
@@ -175,13 +169,14 @@ def main():
         exec_lddtool(os.path.join(sw_dir, 'bin', 'lddtool'), args.ldd_output_path, lddtool_args, ingest_ldds, log_path=args.output_log_path)
 
     except CalledProcessError:
-        logger.error(f'FAILED: LDDTool failed unexpectedly. See output logs.')
+        _logger.error('FAILED: LDDTool failed unexpectedly. See output logs.')
         sys.exit(1)
     except Exception as e:
         traceback.print_exc()
         sys.exit(1)
 
-    logger.info(f'SUCCESS: LDD Generation complete.')
+    _logger.info('SUCCESS: LDD Generation complete.')
+
 
 if __name__ == '__main__':
     main()

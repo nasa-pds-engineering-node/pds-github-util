@@ -1,7 +1,6 @@
 """Release Planning."""
 
 import argparse
-import github3
 import logging
 import os
 import sys
@@ -31,13 +30,8 @@ REPO_INFO = ('\n--------\n\n'
              '     - `Stable Release <{}/releases/latest>`_ \n'
              '     - `Dev Release <{}/releases>`_ \n\n')
 
-# Quiet github3 logging
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
 # Enable logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 def append_to_project(proj, output):
@@ -84,21 +78,22 @@ def main():
                         required=True)
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
     # set output filename
-    output_fname = f'plan.rst'
+    output_fname = 'plan.rst'
 
     # get github token or throw error
     github_token = args.github_token or os.environ.get('GITHUB_TOKEN')
     if not github_token:
-        logger.error(f'github API token must be provided or set as environment'
+        _logger.error('github API token must be provided or set as environment'
                      ' variable (GITHUB_TOKEN).')
         sys.exit(1)
 
     # get zenhub token or throw error
     zenhub_token = args.github_token or os.environ.get('ZENHUB_TOKEN')
     if not zenhub_token:
-        logger.error(f'zenhub API token must be provided or set as environment'
+        _logger.error('zenhub API token must be provided or set as environment'
                      ' variable (ZENHUB_TOKEN).')
         sys.exit(1)
 
@@ -222,7 +217,7 @@ def main():
         traceback.print_exc()
         sys.exit(1)
 
-    logger.info(f'SUCCESS: Release Plan generated successfully.')
+    _logger.info('SUCCESS: Release Plan generated successfully.')
 
 if __name__ == '__main__':
     main()

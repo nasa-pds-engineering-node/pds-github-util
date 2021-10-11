@@ -16,12 +16,7 @@ from pds_github_util.utils import addStandardArguments
 
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
-# Quiet github3 logging
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 DELAYED_LABELS_RUNNING_LATE = 'd.running-late'
@@ -77,10 +72,10 @@ def defer_open_issues(repo, milestone):
 
     next_milestone = get_next_milestone(repo, milestone)
     if next_milestone:
-        logger.info("defer open issues from milestone %s to milestone %s", milestone.title, next_milestone.title)
+        _logger.info("defer open issues from milestone %s to milestone %s", milestone.title, next_milestone.title)
         move_open_issues(repo, milestone, next_milestone)
     else:
-        logger.info("no next milestone available, skipping repo")
+        _logger.info("no next milestone available, skipping repo")
 
 
 def main():
@@ -106,10 +101,11 @@ def main():
                         help='specify number to prepend sprint names or to start with. e.g. 01.foo')
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
     token = args.token or os.environ.get('GITHUB_TOKEN')
     if not token:
-        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+        _logger.error('Github token must be provided or set as environment variable (GITHUB_TOKEN).')
         sys.exit(1)
 
     _sprint_names = args.sprint_names
@@ -119,13 +115,13 @@ def main():
             _sprint_names = f.read().splitlines()
 
     if not _sprint_names:
-        logger.error(f'One of --sprint-names or --sprint-name_file must be specified.')
+        _logger.error('One of --sprint-names or --sprint-name_file must be specified.')
         sys.exit(1)
 
     _due_date = None
     if args.create:
         if not args.due_date:
-            logger.error(f'--due-date must be specified.')
+            _logger.error('--due-date must be specified.')
             sys.exit(1)
         else:
             _due_date = datetime.datetime.strptime(args.due_date, '%Y-%m-%d') + datetime. timedelta(hours=8)
@@ -148,33 +144,33 @@ def main():
                 continue
 
             if args.create:
-                logger.info(f"+++ milestone: {_sprint_name}, due: {_due_date}")
+                _logger.info(f"+++ milestone: {_sprint_name}, due: {_due_date}")
                 try:
-                    logger.info(f"CREATE repo: {_repo.name}")
+                    _logger.info(f"CREATE repo: {_repo.name}")
                     _repo.create_milestone(_sprint_name, due_on=_due_date.strftime('%Y-%m-%dT%H:%M:%SZ'))
                 except exceptions.UnprocessableEntity:
                     # milestone already exists with this name
-                    logger.info(f"CREATE repo: {_repo.name}, already exists. skipping...")
+                    _logger.info(f"CREATE repo: {_repo.name}, already exists. skipping...")
             elif args.close:
-                logger.info(f"+++ milestone: {_sprint_name}")
+                _logger.info(f"+++ milestone: {_sprint_name}")
                 _milestone = get_milestone(_repo, _sprint_name)
                 if _milestone:
-                    logger.info(f"CLOSE repo: {_repo.name}")
+                    _logger.info(f"CLOSE repo: {_repo.name}")
                     remove_closed_issues_from_sprint_backlog(_repo, _milestone)
                     defer_open_issues(_repo, _milestone)
                     _milestone.update(state='closed')
                 else:
-                    logger.info(f"CLOSE repo: {_repo.name}, skipping...")
+                    _logger.info(f"CLOSE repo: {_repo.name}, skipping...")
             elif args.delete:
-                logger.info(f"+++ milestone: {_sprint_name}")
+                _logger.info(f"+++ milestone: {_sprint_name}")
                 _milestone = get_milestone(_repo, _sprint_name)
                 if _milestone:
-                    logger.info(f"DELETE repo: {_repo.name}")
+                    _logger.info(f"DELETE repo: {_repo.name}")
                     _milestone.delete()
                 else:
-                    logger.info(f"DELETE repo: {_repo.name}, skipping...")
+                    _logger.info(f"DELETE repo: {_repo.name}, skipping...")
             else:
-                logger.warning("NONE: no action specified")
+                _logger.warning("NONE: no action specified")
 
         if _due_date:
             # Increment due date for next milestone
