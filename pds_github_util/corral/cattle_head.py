@@ -162,7 +162,7 @@ class CattleHead:
             return None
 
     def _get_license_link(self):
-        return f'https://raw.githubusercontent.com/NASA-PDS/{self._repo_name}/main/LICENSE.txt'
+        return f'https://raw.githubusercontent.com/{self._org}/{self._repo_name}/main/LICENSE.md'
 
     def _get_feedback_link(self):
         return f'{self._github_path}/issues/new/choose'
@@ -171,18 +171,19 @@ class CattleHead:
         icon_cells = [self._get_cell(k, format) for k in self._icon_dict.keys()]
         if format == 'md':
             description = self._description[:SHORT_DESCRIPTION_LEN]
-            if len(self._description)>SHORT_DESCRIPTION_LEN:
-                    description += f" [...]({self._github_path} 'more')"
-        elif format=='rst':
+            if len(self._description) > SHORT_DESCRIPTION_LEN:
+                description += f" […]({self._github_path} 'more')"
+        elif format == 'rst':
             description = self._description  # not able to find an easy way to have a link in a table cell
         else:
             logger.error(f'format {format} not supported to write long description link (get_table_row)')
 
-        return [self._name,
-                self._version_name if self._version_name else "None",
-                self._update.strftime('%Y-%m-%d') if self._update else "N/A",
-                description,
-                *icon_cells
+        return [
+            self._name,
+            self._version_name if self._version_name else "None",
+            self._update.strftime('%Y-%m-%d') if self._update else "N/A",
+            description,
+            *icon_cells
         ]
 
     def _get_changelog_signet(self):
