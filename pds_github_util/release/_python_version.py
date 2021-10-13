@@ -47,11 +47,11 @@ class VersioneerDetective(VersionDetective):
     '''Detective that uses Python Versioneer to tell what version we have'''
     def detect(self):
         if not sys.executable:
-            _logger.debug('🤷‍♂️ Cannot tell what my own Python executable is, so not bothering with versioneer')
+            _logger.info('🤷‍♂️ Cannot tell what my own Python executable is, so not bothering with versioneer')
             return None
         setupFile = self.findFile('setup.py')
         if not setupFile:
-            _logger.debug('🤷‍♀️ No setup.py file, so cannot call versioneer command on it')
+            _logger.info('🤷‍♀️ No setup.py file, so cannot call versioneer command on it')
             return None
         expr = re.compile(r'^Version: (.+)$')
         try:
@@ -64,7 +64,7 @@ class VersioneerDetective(VersionDetective):
                 match = expr.match(line)
                 if match: return match.group(1).strip()
         except subprocess.CalledProcessError as ex:
-            _logger.debug('🚳 Could not execute ``version`` command on ``setup.py``, rc=%d', ex.returncode)
+            _logger.info('🚳 Could not execute ``version`` command on ``setup.py``, rc=%d', ex.returncode)
         return None
 
 
@@ -82,7 +82,7 @@ class TextFileDetective(VersionDetective):
             for fn in filenames:
                 if fn.lower() == 'version.txt':
                     version_file = os.path.join(dirpath, fn)
-                    _logger.debug('🪄 Found a version.txt in %s', version_file)
+                    _logger.info('🪄 Found a version.txt in %s', version_file)
                     break
 
         return version_file
@@ -106,13 +106,13 @@ class ModuleInitDetective(VersionDetective):
             for fn in filenames:
                 if fn == '__init__.py':
                     init = os.path.join(dirpath, '__init__.py')
-                    _logger.debug('🧞‍♀️ Found a potential module init in %s', init)
+                    _logger.info('🧞‍♀️ Found a potential module init in %s', init)
                     with open(init, 'r') as inp:
                         for line in inp:
                             match = expr.match(line)
                             if match:
                                 version = match.group(1)
-                                _logger.debug('🔍 Using version «%s» from %s', version, init)
+                                _logger.info('🔍 Using version «%s» from %s', version, init)
                                 return version
         return None
 
@@ -182,14 +182,14 @@ def getVersion(workspace=None):
     # Figure out where to work
     gh = os.getenv('GITHUB_WORKSPACE')
     workspace = os.path.abspath(workspace if workspace else gh if gh else os.getcwd())
-    _logger.debug('👣 The computed path is %s', workspace)
+    _logger.info('👣 The computed path is %s', workspace)
 
     # Try each detective
     versions = set()
     for detectiveClass in _detectives:
         detective = detectiveClass(workspace)
         version = detective.detect()
-        _logger.debug('🔍 Detected version using %s is %r', detectiveClass.__name__, version)
+        _logger.info('🔍 Detected version using %s is %r', detectiveClass.__name__, version)
         if version:
             # Validate it
             try:
@@ -208,7 +208,7 @@ def getVersion(workspace=None):
     versions = list(versions)
     versions.sort(key=len)
     version = versions[0]
-    _logger.debug('🏁 High confidence version is %s', version)
+    _logger.info('🏁 High confidence version is %s', version)
     return version
 
 
