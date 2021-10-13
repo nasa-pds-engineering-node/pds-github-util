@@ -84,6 +84,7 @@ def release_publication(suffix, get_version, upload_assets, prefix='v'):
                         help='path of workspace. defaults to current working directory if this or GITHUB_WORKSPACE not specified')
     parser.add_argument('--snapshot', action="store_true", help="Mark release as a SNAPSHOT release.")
     args, unknown = parser.parse_known_args()
+    print(f'🪵 Setting log level to {args.loglevel}, debug happens to be {logging.DEBUG}', file=sys.stderr)
     logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
     # read organization and repository name
