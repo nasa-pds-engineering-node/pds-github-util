@@ -1,4 +1,4 @@
-import argparse
+import argparse, logging
 from pds_github_util.branches.git_actions import ping_repo_branch
 from pds_github_util.utils import addStandardArguments
 
@@ -15,7 +15,8 @@ def main():
     parser.add_argument('--message', dest='message',
                         help='commit message')
     args = parser.parse_args()
-
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
+    
     # read organization and repository name
     ping_repo_branch(args.repo, args.branch, args.message, token=args.token)
 

@@ -5,8 +5,9 @@ from pds_github_util.corral.herd import Herd
 from pds_github_util.gh_pages.summary import write_build_summary
 from pds_github_util.utils.tokens import GITHUB_TOKEN
 
-logging.basicConfig(level=logging.INFO)
+
 logger = logging.getLogger(__name__)
+
 
 class MyTestCase(unittest.TestCase):
 

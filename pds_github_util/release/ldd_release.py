@@ -22,12 +22,7 @@ from pds_github_util.tags.tags import Tags
 from pds_github_util.utils import addStandardArguments
 
 
-# Quiet github3 logging
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 SNAPSHOT_TAG_SUFFIX = '-dev'
 PDS_NS = 'http://pds.nasa.gov/pds4/pds/v1'
@@ -42,13 +37,13 @@ def create_release(repo, branch_name, tag_name, tagger, prerelease=False):
     From the latest commit on branch_name. Push the assets created in target directory.
     """
     if not prerelease:
-        logger.info(f"create new release {tag_name}")
+        _logger.info(f"create new release {tag_name}")
     else:
-        logger.info("create new SNAPSHOT release")
+        _logger.info("create new SNAPSHOT release")
 
     our_branch = repo.branch(branch_name)
     repo.create_tag(tag_name,
-                    f'SNAPSHOT release',
+                    'SNAPSHOT release',
                     our_branch.commit.sha,
                     "commit",
                     tagger)
@@ -73,7 +68,7 @@ def get_info(ingest_ldd_src_dir):
 
 def find_ldds(ldd_output_path, namespace_id, ldd_version, pds4_version):
     """Search repo for LDDs."""
-    logger.info('find and group LDDs into applicable groupings')
+    _logger.info('find and group LDDs into applicable groupings')
     ldd_dict = {}
 
     pds4_alpha_version = convert_pds4_version_to_alpha(pds4_version)
@@ -115,7 +110,7 @@ def ldd_upload_assets(release, assets):
     for a in assets:
         with open(a, 'rb') as f_asset:
             asset_filename = os.path.basename(a)
-            logger.info(f"upload asset file {asset_filename}")
+            _logger.info(f"upload asset file {asset_filename}")
             release.upload_asset('application/zip',
                                  asset_filename,
                                  f_asset)
@@ -148,16 +143,20 @@ def main():
                         help='pds4 IM version')
 
     args, unknown = parser.parse_known_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
+    if args.loglevel != logging.DEBUG:
+        # Quiet github3 logging
+        logging.getLogger('github3').setLevel(level=logging.WARNING)
 
     token = args.token or os.environ.get('GITHUB_TOKEN')
 
     if not token:
-        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+        _logger.error('Github token must be provided or set as environment variable (GITHUB_TOKEN).')
         sys.exit(1)
 
     repo_full_name = args.repo_name or os.environ.get('GITHUB_REPOSITORY')
     if not repo_full_name:
-        logger.error(f'Github repository must be provided or set as environment variable (GITHUB_REPOSITORY).')
+        _logger.error('Github repository must be provided or set as environment variable (GITHUB_REPOSITORY).')
         sys.exit(1)
     org = repo_full_name.split('/')[0]
     repo_name = repo_full_name.split('/')[1]
@@ -191,16 +190,16 @@ def main():
                 tags = Tags(org, repo_name, token=token)
                 if not tags.get_tag(tag_name):
                     release = create_release(repo, "main", tag_name, tagger, args.dev)
-                    logger.info("upload assets")
+                    _logger.info("upload assets")
                     ldd_upload_assets(release, assets)
                 else:
-                    logger.warning(f"tag {tag_name} already exists. skipping...")
+                    _logger.warning(f"tag {tag_name} already exists. skipping...")
 
     except Exception:
         traceback.print_exc()
         sys.exit(1)
 
-    logger.info(f'SUCCESS: LDD release complete.')
+    _logger.info('SUCCESS: LDD release complete.')
 
 
 if __name__ == "__main__":

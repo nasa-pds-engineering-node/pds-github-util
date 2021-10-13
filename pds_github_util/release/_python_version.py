@@ -90,7 +90,7 @@ class TextFileDetective(VersionDetective):
     def detect(self):
         version_file = self.locate_file(self.workspace)
         if version_file is not None:
-            with open(versionFile, 'r') as inp:
+            with open(version_file, 'r') as inp:
                 return inp.read().strip()
         else:
             return None

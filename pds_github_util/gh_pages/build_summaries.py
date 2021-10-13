@@ -12,15 +12,11 @@ from pds_github_util.utils.tokens import GITHUB_TOKEN
 from pds_github_util.utils import addStandardArguments
 
 
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
+_logger = logging.getLogger(__name__)
 
 
 def copy_resources():
-    logger.info("write static resources (img, config)...")
+    _logger.info("write static resources (img, config)...")
     resources = resource_filename(__name__, 'resources')
     for f in os.listdir(resources):
         i_p = os.path.join(resources, f)
@@ -33,7 +29,6 @@ def copy_resources():
             if os.path.exists(o_p):
                 os.remove(o_p)
             copy(i_p, os.getcwd())
-
 
 
 def build_summaries(token, path=os.getcwd(), format='md', version_pattern=None):
@@ -55,7 +50,7 @@ def build_summaries(token, path=os.getcwd(), format='md', version_pattern=None):
             token=token,
             local_git_tmp_dir='/tmp'))
         herds.append(herd)
-        version_pattern = '[0-9]+\.[0-9]+'
+        version_pattern = r'[0-9]+\.[0-9]+'
 
     # loop on selected version patterns
     for herd in loop_checkout_on_branch(
@@ -84,10 +79,11 @@ def main():
     parser.add_argument('--format', dest='format', default='rst',
                         help='format of the summary, accepted formats are md and rst')
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
     token = args.token or GITHUB_TOKEN
     if not token:
-        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+        _logger.error('Github token must be provided or set as environment variable (GITHUB_TOKEN).')
         sys.exit(1)
 
     build_summaries(token, args.path, args.format)
@@ -95,4 +91,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -10,7 +10,7 @@ import time
 import traceback
 import yaml
 
-from github3 import login, exceptions
+from github3 import login
 from github3.exceptions import UnprocessableEntity, ConnectionError, ForbiddenError, NotFoundError
 
 from pds_github_util.utils import addStandardArguments
@@ -18,12 +18,8 @@ from pds_github_util.utils import addStandardArguments
 
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
-# Quiet github3 logging
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
+_logger = logging.getLogger(__name__)
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 class Labels:
     def __init__(self, org, repos, token, dev=False):
@@ -38,7 +34,7 @@ class Labels:
             self._repos = self._gh.repositories_by(self._org)
 
     def create_labels_for_org(self, label_name, label_color):
-        logger.info(f'Creating label "{label_name}" (color: "{label_color}")')
+        _logger.info(f'Creating label "{label_name}" (color: "{label_color}")')
         for repo in self._repos:
             self.create_label(repo, label_name, label_color)
 
@@ -47,23 +43,23 @@ class Labels:
             for label in repo.labels():
                 if label.name in labels.keys():
                     label.delete()
-                    logger.info('%s: Delete SUCCESS' % repo)
+                    _logger.info('%s: Delete SUCCESS' % repo)
 
     def create_label(self, repo, label_name, label_color):
         try:
             try:
                 label = repo.label(label_name)
                 label.update(label_name, label_color)
-                logger.info('%s: Update SUCCESS' % repo)
+                _logger.info('%s: Update SUCCESS' % repo)
             except NotFoundError:
                 repo.create_label(label_name, label_color)
-                logger.info('%s: Creation SUCCESS' % repo)
+                _logger.info('%s: Creation SUCCESS' % repo)
         except (UnprocessableEntity, ForbiddenError, ConnectionError):
-            logger.warning("Odd connection error or out of API calls. Wait 1 hour...")
+            _logger.warning("Odd connection error or out of API calls. Wait 1 hour...")
             time.sleep(3600)
             self.create_label(repo, label_name, label_color)
         except Exception:
-            logger.error('ERROR: Create/update failed.')
+            _logger.error('ERROR: Create/update failed.')
             traceback.print_exc()
             sys.exit(1)
 
@@ -94,10 +90,11 @@ def main():
                         help='YAML config file containing many label-name + label-color combinations.')
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
     token = args.token or os.environ.get('GITHUB_TOKEN')
     if not token:
-        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+        _logger.error('Github token must be provided or set as environment variable (GITHUB_TOKEN).')
         sys.exit(1)
 
     if (args.label_name and not args.label_color) or (not args.label_name and args.label_color):

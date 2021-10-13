@@ -4,12 +4,10 @@ from bs4 import BeautifulSoup
 import github3
 from packaging import version
 from datetime import datetime
-logging.basicConfig(level=logging.INFO)
 
 import http.client
 http.client.HTTPConnection.debuglevel = 1
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 requests_log = logging.getLogger("requests.packages.urllib3")

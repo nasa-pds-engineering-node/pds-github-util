@@ -4,8 +4,9 @@ import logging
 from pds_github_util.requirements.requirements import Requirements, NoAppropriateVersionFoundException
 from pds_github_util.utils.tokens import GITHUB_TOKEN
 
-logging.basicConfig(level=logging.DEBUG)
+
 logger = logging.getLogger(__name__)
+
 
 class MyTestCase(unittest.TestCase):
     def test_get_requirements(self):
