@@ -68,16 +68,6 @@ jobs:
                     # Should really use PyPI's API token stuff here
                     user: ${{secrets.PYPI_USERNAME}}
                     password: ${{secrets.PYPI_PASSWORD}}
-            -
-                 # Send a respository dispatch to pds-actions-base to trigger
-                 # a fresh build since it depends on pds-github-util
-                 name: Trigger github-actions-base build
-                 uses: peter-evans/repository-dispatch@v1
-                 with:
-                     token: ${{secrets.ADMIN_GITHUB_TOKEN}}
-                     repository: NASA-PDS/github-actions-base
-                     event-type: pds-github-util-built
-
 ...
 
 # -*- mode: yaml; indent: 4; fill-column: 120; coding: utf-8 -*-
