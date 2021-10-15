@@ -1,1 +1,3 @@
-include pds_github_util/VERSION.txt
+include src/pds_github_util/VERSION.txt
+include src/pds_github_util/html/*.template
+recursive-include src/pds_github_util/gh_pages/resources/ *.yml *.png

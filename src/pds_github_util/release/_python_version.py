@@ -43,31 +43,6 @@ class VersionDetective(object):
         raise NotImplementedError('Subclasses must implement ``VersionDetective.detect``')
 
 
-class VersioneerDetective(VersionDetective):
-    '''Detective that uses Python Versioneer to tell what version we have'''
-    def detect(self):
-        if not sys.executable:
-            _logger.debug('🤷‍♂️ Cannot tell what my own Python executable is, so not bothering with versioneer')
-            return None
-        setupFile = self.findFile('setup.py')
-        if not setupFile:
-            _logger.debug('🤷‍♀️ No setup.py file, so cannot call versioneer command on it')
-            return None
-        expr = re.compile(r'^Version: (.+)$')
-        try:
-            completion = subprocess.run(
-                [sys.executable, setupFile, 'version'], 
-                check=True, cwd=self.workspace, encoding='utf-8', stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
-                text=True
-            )
-            for line in completion.stdout.split('\n'):
-                match = expr.match(line)
-                if match: return match.group(1).strip()
-        except subprocess.CalledProcessError as ex:
-            _logger.debug('🚳 Could not execute ``version`` command on ``setup.py``, rc=%d', ex.returncode)
-        return None
-
-
 class TextFileDetective(VersionDetective):
     '''Detective that looks for a ``version.txt`` file of some kind for a version indication'''
 
@@ -213,5 +188,5 @@ def getVersion(workspace=None):
 
 
 # Register the "built in" detectives:
-for d in (VersioneerDetective, SetupConfigDetective, SetupModuleDetective, TextFileDetective, ModuleInitDetective):
+for d in (SetupConfigDetective, SetupModuleDetective, TextFileDetective, ModuleInitDetective):
     registerDetective(d)
