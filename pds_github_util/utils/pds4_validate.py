@@ -64,25 +64,27 @@ def exec_validate(executable, args, log_path=os.path.expanduser('~')):
 
 def download_schemas(download_path, pds4_version, dev_release=False):
     pds4_version_short = convert_pds4_version_to_alpha(pds4_version)
-    try:
-        if not dev_release:
-            base_url = PDS_SCHEMA_URL
-        else:
-            base_url = PDS_DEV_SCHEMA_URL
 
-        fname = 'PDS4_PDS_' + pds4_version_short
+    if not dev_release:
+        base_url = PDS_SCHEMA_URL
+    else:
+        base_url = PDS_DEV_SCHEMA_URL
+
+    fname = 'PDS4_PDS_' + pds4_version_short
+    try:
         for suffix in ['.xsd', '.sch']:
             logger.info(f'Downloading {base_url + fname + suffix}')
             r = requests.get(base_url + fname + suffix, allow_redirects=True)
+            r.raise_for_status()
             with open(os.path.join(download_path, fname + suffix), 'wb') as f:
                 f.write(r.content)
-
-    except Exception as e:
-        logger.error('Failure attempting to download schemas.')
-        raise e
-        traceback.print_exc
-        sys.exit(1)
-
+    except requests.exceptions.HTTPError:
+        # if ops version fails, let's try to download from dev
+        if not dev_release:
+            logger.warning("Schemas not found online in production. Trying development version...")
+            download_schemas(download_path, pds4_version, True)
+        else:
+            raise
 
 def main():
 
