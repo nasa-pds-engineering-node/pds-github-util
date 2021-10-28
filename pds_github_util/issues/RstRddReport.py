@@ -111,8 +111,17 @@ class MetricsRddReport(RddReport):
                  org,
                  start_time=None,
                  end_time=None,
+                 build=None,
                  token=None):
-        super().__init__(org, start_time, end_time, token)
+
+        title = f"Release Metrics for build {build}" if build else ''
+
+        super().__init__(org,
+                         title=title,
+                         start_time=start_time,
+                         end_time=end_time,
+                         build=build,
+                         token=token)
         self.issues_type_counts = {}
         for t in self.ISSUE_TYPES:
             self.issues_type_counts[t] = 0
@@ -156,7 +165,7 @@ class MetricsRddReport(RddReport):
                 since=self._start_time
         ):
             if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS) \
-                    and issue.created_at <  datetime.fromisoformat(self._end_time):
+                    and (not self._end_time or issue.created_at <  datetime.fromisoformat(self._end_time)):
                 self.issues_type_counts[type] += 1
 
     def _bug_metrics(self, repo):
@@ -167,7 +176,7 @@ class MetricsRddReport(RddReport):
                 since=self._start_time
         ):
             if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS) \
-                    and issue.created_at < datetime.fromisoformat(self._end_time):
+                    and (not self._end_time or issue.created_at < datetime.fromisoformat(self._end_time)):
                 # get severity
                 severity = 's.unknown'
                 for label in issue.labels():
@@ -209,7 +218,7 @@ class MetricsRddReport(RddReport):
     def _get_issue_type_count(self, repo):
 
         # count epics
-        n_epics = self._get_epics_count(repo, 'B11.1')
+        n_epics = self._get_epics_count(repo)
         if n_epics>0:
             self.epic_closed_for_the_build[repo.name] = n_epics
 
@@ -436,14 +445,15 @@ class RstRddReport(RddReport):
             data = []
             for enhancement in theme_crawler:
                 issue = enhancement.issue
-                self._logger.info("crawl theme tree %i", issue.number)
-                self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
-                i_and_t = '|iandt|' if RstRddReport._is_tested(issue) else ''
-                data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
-                             i_and_t,
-                             enhancement.type.value,
-                             get_issue_priority(issue)])
-                planned_tickets.add(issue.number)
+                if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS):
+                    self._logger.info("crawl theme tree %i", issue.number)
+                    self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
+                    i_and_t = '|iandt|' if RstRddReport._is_tested(issue) else ''
+                    data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
+                                 i_and_t,
+                                 enhancement.type.value,
+                                 get_issue_priority(issue)])
+                    planned_tickets.add(issue.number)
 
             done = self._flush_theme_updates(theme_head, data) or done
 
