@@ -382,6 +382,7 @@ class RstRddReport(RddReport):
             repo,
             state='closed'
         )
+
         issue_count = sum([len(issues) for issues in issue_map.values()])
 
         if issue_count:
@@ -394,8 +395,8 @@ class RstRddReport(RddReport):
 
     def _add_other_updates(self, repo, issues_map, ignore_tickets=None):
 
-        for issues in issues_map.values():
-            issues = list(set(issues) - ignore_tickets)
+        for type, issues in issues_map.items():
+            issues_map[type] = list(set(issues) - ignore_tickets)
 
         issue_count = sum([len(issues) for issues in issues_map.values()])
 
@@ -406,17 +407,17 @@ class RstRddReport(RddReport):
                     self._add_rst_repo_change_sub_section(repo, issue_type, issues, ignore_tickets=ignore_tickets)
 
     def _flush_theme_updates(self, theme_line, ticket_lines):
-        done = False
+        empty_suffix = "" if ticket_lines else " (no epic in this repository)"
+        theme_line = theme_line + empty_suffix
+        self._rst_doc.li(theme_line)
         if ticket_lines:
-
-            self._rst_doc.li(theme_line)
             columns = ["Issue", "I&T", "Level", "Priority / Bug Severity"]
             self._rst_doc.table(
                 columns,
                 data=ticket_lines)
-            self._rst_doc.newline()
-            done = True
-        return done
+
+        self._rst_doc.newline()
+
 
     @staticmethod
     def _is_tested(issue):
@@ -438,6 +439,7 @@ class RstRddReport(RddReport):
         for theme in themes:
             theme_crawler = theme.crawl()
             theme = next(theme_crawler)
+            planned_tickets.add(theme.issue)
             self._rst_doc.hyperlink(f'{repo.name}#{theme.issue.number}', theme.issue.html_url)
             theme_head = RstRddReport._get_theme_head(repo,
                                                       theme.issue
@@ -455,7 +457,8 @@ class RstRddReport(RddReport):
                                  get_issue_priority(issue)])
                     planned_tickets.add(issue.number)
 
-            done = self._flush_theme_updates(theme_head, data) or done
+            self._flush_theme_updates(theme_head, data)
+            done = True
 
         if not done:
             self._rst_doc.content("No planned update realised in the build in this repository.")
