@@ -118,6 +118,7 @@ def main():
             args.github_org,
             start_time=args.start_time,
             end_time=args.end_time,
+            build=args.build,
             token=args.token
         )
 
