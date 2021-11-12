@@ -1,16 +1,12 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/pds-github-util/tree/«unknown») (2021-11-01)
+## [v0.26.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.26.0-dev) (2021-11-01)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.26.0-dev...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.6...v0.26.0-dev)
 
 **Defects:**
 
 - RDD contains issues marked as wontfix [\#51](https://github.com/NASA-PDS/pds-github-util/issues/51) [[s.medium](https://github.com/NASA-PDS/pds-github-util/labels/s.medium)]
-
-## [v0.26.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.26.0-dev) (2021-10-27)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.6...v0.26.0-dev)
 
 ## [v0.25.6](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.6) (2021-10-27)
 
