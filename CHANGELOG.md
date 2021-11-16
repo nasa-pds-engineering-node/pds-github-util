@@ -1,8 +1,16 @@
 # Changelog
 
-## [v0.25.5-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.5-dev) (2021-09-30)
+## [v0.26.0-dev](https://github.com/NASA-PDS/pds-github-util/tree/v0.26.0-dev) (2021-11-01)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.5...v0.25.5-dev)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.6...v0.26.0-dev)
+
+**Defects:**
+
+- RDD contains issues marked as wontfix [\#51](https://github.com/NASA-PDS/pds-github-util/issues/51) [[s.medium](https://github.com/NASA-PDS/pds-github-util/labels/s.medium)]
+
+## [v0.25.6](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.6) (2021-10-27)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/v0.25.5...v0.25.6)
 
 ## [v0.25.5](https://github.com/NASA-PDS/pds-github-util/tree/v0.25.5) (2021-09-30)
 
@@ -244,15 +252,15 @@
 
 ## [0.14.4](https://github.com/NASA-PDS/pds-github-util/tree/0.14.4) (2020-10-13)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.3...0.14.4)
-
-## [0.14.3](https://github.com/NASA-PDS/pds-github-util/tree/0.14.3) (2020-10-13)
-
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.2...0.14.3)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.2...0.14.4)
 
 ## [0.14.2](https://github.com/NASA-PDS/pds-github-util/tree/0.14.2) (2020-10-13)
 
-[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.1...0.14.2)
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.3...0.14.2)
+
+## [0.14.3](https://github.com/NASA-PDS/pds-github-util/tree/0.14.3) (2020-10-13)
+
+[Full Changelog](https://github.com/NASA-PDS/pds-github-util/compare/0.14.1...0.14.3)
 
 ## [0.14.1](https://github.com/NASA-PDS/pds-github-util/tree/0.14.1) (2020-10-13)
 

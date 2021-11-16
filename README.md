@@ -66,9 +66,9 @@ Example of creating milestones:
 
 For example:
 
-    milestones --create --sprint_name_file conf/milestones_2021.yaml \
-               --prepend_number 3 --due_date 2021-02-25 \
-               --github_org NASA-PDS --github_repos pds-registry-common
+    milestones --create --sprint-name-file conf/milestones_2021.yaml \
+               --prepend-number 3 --due-date 2021-02-25 \
+               --github-org NASA-PDS --github-repos pds-registry-common
 
 ## PDS Issues
 
