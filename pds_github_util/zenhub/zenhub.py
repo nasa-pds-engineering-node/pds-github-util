@@ -1,12 +1,10 @@
 """ZenhubWrapper."""
 
-import github3
 import logging
 import time
 import requests
 
 # Enable logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ZENHUB_URL = 'https://api.zenhub.com{}?access_token={}'

@@ -1,5 +1,5 @@
 import fnmatch
-import os
+import os, sys
 from lxml import etree
 from .release import release_publication
 
@@ -13,7 +13,9 @@ def maven_get_version(workspace=None):
     pom_doc = etree.parse(pom_path)
     r = pom_doc.xpath('/pom:project/pom:version',
                       namespaces={'pom': 'http://maven.apache.org/POM/4.0.0'})
-    return r[0].text
+    version = r[0].text
+    print(f'Yo yo maven gets version {version} from the pom', file=sys.stderr)
+    return version
 
 
 def maven_upload_assets(repo_name, tag_name, release):
@@ -21,6 +23,7 @@ def maven_upload_assets(repo_name, tag_name, release):
           Upload packages produced by maven
 
     """
+    print(f'Yo yo maven upload assets for {repo_name} and tag {tag_name}', file=sys.stderr)
     # upload assets
     assets = ['*-bin.tar.gz', '*-bin.zip', '*.jar']
     for dirname, subdirs, files in os.walk(os.environ.get('GITHUB_WORKSPACE')):

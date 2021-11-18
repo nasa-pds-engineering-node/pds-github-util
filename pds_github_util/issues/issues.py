@@ -7,7 +7,7 @@ import logging
 
 
 from mdutils.mdutils import MdUtils
-from pds_github_util.issues.utils import TOP_PRIORITIES, get_issue_type, get_issue_priority, ignore_issue, get_issues_groupby_type, is_theme
+from pds_github_util.issues.utils import TOP_PRIORITIES, get_issue_priority, get_issues_groupby_type
 
 from pds_github_util.utils import GithubConnection, addStandardArguments
 from pds_github_util.issues import RstRddReport
@@ -16,12 +16,7 @@ from pds_github_util.issues import MetricsRddReport
 
 DEFAULT_GITHUB_ORG = 'NASA-PDS'
 
-# Quiet github3 logging
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 def convert_issues_to_planning_report(md_file, repo_name, issues_map):
@@ -88,8 +83,9 @@ def main():
                         help='build label, for example B11.1 or B12.0')
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
-    logger.info('Working on build %s', args.build)
+    _logger.info('Working on build %s', args.build)
 
     if args.format == 'md':
         create_md_issue_report(
@@ -125,5 +121,5 @@ def main():
         rdd_metrics.create(args.github_repos)
 
     else:
-        logger.error("unsupported format %s, must be rst or md or metrics", args.format)
+        _logger.error("unsupported format %s, must be rst or md or metrics", args.format)
 

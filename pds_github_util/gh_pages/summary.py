@@ -4,7 +4,6 @@ from pds_github_util.tags.tags import Tags
 from pds_github_util.utils import RstClothReferenceable
 from pds_github_util.corral.herd import Herd
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedback']

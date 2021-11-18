@@ -65,21 +65,12 @@ jobs:
                     restore-keys: pds-${{runner.os}}-py-
             -
                 name: 🤠 Roundup
-                uses: NASA-PDS/roundup-action@main
+                uses: nasa-pds-engineering-node/roundup-action@stable
                 with:
                     assembly: stable
                 env:
                     pypi_username: ${{secrets.PYPI_USERNAME}}
                     pypi_password: ${{secrets.PYPI_PASSWORD}}
                     ADMIN_GITHUB_TOKEN: ${{secrets.ADMIN_GITHUB_TOKEN}}
-            -
-                 # Send a respository dispatch to pds-actions-base to trigger
-                 # a fresh build since it depends on pds-github-util
-                 name: Trigger github-actions-base build
-                 uses: peter-evans/repository-dispatch@v1
-                 with:
-                     token: ${{secrets.ADMIN_GITHUB_TOKEN}}
-                     repository: NASA-PDS/github-actions-base
-                     event-type: pds-github-util-built
 
 ...

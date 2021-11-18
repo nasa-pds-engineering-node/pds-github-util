@@ -14,7 +14,6 @@ import traceback
 
 from datetime import datetime
 from subprocess import Popen, CalledProcessError, PIPE, STDOUT
-from zipfile import ZipFile
 
 from pds_github_util.tags.tags import Tags
 from pds_github_util.assets.assets import download_asset, unzip_asset
@@ -30,12 +29,7 @@ PDS_SCHEMA_URL = 'https://pds.nasa.gov/pds4/pds/v1/'
 PDS_DEV_SCHEMA_URL = 'https://pds.nasa.gov/datastandards/schema/develop/pds/'
 DOWNLOAD_PATH = '/tmp'
 
-# Quiet github3 logging
-logger = logging.getLogger('github3')
-logger.setLevel(level=logging.WARNING)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 def get_latest_release(token, dev=False):
@@ -73,7 +67,7 @@ def download_schemas(download_path, pds4_version, dev_release=False):
     fname = 'PDS4_PDS_' + pds4_version_short
     try:
         for suffix in ['.xsd', '.sch']:
-            logger.info(f'Downloading {base_url + fname + suffix}')
+            _logger.info(f'Downloading {base_url + fname + suffix}')
             r = requests.get(base_url + fname + suffix, allow_redirects=True)
             r.raise_for_status()
             with open(os.path.join(download_path, fname + suffix), 'wb') as f:
@@ -123,11 +117,12 @@ def main():
                         action='store_true', default=False)
 
     args = parser.parse_args()
+    logging.basicConfig(level=args.loglevel, format="%(levelname)s %(message)s")
 
     token = args.token or os.environ.get('GITHUB_TOKEN')
 
     if not token:
-        logger.error(f'Github token must be provided or set as environment variable (GITHUB_TOKEN).')
+        _logger.error('Github token must be provided or set as environment variable (GITHUB_TOKEN).')
         sys.exit(1)
 
     try:
@@ -165,20 +160,20 @@ def main():
         validate_args.append('-t')
         validate_args.extend(glob.glob(args.datapath, recursive=True))
 
-
         pkg = download_asset(get_latest_release(token), args.deploy_dir, startswith="validate", file_extension='.zip')
         sw_dir = unzip_asset(pkg, args.deploy_dir)
 
         exec_validate(os.path.join(sw_dir, 'bin', 'validate'), validate_args, log_path=args.output_log_path)
     except CalledProcessError:
         if not args.failure_expected:
-            logger.error(f'FAILED: Validate failed unexpectedly. See output logs.')
+            _logger.error('FAILED: Validate failed unexpectedly. See output logs.')
             sys.exit(1)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         sys.exit(1)
 
-    logger.info(f'SUCCESS: Validation complete.')
+    _logger.info('SUCCESS: Validation complete.')
+
 
 if __name__ == '__main__':
     main()

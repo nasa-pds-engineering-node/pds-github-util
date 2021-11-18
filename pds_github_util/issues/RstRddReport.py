@@ -28,6 +28,7 @@ class PDSIssue(ShortIssue):
 
 from pds_github_util.issues.utils import get_issue_priority, ignore_issue
 
+
 class RddReport:
 
     ISSUE_TYPES = ['bug', 'requirement', 'theme', 'enhancement'] # non hierarchical tickets
@@ -56,12 +57,12 @@ class RddReport:
                  build=None,
                  token=None):
 
-
-        # Quiet github3 logging
+        # Quiet github3 logging — 😬 This should be user-controllable (command-line, config file) and not
+        # forced by the code.
         self._logger = logging.getLogger('github3')
         self._logger.setLevel(level=logging.WARNING)
 
-        logging.basicConfig(level=logging.INFO)
+        # Why bother saving the github3 logger in ``_logger`` if we're just overwriting it with the ``_name`` logger? 🤔
         self._logger = logging.getLogger(__name__)
 
         self._org = org

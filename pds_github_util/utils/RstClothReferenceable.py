@@ -2,8 +2,8 @@ import os
 import logging
 from rstcloth import RstCloth
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 def _indent(content, indent):
     """

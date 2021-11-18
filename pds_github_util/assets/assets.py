@@ -3,7 +3,6 @@ import os
 
 from zipfile import ZipFile
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -45,7 +44,7 @@ def zip_assets(file_paths, outzip):
     if not os.path.exists(os.path.dirname(outzip)):
         os.makedirs(os.path.dirname(outzip))
 
-    logger.info(f'zipping assets')
+    logger.info('zipping assets')
     with ZipFile(outzip,'w') as z:
         for f in file_paths: 
             z.write(f, os.path.basename(f))
