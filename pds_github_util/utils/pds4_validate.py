@@ -10,7 +10,6 @@ import logging
 import os
 import requests
 import sys
-import traceback
 
 from datetime import datetime
 from subprocess import Popen, CalledProcessError, PIPE, STDOUT
@@ -75,10 +74,11 @@ def download_schemas(download_path, pds4_version, dev_release=False):
     except requests.exceptions.HTTPError:
         # if ops version fails, let's try to download from dev
         if not dev_release:
-            logger.warning("Schemas not found online in production. Trying development version...")
+            _logger.warning("Schemas not found online in production. Trying development version...")
             download_schemas(download_path, pds4_version, True)
         else:
             raise
+
 
 def main():
 
@@ -168,9 +168,6 @@ def main():
         if not args.failure_expected:
             _logger.error('FAILED: Validate failed unexpectedly. See output logs.')
             sys.exit(1)
-    except Exception:
-        traceback.print_exc()
-        sys.exit(1)
 
     _logger.info('SUCCESS: Validation complete.')
 
