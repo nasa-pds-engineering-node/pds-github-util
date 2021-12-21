@@ -10,24 +10,20 @@ COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedba
 
 REPO_TYPES = {
     'tool': {
-        'title': 'Standalone Tools and Libraries',
+        'title': 'Standalone Tools',
         'description': 'PDS Tools for Discipline Nodes, Data Providers and Community Users.'
+    },
+    'library': {
+        'title': 'Libraries and Clients',
+        'description': 'Libraries and Clients for programing interfaces to PDS services and data.'
     },
     'service': {
         'title': 'Discipline Node Services',
         'description': 'Tools and Services that Discipline Node should deploy to enable integration and interoperability across the PDS.'
     },
-    'library': {
-        'title': 'Libraries',
-        'description': 'Libraries supported by PDS'
-    },
     'core': {
         'title': 'Engineering Node Services',
         'description': 'Tools and Services centrally deployed by PDS Engineering Node to support the integration and interoperability of all PDS nodes.'
-    },
-    'other': {
-        'title': 'Other Tools and Libraries (dependencies)',
-        'description': 'Other software assets re-used in previously listed applications'
     },
     'unknown': {
         'title': 'Additional Software Assets',
