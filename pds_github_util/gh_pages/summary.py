@@ -11,11 +11,11 @@ COLUMNS = ['manual', 'changelog', 'requirements', 'download', 'license', 'feedba
 REPO_TYPES = {
     'tool': {
         'title': 'Standalone Tools and Libraries',
-        'description': 'PDS tools for discipline nodes, data providers and users.'
+        'description': 'PDS Tools for Discipline Nodes, Data Providers and Community Users.'
     },
     'service': {
         'title': 'Discipline Node Services',
-        'description': 'PDS servers that Discipline Node should deploy to publish their archive at PDS level'
+        'description': 'Tools and Services that Discipline Node should deploy to enable integration and interoperability across the PDS.'
     },
     'library': {
         'title': 'Libraries',
@@ -23,14 +23,14 @@ REPO_TYPES = {
     },
     'core': {
         'title': 'Engineering Node Services',
-        'description': 'PDS servers deployed by PDS Engineering Node at central level'
+        'description': 'Tools and Services centrally deployed by PDS Engineering Node to support the integration and interoperability of all PDS nodes.'
     },
     'other': {
         'title': 'Other Tools and Libraries (dependencies)',
         'description': 'Other software assets re-used in previously listed applications'
     },
     'unknown': {
-        'title': 'Additional software assets',
+        'title': 'Additional Software Assets',
         'description': ''
     }
 }
