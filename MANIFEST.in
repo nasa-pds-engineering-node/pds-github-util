@@ -1,1 +1,2 @@
 include pds_github_util/VERSION.txt
+include pds_github_util/gh_pages/resources
