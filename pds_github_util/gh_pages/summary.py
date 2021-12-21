@@ -87,14 +87,15 @@ def write_md_file(herd, output_file_name, version):
 
 
 def write_rst_introduction(d: RstClothReferenceable, version: str):
-    d.title(f'Software Catalog (build {version})')
+    d.title(f'Software Catalog (Build {version})')
 
-    d.content(f'The software provided for the build {version} are listed hereafter and organized by category:')
+    d.content(f'The software provided for the PDS System Build {version} are listed below and organized by category:')
     d.newline()
     for t, section in REPO_TYPES.items():
         if t != 'unknown':
             d.li(f"`{section['title']}`_")
             d.newline()
+    d.newline()
 
 def write_rst_file(herd, output_file_name, version):
 

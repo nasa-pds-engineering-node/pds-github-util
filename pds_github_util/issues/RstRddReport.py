@@ -143,19 +143,19 @@ class MetricsRddReport(RddReport):
             if not repos or _repo.name in repos:
                 self.add_repo(_repo)
 
-        print('Issues types')
+        print('Issues Types')
         print(self.issues_type_counts)
 
-        print('Bug states')
+        print('Bug States')
         print(self.bugs_open_closed)
 
-        print('Bug severity')
+        print('Bug Severity')
         print(self.bugs_severity)
 
-        print('Open high and critical bugs')
+        print('Open High/Critical Bugs')
         print(self.high_and_critical_open_bugs)
 
-        print('Closed EPICS')
+        print('Closed Epics')
         print(self.epic_closed_for_the_build)
 
     def _non_bug_metrics(self, type, repo):
@@ -166,7 +166,7 @@ class MetricsRddReport(RddReport):
                 since=self._start_time
         ):
             if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS) \
-                    and (not self._end_time or issue.created_at <  datetime.fromisoformat(self._end_time)):
+                    and (not self._end_time or issue.created_at < datetime.fromisoformat(self._end_time)):
                 self.issues_type_counts[type] += 1
 
     def _bug_metrics(self, repo):
@@ -402,13 +402,13 @@ class RstRddReport(RddReport):
         issue_count = sum([len(issues) for issues in issues_map.values()])
 
         if issue_count>0:
-            self._rst_doc.h3("Other updates")
+            self._rst_doc.h3("Other Updates")
             for issue_type, issues in issues_map.items():
                 if issues and issue_type != RddReport.THEME:
                     self._add_rst_repo_change_sub_section(repo, issue_type, issues, ignore_tickets=ignore_tickets)
 
     def _flush_theme_updates(self, theme_line, ticket_lines):
-        empty_suffix = "" if ticket_lines else " (no epic in this repository)"
+        empty_suffix = "" if ticket_lines else " (no parent epic in this repository)"
         theme_line = theme_line + empty_suffix
         self._rst_doc.li(theme_line)
         if ticket_lines:
@@ -462,7 +462,7 @@ class RstRddReport(RddReport):
             done = True
 
         if not done:
-            self._rst_doc.content("No planned update realised in the build in this repository.")
+            self._rst_doc.content("No planned updates realized for this build in this repository.")
             self._rst_doc.newline()
 
         return planned_tickets
@@ -496,17 +496,18 @@ class RstRddReport(RddReport):
                                          arg=f'https://nasa-pds.github.io/_static/images/noun_certified_18093.png',
                                          fields=[('alt', 'I&T'), ('width', '20')],
                                          reference='iandt')
-        self._rst_doc.h1('Software changes')
-        self._rst_doc.content("The changes types are 'bug', 'enhancement' or 'requirement'. "
+        self._rst_doc.h1('Software Changes')
+        self._rst_doc.content("The changes types are 'Bug', 'Enhancement' or 'Requirement'. "
                               "For each software repository, the changes are listed in 2 categories: ")
-        self._rst_doc.li("planned updates")
-        self._rst_doc.li("other updates")
+        self._rst_doc.newline()
+        self._rst_doc.li("Planned Updates")
+        self._rst_doc.li("Other Updates")
         self._rst_doc.newline()
 
-        self._rst_doc.content(f"The 'planned updates' are organized by 'themes' which are defined at the planing phase (see `plan {self._build}`_')")
-        self._rst_doc.content(f"The 'other updates' occurs during the build cycle witout being planned or attached to a theme. They are organized by types (bug, enhancements, requirements...)")
+        self._rst_doc.content(f"The 'Planned Updates' are organized by 'Themes' (or 'Release Themes'), which are defined in advance and approved by the PDS Software Working Group (see `Plan {self._build}`_')")
+        self._rst_doc.content(f"The 'Other Updates' occurs during the build cycle witout being planned or attached to a theme. They are organized by types (bug, enhancements, requirements...). Any updates that require a de-scope of planned tasks are reviewed by the PDS Software Working Group.")
         self._rst_doc.newline()
-        self._rst_doc.content(f"The deliveries are validated by the development team and most of time, when relevant, also go through an additional Integration & Test process as indicated by a specific icon in the following tables.")
+        self._rst_doc.content(f"The deliveries are validated by the development team and go through an additional Integration & Test process, as applicable, as indicated by a specific icon in the following tables.")
         self._rst_doc.newline()
 
         for _repo in self.available_repos():
@@ -522,26 +523,26 @@ class RstRddReport(RddReport):
         self._logger.info("Add software catalog")
         self._rst_doc.h1('Engineering Node Software Catalog')
         self._rst_doc.content(
-            f'The Engineering Node Software resources are listed in the `software release summary ({self._build})`_'
+            f'The Engineering Node Software resources are listed in the `Software Release Summary ({self._build})`_'
         )
         self._rst_doc.newline()
         self._rst_doc.hyperlink(
-            f'software release summary ({self._build})',
+            f'Software Release Summary ({self._build})',
             f'https://nasa-pds.github.io/releases/{self._build}/index.html'
         )
 
 
     def _add_install_and_operation(self):
         self._logger.info("Add installation and operations")
-        self._rst_doc.h1('Installation and operation')
+        self._rst_doc.h1('Installation and Operation')
         self._rst_doc.content(
-            'PDS Engineering node software are meant to be deployed in 3 contexts: standalone, discipline nodes or engineering node')
+            'PDS Engineering Node Software have 3 different venues/purposes for execution: Standalone, Discipline Node Deployment or Engineering Node-only Deployment')
 
-        self._rst_doc.content('For the installation and operation manual see the `user''s manuals` in the software summary sections below:' )
+        self._rst_doc.content('For the Installation and Operation manual see the `user''s manuals` in the software summary sections below:' )
 
         self._add_li('`PDS Standalone`_')
         self._add_li('`PDS Discipline Nodes`_')
-        self._add_li('`PDS Engineering Node only`_')
+        self._add_li('`PDS Engineering Node Only`_')
 
         self._rst_doc.hyperlink(
             'PDS Standalone',
@@ -554,7 +555,7 @@ class RstRddReport(RddReport):
         )
 
         self._rst_doc.hyperlink(
-            'PDS Engineering Node only',
+            'PDS Engineering Node Only',
             'https://nasa-pds.github.io/releases/11.1/index.html#enineering-node-services'
         )
 
@@ -590,13 +591,13 @@ class RstRddReport(RddReport):
         self._add_li('PDAP Search Protocol, Version 1.0, March 21, 2014.')
         self._add_li(
             'PDS Security Service Software Requirements and Design Document (SRD/SDD), Version 1.1, September 1, 2013.')
-        self._add_li('`PDS Deep Archive Sotware Requirements and Design Document (SRD/SDD)`_')
+        self._add_li('`PDS Deep Archive Software Requirements and Design Document (SRD/SDD)`_')
         self._add_li('`PDS DOI Service Requirements and Design Document (SRD/SDD)`_')
 
         self._rst_doc.newline()
 
         self._rst_doc.hyperlink(
-            'PDS Deep Archive Sotware Requirements and Design Document (SRD/SDD)',
+            'PDS Deep Archive Software Requirements and Design Document (SRD/SDD)',
             'https://github.com/NASA-PDS/pds-deep-archive/blob/master/docs/pds4_nssdca_delivery_design_20191219.docx'
         )
         self._rst_doc.hyperlink(
@@ -608,10 +609,10 @@ class RstRddReport(RddReport):
     def _add_introduction(self):
         self._logger.info("Add introduction")
         self._rst_doc.content('This release of the PDS4 System is intended as an operational release of the system components to date.')
-        self._rst_doc.content(f'The original plan for this release can be found here: `plan {self._build}`_')
+        self._rst_doc.content(f'The original plan for this release can be found here: `Plan {self._build}`_')
         self._rst_doc.newline()
         self._rst_doc.content('The following sections can be found in this document:')
-        self._rst_doc.hyperlink(f'plan {self._build}', f'https://nasa-pds.github.io/releases/{self._build[1:]}/plan.html')  # remove B prefix from the build code
+        self._rst_doc.hyperlink(f'Plan {self._build}', f'https://nasa-pds.github.io/releases/{self._build[1:]}/plan.html')  # remove B prefix from the build code
         self._rst_doc.newline()
         self._rst_doc.directive('toctree', fields=[('glob', ''), ('maxdepth', 3)], content='rdd.rst')
         self._rst_doc.newline()
@@ -641,7 +642,7 @@ class RstRddReport(RddReport):
                 columns,
                 data=data)
         else:
-            self._rst_doc.content("no PDS4 standard updates")
+            self._rst_doc.content("No PDS4 Standards Updates")
 
     def create(self, repos, filename):
         self._logger.info("Create RDD rst")
