@@ -161,7 +161,7 @@ class MetricsRddReport(RddReport):
     def _non_bug_metrics(self, type, repo):
         for issue in repo.issues(
                 state='closed',
-                labels=type,
+                labels=f'{self._build},{type}',
                 direction='asc',
                 since=self._start_time
         ):
@@ -172,7 +172,7 @@ class MetricsRddReport(RddReport):
     def _bug_metrics(self, repo):
         for issue in repo.issues(
                 state='all',
-                labels='bug',
+                labels=f'{self._build},bug',
                 direction='asc',
                 since=self._start_time
         ):
