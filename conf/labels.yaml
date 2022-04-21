@@ -45,6 +45,7 @@ labels:
   invalid: ffffff
   wontfix: ffffff
   duplicate: ffffff
+  backwards-incompatible: b60205
 
   # PDS Build(s)
   B12.0: ff94ff
