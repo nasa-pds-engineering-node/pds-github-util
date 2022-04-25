@@ -69,7 +69,7 @@ jobs:
                     restore-keys: pds-${{runner.os}}-py-
             -
                 name: 🤠 Roundup
-                uses: nasa-pds-engineering-node/roundup-action@stable
+                uses: nasa-pds/roundup-action@stable
                 with:
                     assembly: unstable
                 env:
