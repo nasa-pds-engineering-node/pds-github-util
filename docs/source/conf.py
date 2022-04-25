@@ -66,6 +66,10 @@ html_context = {
     'css_files': [
         '_static/theme_overrides.css',  # override wide tables in RTD theme
     ],
+    'display_github': True,
+    "github_user": "nasa-pds",
+    "github_repo": "pds-github-util",
+    "github_version": "main"
 }
 
 # -- Projeect specific config -------
