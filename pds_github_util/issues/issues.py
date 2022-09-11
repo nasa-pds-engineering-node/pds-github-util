@@ -73,9 +73,9 @@ def main():
                         default='all',
                         help='Return open, closed, or all issues')
     parser.add_argument('--start-time',
-                        help='Start datetime for tickets to find. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.')
+                        help='Start datetime for tickets to find. This is a timestamp in ISO 8601-like format: YYYY-MM-DDTHH:MM:SS+00:00.')
     parser.add_argument('--end-time',
-                        help='End datetime for tickets to find. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.')
+                        help='End datetime for tickets to find. This is a timestamp in ISO 8601-like format: YYYY-MM-DDTHH:MM:SS+00:00.')
     parser.add_argument('--format', default='md',
                         help='rst or md or metrics')
 

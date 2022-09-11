@@ -36,14 +36,16 @@ class Labels:
     def create_labels_for_org(self, label_name, label_color):
         _logger.info(f'Creating label "{label_name}" (color: "{label_color}")')
         for repo in self._repos:
-            self.create_label(repo, label_name, label_color)
+            if not repo.archived:
+                self.create_label(repo, label_name, label_color)
 
     def delete_labels_for_org(self, labels):
         for repo in self._repos:
-            for label in repo.labels():
-                if label.name in labels.keys():
-                    label.delete()
-                    _logger.info('%s: Delete SUCCESS' % repo)
+            if not repo.archived:
+                for label in repo.labels():
+                    if label.name in labels.keys():
+                        label.delete()
+                        _logger.info('%s: Delete SUCCESS' % repo)
 
     def create_label(self, repo, label_name, label_color):
         try:
