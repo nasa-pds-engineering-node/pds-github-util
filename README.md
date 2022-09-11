@@ -82,18 +82,18 @@ Example of generating a report for open [NASA-PDS/validate repo](https://github.
 
 Currently outputs to file: `pdsen_issues.md`.
 
-For the RDD generation:
+For the RDD generation for specific repo(s):
 
-    pds-issues --github-repos validate --issue_state closed --format rst --start-time 2020-10-26T00:00:00Z
+    pds-issues --github-repos validate --issue_state closed --format rst --start-time 2020-10-26T00:00:00+00:00
 
 Generates `pdsen_issues.rst`.
 
-or (better)
+or for tickets specifically tagged with the Build label (e.g. B11.1)
 
     pds-issues  --github-repos validate --issue_state closed --format rst --build B11.1
 Generates `pdsen_issues.rst`
 
-For RD metrics:
+For TRR/DDR metrics:
 
     pds-issues --issue_state closed --format metrics --start-time 2020-04-19T00:00:00+00:00 --end-time 2021-10-31T00:00:00+00:00
 
@@ -103,6 +103,8 @@ Move issues from one obsolete repository to a new one:
     
 
 # Milestones
+
+**Obsolete** - Sprints are now auto-magically handled by Zenhub
 
 Example of creating milestones:
 - for a single repo
