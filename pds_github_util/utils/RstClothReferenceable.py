@@ -31,7 +31,7 @@ _indent = _indent_ok_for_table
 
 
 class RstClothReferenceable(rstcloth.RstCloth):
-    def __init__(self, line_width=72):
+    def __init__(self, line_width=160):
         super().__init__(line_width=line_width)
         self._deffered_directives = []
 

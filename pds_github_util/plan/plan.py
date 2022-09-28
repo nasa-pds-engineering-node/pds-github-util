@@ -62,17 +62,13 @@ def main():
                         help='build number',
                         required=True)
     parser.add_argument('--delivery_date',
-                        help='EN delivery to I&T date',
-                        required=True)
+                        help='EN delivery to I&T date')
     parser.add_argument('--trr_date',
-                        help='EN TRR date',
-                        required=True)
+                        help='EN TRR date')
     parser.add_argument('--ddr_date',
-                        help='EN DDR date',
-                        required=True)
+                        help='EN DDR date')
     parser.add_argument('--release_date',
-                        help='EN DDR date',
-                        required=True)
+                        help='EN DDR date')
     parser.add_argument('--projects_config',
                         help='Path to config file with project information',
                         required=True)

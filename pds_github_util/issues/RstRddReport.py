@@ -33,18 +33,18 @@ class RddReport:
 
     ISSUE_TYPES = ['bug', 'requirement', 'theme', 'enhancement'] # non hierarchical tickets
     THEME = 'theme'
-    IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable'}
+    IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'task'}
     NOT_TESTED = 'skip-i&t'
-    IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral', 'pdsen-operations',
-                     'roundup-action', 'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util',
-                     'pds-template-repo-java', 'devops-BROKEN', 'kdp'}
+    IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral',
+                     'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util',
+                     'pds-template-repo-java', 'kdp', 'naif-pds4-bundler'}
     REPO_INFO = '*{}*\n\n' \
                 '.. list-table:: \n' \
                 '   :widths: 15 15 15 15 15 15\n\n' \
                 '   * - `User Guide <{}>`_\n' \
                 '     - `Github Repo <{}>`_\n' \
                 '     - `Issue Tracking <{}/issues>`_ \n' \
-                '     - `Backlog <{}/issues?q=is%3Aopen+is%3Aissue+label%3Abacklog>`_ \n' \
+                '     - `Requirements <{}/tree/main/docs/requirements>`_ \n' \
                 '     - `Stable Release <{}/releases/latest>`_ \n' \
                 '     - `Dev Release <{}/releases>`_ \n\n'
     SWG_REPO_NAME = 'pds-swg'
@@ -99,9 +99,13 @@ class RddReport:
             type_issues = repo.issues(state=state, labels=','.join(labels), direction='asc')
 
             for issue in type_issues:
+                compare_date = issue.created_at
+                if state == 'closed':
+                    compare_date = issue.closed_at
+
                 if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS) \
-                   and (self._end_time is None or issue.created_at < datetime.fromisoformat(self._end_time))\
-                   and (self._start_time is None or issue.created_at > datetime.fromisoformat(self._start_time)):
+                   and (self._end_time is None or compare_date < datetime.fromisoformat(self._end_time))\
+                   and (self._start_time is None or compare_date > datetime.fromisoformat(self._start_time)):
                     issues[t].append(issue)
 
         return issues
@@ -314,7 +318,7 @@ class RstRddReport(RddReport):
                  token=None):
 
         if not title:
-            build_text = f"(build {build})" if build else ''
+            build_text = f"(Build {build})" if build else ''
             title = f"Release Description Document " + build_text
         super().__init__(org,
                          title=title,
@@ -372,8 +376,8 @@ class RstRddReport(RddReport):
 
     def _get_theme_trees(self, repo):
         labels = [self.THEME, self._target_build]
-        # TODO check if we want to see all themes or only the closed one
-        theme_issues = repo.issues(state='all', labels=','.join(labels), direction='asc')
+        # Only want to see closed themes in the RDD, anything not closed should be in the deferrals
+        theme_issues = repo.issues(state='closed', labels=','.join(labels), direction='asc')
         theme_trees = []
         for theme_issue in theme_issues:
             theme = EpicFactory(self._zenhub, self._logger).create_enhancement(repo, theme_issue, self._target_build)
@@ -410,16 +414,17 @@ class RstRddReport(RddReport):
                     self._add_rst_repo_change_sub_section(repo, issue_type, issues, ignore_tickets=ignore_tickets)
 
     def _flush_theme_updates(self, theme_line, ticket_lines):
-        empty_suffix = "" if ticket_lines else " (this theme has not epics in this repository)"
-        theme_line = theme_line + empty_suffix
-        self._rst_doc.li(theme_line)
+        theme_line = theme_line
+        self._rst_doc.h4(theme_line)
         if ticket_lines:
             columns = ["Issue", "I&T", "Level", "Priority / Bug Severity"]
             self._rst_doc.table(
                 columns,
-                data=ticket_lines,
-                indent=4
+                data=ticket_lines
             )
+        else:
+            self._rst_doc.content("No requirements, significant enhancements, or bug fixes identified for this Build." +
+                                  " See theme for more details.")
 
         self._rst_doc.newline()
 

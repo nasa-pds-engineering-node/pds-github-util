@@ -1,13 +1,18 @@
+"""
+Tags module
+
+Wrapper for looping through all a repos Tags
+
+WARNING: This module loops through ALL tags for a repo, which can become
+         very costly in terms of the Github API rate limiting.
+         Use sparingly.
+"""
 import github3
-import git
 from packaging import version
-
-
 
 class Tags:
     JAVA_DEV_SUFFIX = '-SNAPSHOT'
     PYTHON_DEV_SUFFIX = '-dev'
-
 
     def __init__(self, org, repo, token=None):
         self._organization = org
