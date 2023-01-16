@@ -78,9 +78,9 @@ class CattleHead:
         self.rst_doc = d
 
     def set_icon_replacement_rst(self, function, link_func):
-        self.rst_doc.deffered_directive('image', arg=self._icon_dict[function],
-                               fields=[('target', link_func)],
-                               reference=f'{self._repo}_{function}')
+        self.rst_doc.deferred_directive('image', arg=self._icon_dict[function],
+                                        fields=[('target', link_func)],
+                                        reference=f'{self._repo}_{function}')
 
     def get_published_date(self):
         return self._update

@@ -34,7 +34,7 @@ class RddReport:
     ISSUE_TYPES = ['bug', 'requirement', 'theme', 'enhancement'] # non hierarchical tickets
     THEME = 'theme'
     IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'task'}
-    NOT_TESTED = 'skip-i&t'
+    SKIP_TESTING = 'skip-i&t'
     IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral',
                      'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util',
                      'pds-template-repo-java', 'kdp', 'naif-pds4-bundler'}
@@ -434,9 +434,9 @@ class RstRddReport(RddReport):
 
 
     @staticmethod
-    def _is_tested(issue):
+    def _testing_needed(issue):
         for label in issue.labels():
-            if label.name == RstRddReport.NOT_TESTED:
+            if label.name == RstRddReport.SKIP_TESTING:
                 return False
 
         return True
@@ -464,7 +464,7 @@ class RstRddReport(RddReport):
                 if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS):
                     self._logger.debug("crawl theme tree %i", issue.number)
                     self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
-                    i_and_t = '|iandt|' if RstRddReport._is_tested(issue) else ''
+                    i_and_t = '|iandt|' if RstRddReport._testing_needed(issue) else ''
                     priority = get_issue_priority(issue)
                     data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
                                  i_and_t,
@@ -495,7 +495,7 @@ class RstRddReport(RddReport):
         data = []
         for issue in issues:
             if issue.number not in ignore_tickets:
-                i_and_t = '|iandt|' if RstRddReport._is_tested(issue) else ''
+                i_and_t = '|iandt|' if RstRddReport._testing_needed(issue) else ''
                 self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
                 priority = get_issue_priority(issue)
                 data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
@@ -517,7 +517,7 @@ class RstRddReport(RddReport):
 
     def _add_software_changes(self, repos):
         self._logger.info("Add software changes")
-        self._rst_doc.deffered_directive('image',
+        self._rst_doc.deferred_directive('image',
                                          arg=f'https://nasa-pds.github.io/_static/images/noun_certified_18093.png',
                                          fields=[('alt', 'I&T'), ('width', '20')],
                                          reference='iandt')

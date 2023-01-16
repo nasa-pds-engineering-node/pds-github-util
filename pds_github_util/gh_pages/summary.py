@@ -59,7 +59,7 @@ def get_table_columns_rst():
 def rst_column_header_images(d):
 
     for column in COLUMNS:
-        d.deffered_directive('image', arg=f'https://nasa-pds.github.io/pdsen-corral/images/{column}_text.png', fields=[('alt', column)], reference=column)
+        d.deferred_directive('image', arg=f'https://nasa-pds.github.io/pdsen-corral/images/{column}_text.png', fields=[('alt', column)], reference=column)
 
 
 

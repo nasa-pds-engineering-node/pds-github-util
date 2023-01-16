@@ -33,12 +33,12 @@ _indent = _indent_ok_for_table
 class RstClothReferenceable(rstcloth.RstCloth):
     def __init__(self, line_width=160):
         super().__init__(line_width=line_width)
-        self._deffered_directives = []
+        self._deferred_directives = []
 
     def hyperlink(self, ref, url):
-        self._deffered_directives.append(f".. _{ref}: {url}")
+        self._deferred_directives.append(f".. _{ref}: {url}")
 
-    def deffered_directive(self, name, arg=None, fields=None, content=None, indent=0, wrap=True, reference=None):
+    def deferred_directive(self, name, arg=None, fields=None, content=None, indent=0, wrap=True, reference=None):
         """
         :param name: the directive itself to use
         :param arg: the argument to pass into the directive
@@ -71,7 +71,7 @@ class RstClothReferenceable(rstcloth.RstCloth):
             else:
                 o.append(_indent(content, 3))
 
-        self._deffered_directives.extend(_indent(o, indent))
+        self._deferred_directives.extend(_indent(o, indent))
 
     def write(self, filename):
         """
@@ -88,6 +88,6 @@ class RstClothReferenceable(rstcloth.RstCloth):
         with open(filename, "w") as f:
             f.write("\n".join(self._data))
             f.write("\n")
-            f.write("\n".join(self._deffered_directives))
+            f.write("\n".join(self._deferred_directives))
             f.write("\n")
 
