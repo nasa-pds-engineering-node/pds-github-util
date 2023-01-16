@@ -53,8 +53,6 @@ setuptools.setup(
                             'requirement-report=pds_github_util.requirements.generate_requirements:main',
                             'git-ping=pds_github_util.branches.git_ping:main',
                             'summaries=pds_github_util.gh_pages.build_summaries:main',
-                            'pds4-validate=pds_github_util.utils.pds4_validate:main',
-                            'ldd-gen=pds_github_util.utils.ldd_gen:main',
                             'ldd-release=pds_github_util.release.ldd_release:main',
                             'pds-plan=pds_github_util.plan.plan:main',
                             'milestones=pds_github_util.milestones.milestones:main',

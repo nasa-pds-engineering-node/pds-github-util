@@ -15,7 +15,6 @@ import datetime
 
 import xml.etree.ElementTree as ETree
 
-from pds_github_util.utils.ldd_gen import find_primary_ingest_ldd, convert_pds4_version_to_alpha
 from pds_github_util.release.release import delete_snapshot_releases
 from pds_github_util.assets.assets import zip_assets
 from pds_github_util.tags.tags import Tags
@@ -29,6 +28,34 @@ PDS_NS = 'http://pds.nasa.gov/pds4/pds/v1'
 LDD_NAME_BASE = 'PDS4_{}_{}'
 STAGING_DIR = f'/tmp/out_{datetime.datetime.utcnow().timestamp()}'
 RELEASE_NAME = '{}_{}'
+
+def convert_pds4_version_to_alpha(pds4_version):
+    pds4_version_short = ''
+    version_list = pds4_version.split('.')
+    for num in version_list:
+        if int(num) >= 10:
+            pds4_version_short += chr(ord('@') + (int(num) % 10 + 1))
+        else:
+            pds4_version_short += num
+
+    return pds4_version_short
+
+
+def find_dependency_ingest_ldds(ingest_ldd_src_dir):
+    # Get any dependencies first
+    dependencies_path = os.path.join(ingest_ldd_src_dir, 'dependencies')
+    dependency_ldds = glob.glob(os.path.join(dependencies_path, '*', 'src', '*IngestLDD*.xml'))
+    return dependency_ldds
+
+
+def find_primary_ingest_ldd(ingest_ldd_src_dir):
+    ingest_ldd = glob.glob(os.path.join(ingest_ldd_src_dir, '*IngestLDD*.xml'))
+    return ingest_ldd
+
+
+def get_latest_release(token, dev=False):
+    _tags = Tags(GITHUB_ORG, GITHUB_REPO, token=token)
+    return _tags._repo.release_from_tag(_tags.get_latest_tag(dev=dev))
 
 
 def create_release(repo, branch_name, tag_name, tagger, prerelease=False):
