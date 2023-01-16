@@ -1,13 +1,13 @@
 key_dates:
-  scr_date: 08/26/2022
-  doc_update_date: 10/03/2022
-  delivery_date: 09/22/2022
-  trr_date: 10/03/2021
-  beta_test_date: 10/26/2022 - 11/15/2022
-  dldd_int_date: 10/18/2022 - 11/15/2022
-  doc_review_date: 11/15/2022
-  ddr_date: 11/17/2022
-  release_date: 12/02/2022
+  scr_date: 03/02/2022
+  doc_update_date: 04/06/2023
+  delivery_date: 03/21/2023
+  trr_date: 04/03/2023
+  beta_test_date: 04/18/2023 - 05/16/2023
+  dldd_int_date: 04/18/2023 - 05/16/2023
+  doc_review_date: 05/08/2023
+  ddr_date: 05/22/2023
+  release_date: 06/02/2023
 
 projects:
   proj.devops:
