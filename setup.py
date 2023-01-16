@@ -41,8 +41,8 @@ setuptools.setup(
         "gitpython==3.1.27",
         "requests==2.28.1",
         "beautifulsoup4==4.9.0",
-        "rstcloth==0.3.1",
-        "pyyaml==5.4.1",
+        "rstcloth==0.5.2",
+        "pyyaml==6.0",
         "pyzenhub==0.3.1"
     ],
     entry_points={
