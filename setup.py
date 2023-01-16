@@ -34,7 +34,7 @@ setuptools.setup(
         "github3.py>=3.2.0",
         "lxml>=4.5",
         "mdutils>=1.2",
-        "packaging==20.9",
+        "packaging>=21.9",
         "markdown2==2.4.3",
         "jinja2==3.1.2",
         "emoji==2.0.0",
