@@ -29,12 +29,19 @@ class PDSIssue(ShortIssue):
 from pds_github_util.issues.utils import get_issue_priority, ignore_issue
 
 
+class StatusEmoji(Enum):
+    SKIP = '|:blue_circle:|'
+    TESTING_NEEDED = '|:yellow_circle:|'
+    TESTING_COMPLETE = '|:green_circle:|'
+
+
 class RddReport:
 
     ISSUE_TYPES = ['bug', 'requirement', 'theme', 'enhancement'] # non hierarchical tickets
     THEME = 'theme'
     IGNORED_LABELS = {'wontfix', 'duplicate', 'invalid', 'I&T', 'untestable', 'task'}
-    SKIP_TESTING = 'skip-i&t'
+    SKIP_TESTING = 'i&t.skip'
+    TESTING_COMPLETE = 'i&t.done'
     IGNORED_REPOS = {'PDS-Software-Issues-Repo', 'pds-template-repo-python', 'pdsen-corral',
                      'github-actions-base', '.github', 'nasa-pds.github.io', 'pds-github-util',
                      'pds-template-repo-java', 'kdp', 'naif-pds4-bundler'}
@@ -84,7 +91,7 @@ class RddReport:
         issues_map = self._get_issues_groupby_type(repo, state='closed')
         issue_count = sum([len(issues) for _, issues in issues_map.items()])
         if issue_count > 0:
-            self._write_repo_change_section(repo, issues_map)
+            self._write_repo_change_section(repo)
 
     def _get_issues_groupby_type(self, repo, state='closed'):
         issues = {}
@@ -420,8 +427,9 @@ class RstRddReport(RddReport):
     def _flush_theme_updates(self, theme_line, ticket_lines):
         theme_line = theme_line
         self._rst_doc.h4(theme_line)
+
         if ticket_lines:
-            columns = ["Issue", "I&T", "Level", "Priority / Bug Severity"]
+            columns = ["Issue", "I&T Status", "Level", "Priority / Bug Severity"]
             self._rst_doc.table(
                 columns,
                 data=ticket_lines
@@ -434,12 +442,14 @@ class RstRddReport(RddReport):
 
 
     @staticmethod
-    def _testing_needed(issue):
+    def _testing_status(issue):
         for label in issue.labels():
             if label.name == RstRddReport.SKIP_TESTING:
-                return False
+                return StatusEmoji.SKIP.value
+            elif label.name == RstRddReport.TESTING_COMPLETE:
+                return StatusEmoji.TESTING_COMPLETE.value
 
-        return True
+        return StatusEmoji.TESTING_NEEDED.value
 
     @staticmethod
     def _get_theme_head(repo, issue):
@@ -464,7 +474,8 @@ class RstRddReport(RddReport):
                 if not ignore_issue(issue.labels(), ignore_labels=RstRddReport.IGNORED_LABELS):
                     self._logger.debug("crawl theme tree %i", issue.number)
                     self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
-                    i_and_t = '|iandt|' if RstRddReport._testing_needed(issue) else ''
+
+                    i_and_t = RstRddReport._testing_status(issue)
                     priority = get_issue_priority(issue)
                     data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
                                  i_and_t,
@@ -495,7 +506,7 @@ class RstRddReport(RddReport):
         data = []
         for issue in issues:
             if issue.number not in ignore_tickets:
-                i_and_t = '|iandt|' if RstRddReport._testing_needed(issue) else ''
+                i_and_t = RstRddReport._testing_status(issue)
                 self._rst_doc.hyperlink(f'{repo.name}#{issue.number}', issue.html_url)
                 priority = get_issue_priority(issue)
                 data.append([f'`{repo.name}#{issue.number}`_ {issue.title}'.replace('|', ''),
@@ -505,7 +516,7 @@ class RstRddReport(RddReport):
                     self._log_missing_priority(repo.name, issue.number)
         if data:
             self._rst_doc.h4(type.capitalize() + 's')
-            columns = ["Issue", "I&T", "Priority / Bug Severity"]
+            columns = ["Issue", "I&T Status", "Priority / Bug Severity"]
             self._rst_doc.table(
                 columns,
                 data=data
@@ -517,10 +528,6 @@ class RstRddReport(RddReport):
 
     def _add_software_changes(self, repos):
         self._logger.info("Add software changes")
-        self._rst_doc.deferred_directive('image',
-                                         arg=f'https://nasa-pds.github.io/_static/images/noun_certified_18093.png',
-                                         fields=[('alt', 'I&T'), ('width', '20')],
-                                         reference='iandt')
         self._rst_doc.h1('Software Changes')
         self._rst_doc.content("The changes types are 'Bug', 'Enhancement' or 'Requirement'. "
                               "For each software repository, the changes are listed in 2 categories: ")
@@ -529,10 +536,14 @@ class RstRddReport(RddReport):
         self._rst_doc.li("Other Updates")
         self._rst_doc.newline()
 
-        self._rst_doc.content(f"The 'Planned Updates' are organized by 'Themes' (or 'Release Themes'), which are defined in advance and approved by the PDS Software Working Group (see `Plan {self._build}`_')")
-        self._rst_doc.content(f"The 'Other Updates' occurs during the build cycle witout being planned or attached to a theme. They are organized by types (bug, enhancements, requirements...). Any updates that require a de-scope of planned tasks are reviewed by the PDS Software Working Group.")
+        self._rst_doc.content(f"The 'Planned Updates' are organized by 'Themes' (or 'Release Themes'), which are defined in advance and approved by the PDS Software Working Group (see `Plan {self._build}`_)")
+        self._rst_doc.content(f"The 'Other Updates' occurs during the build cycle witout being planned or attached to a theme. They are organized by types (bug, enhancements, requirements, tasks). Any updates that require a de-scope of planned tasks are reviewed by the PDS Software Working Group.")
         self._rst_doc.newline()
-        self._rst_doc.content(f"The deliveries are validated by the development team and go through an additional Integration & Test process, as applicable, as indicated by a specific icon in the following tables.")
+        self._rst_doc.content(f"The deliveries are validated by the development team and go through an additional Integration & Test process, as applicable, as indicated by the ```Testing Status``` column in the tables below. There are 3 possible statuses for testing:")
+        self._rst_doc.newline()
+        self._rst_doc.li(f"{StatusEmoji.SKIP.value} Skip Testing - Testing is not needed for this ticket. These are determined at the discretion of the team based upon the technical or operational nature of the closed task.", wrap=False)
+        self._rst_doc.li(f"{StatusEmoji.TESTING_NEEDED.value} Testing Needed")
+        self._rst_doc.li(f"{StatusEmoji.TESTING_COMPLETE.value} Testing Complete - Initial testing complete, and test cases/results documented.", wrap=False)
         self._rst_doc.newline()
 
         for _repo in self.available_repos():
@@ -672,7 +683,9 @@ class RstRddReport(RddReport):
                 columns,
                 data=data)
         else:
+            self._rst_doc.newline()
             self._rst_doc.content("No PDS4 Standards Updates")
+            self._rst_doc.newline()
 
     def create(self, repos, filename):
         self._logger.info("Create RDD rst")
@@ -693,7 +706,7 @@ class RstRddReport(RddReport):
         issue_count = sum([len(issues) for _, issues in issues_map.items()])
 
         if issue_count > 0:
-            self._write_repo_change_section(repo, issues_map)
+            self._write_repo_change_section(repo)
 
     def write(self, filename):
         self._logger.info('Create file %s', filename)

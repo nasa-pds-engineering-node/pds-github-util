@@ -56,6 +56,9 @@ class Labels:
             except NotFoundError:
                 repo.create_label(label_name, label_color)
                 _logger.info('%s: Creation SUCCESS' % repo)
+        except ForbiddenError:
+            # Most likely due to archived repo, just keep going
+            return
         except (UnprocessableEntity, ForbiddenError, ConnectionError):
             _logger.warning("Odd connection error or out of API calls. Wait 1 hour...")
             time.sleep(3600)

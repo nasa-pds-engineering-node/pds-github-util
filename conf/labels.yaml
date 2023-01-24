@@ -7,8 +7,9 @@ labels:
 
   # Category
   security: 38761d
-  "skip-i&t": 38761d
-  "I&T": 38761d
+  "i&t.skip": 889BF6
+  "i&t.done": 889BF6
+  "i&t.issue": 889BF6
   pending-scr: 38761d
 
   # Priorities
