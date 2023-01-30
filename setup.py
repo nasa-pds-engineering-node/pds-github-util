@@ -39,7 +39,7 @@ setuptools.setup(
         "jinja2==3.1.2",
         "emoji==2.0.0",
         "gitpython==3.1.27",
-        "requests==2.28.1",
+        "requests==2.23.0",
         "beautifulsoup4==4.9.0",
         "rstcloth==0.4.0",
         "pyyaml==6.0",
