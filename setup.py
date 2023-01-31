@@ -35,7 +35,7 @@ setuptools.setup(
         "mdutils~=1.2.2",
         "packaging==21.0",        # Do not change this version without also changing it in roundup-action
         "markdown2~=2.4.3",
-        "jinja2~=3.1.2",
+        "jinja2<3.1",             # Do not change: Jinja2 ≥ 3.1 incompatible with Sphinx ≅ 3.2.1
         "emoji~=2.0.0",
         "gitpython~=3.1.27",
         "requests==2.23.0",       # Do not change this version without also changing it in github-actions-base
